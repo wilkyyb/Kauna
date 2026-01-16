@@ -2,7 +2,8 @@
 
 # Kauna
 
-Kauna on Realmi.fi palvelimelle luotu utility modi, jolla saat... tällä hetkellä pelkästään jotain Parkour duels ominaisuuksia...
+Kauna on Realmi.fi palvelimelle luotu utility modi, jolla saat. tällä hetkellä pelkästään jotain Parkour duels ominaisuuksia. <br>
+Modi ei anna yhtään etua muihin pelaajiin verrattuna, lisää vain elämänlaatua parantavia asioita.
 
 ---
 
