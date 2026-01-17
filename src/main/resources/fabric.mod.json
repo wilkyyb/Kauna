@@ -3,13 +3,13 @@
 	"id": "kauna",
 	"version": "${version}",
 	"name": "Kauna",
-	"description": "Realmi Util Mod",
+	"description": "An utility mod for Realmi.fi, adding for now a Duels Parkour Overlay (World Record and Personal Best -notifications)",
 	"authors": [
 		"wilkyy"
 	],
 	"contact": {
 		"homepage": "https://wilkyy.lol/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/wilkyyb/Kauna"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/kauna/icon.png",
@@ -19,7 +19,9 @@
 			"lol.wilkyy.kauna.Kauna"
 		],
 		"client": [
-			"lol.wilkyy.kauna.KaunaClient"
+			"lol.wilkyy.kauna.parkourChatListener",
+			"lol.wilkyy.kauna.parkourModule",
+			"lol.wilkyy.kauna.inDuelChecks"
 		]
 	},
 	"mixins": [
