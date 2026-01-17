@@ -42,7 +42,13 @@ public class parkourModule implements ClientModInitializer {
         // Rainbow animation tick handler (only for WR case)
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             if (!rainbowRunning) return;
-            rainbowTick++;
+            if (mc.world.getTime() % 2 == 0) { // every 2 ticks
+                rainbowTick++;
+            }
+
+
+            int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
+            int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
 
             MutableText rainbowText = Text.empty();
             for (int i = 0; i < worldRecordText.length(); i++) {
@@ -62,6 +68,8 @@ public class parkourModule implements ClientModInitializer {
             mc.inGameHud.setTitleTicks(0, 2, 20);
 
             Text subtitle = Text.empty()
+                    .append(Text.literal("WR: ")
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
                     .append(Text.literal(formatDiff(wrDiff))
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
                     .append(Text.literal(" | ")
@@ -70,6 +78,8 @@ public class parkourModule implements ClientModInitializer {
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
                     .append(Text.literal(" | ")
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
+                    .append(Text.literal("PB: ")
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
                     .append(Text.literal(formatDiff(pbDiff))
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
 
@@ -93,8 +103,7 @@ public class parkourModule implements ClientModInitializer {
         return formatted;
     }
 
-    int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
-    int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
+    int otherTextColor = 0xbebebe;
     int timeColor = 0xFFFFFF;
     int dividerColor = 0x545454;
     int starColor = 0xFDD000;
@@ -117,6 +126,8 @@ public class parkourModule implements ClientModInitializer {
                             rainbowTick = 0;
                             LOGGER.info("Got WR, rainbow animation started");
                         } else if (pbDiff < 0) { // Personal best
+                            int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
+                            int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
                             MinecraftClient client = MinecraftClient.getInstance();
 
                             MutableText title = Text.literal("⭐ ")
@@ -127,6 +138,8 @@ public class parkourModule implements ClientModInitializer {
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
 
                             Text subtitle = Text.empty()
+                                    .append(Text.literal("WR ")
+                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
                                     .append(Text.literal(formatDiff(wrDiff))
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
                                     .append(Text.literal(" | ")
@@ -135,6 +148,8 @@ public class parkourModule implements ClientModInitializer {
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
                                     .append(Text.literal(" | ")
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
+                                    .append(Text.literal("PB ")
+                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
                                     .append(Text.literal(formatDiff(pbDiff))
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
 
@@ -144,6 +159,8 @@ public class parkourModule implements ClientModInitializer {
 
                             LOGGER.info("Got PB, splits displayed without server title");
                         } else { // No record
+                            int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
+                            int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
                             MinecraftClient client = MinecraftClient.getInstance();
 
                             MutableText title = Text.literal("⭐ ")
@@ -154,6 +171,8 @@ public class parkourModule implements ClientModInitializer {
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
 
                             Text subtitle = Text.empty()
+                                    .append(Text.literal("WR ")
+                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
                                     .append(Text.literal(formatDiff(wrDiff))
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
                                     .append(Text.literal(" | ")
@@ -162,6 +181,8 @@ public class parkourModule implements ClientModInitializer {
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
                                     .append(Text.literal(" | ")
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
+                                    .append(Text.literal("PB ")
+                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
                                     .append(Text.literal(formatDiff(pbDiff))
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
 

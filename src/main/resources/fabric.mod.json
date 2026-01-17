@@ -3,7 +3,7 @@
 	"id": "kauna",
 	"version": "${version}",
 	"name": "Kauna",
-	"description": "An utility mod for Realmi.fi, adding for now a Duels Parkour Overlay (World Record and Personal Best -notifications)",
+	"description": "An utility mod for Realmi.fi (specifically Kahakka)",
 	"authors": [
 		"wilkyy"
 	],
