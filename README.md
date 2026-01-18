@@ -31,3 +31,10 @@ Parkouriin pelin loppuessa jos saat oman ennätyksen, näyttää modi "Voittaja"
 Kauna myös: <br> 
 **Poistaa lähtölaskenta titlen** (actionbarissa tää on kuiteski) (tää on bugi kattoo jos fixaan), <br> 
 **Poistaa "Vihollinen haluaa skipata kartan" titlen** (chatis näkyy kuiteski) (tää myöski bugi. tän tuun fixaa),
+
+### ✒️TODO list
+
+vihu haluaa skippaa ikuiseks subtitelks (kosk ite aina unohan xD) <br>
+AutoGG <br>
+AutoEz (vähä troll mut ihsm) <br>
+Mod menu ja Cloth config integraatio <br>
