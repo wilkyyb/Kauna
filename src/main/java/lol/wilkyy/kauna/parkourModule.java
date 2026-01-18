@@ -34,10 +34,11 @@ public class parkourModule implements ClientModInitializer {
     private static final DecimalFormat threeDecimals = new DecimalFormat("0.000");
 
 
+
     @Override
     public void onInitializeClient() {
         LOGGER.info(">>> parkourModule initialized <<<");
-        parkourDuelEnd();
+        parkourDuelWinCheck();
 
         // Rainbow animation tick handler (only for WR case)
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
@@ -45,7 +46,6 @@ public class parkourModule implements ClientModInitializer {
             if (mc.world.getTime() % 2 == 0) { // every 2 ticks
                 rainbowTick++;
             }
-
 
             int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
             int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
@@ -93,7 +93,6 @@ public class parkourModule implements ClientModInitializer {
         });
     }
 
-
     // helper method
     private static String formatDiff(double value) {
         String formatted = threeDecimals.format(value);
@@ -108,10 +107,11 @@ public class parkourModule implements ClientModInitializer {
     int dividerColor = 0x545454;
     int starColor = 0xFDD000;
 
-    public void parkourDuelEnd() {
+    public void parkourDuelWinCheck() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             if (msg.contains("Aika:") && !msg.contains("[")) {
+                LOGGER.info("Duel Won");
                 new Thread(() -> {
                     try {
                         Thread.sleep(1);
