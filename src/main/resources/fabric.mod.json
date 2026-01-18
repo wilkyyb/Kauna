@@ -22,6 +22,9 @@
 			"lol.wilkyy.kauna.parkourChatListener",
 			"lol.wilkyy.kauna.parkourModule",
 			"lol.wilkyy.kauna.inDuelChecks"
+		],
+		"modmenu": [
+			"lol.wilkyy.kauna.ModMenuIntegration"
 		]
 	},
 	"mixins": [

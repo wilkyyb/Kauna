@@ -13,6 +13,7 @@ import net.minecraft.text.MutableText;
 
 import java.text.DecimalFormat;
 
+
 import static lol.wilkyy.kauna.parkourChatListener.*;
 
 public class parkourModule implements ClientModInitializer {
@@ -34,11 +35,10 @@ public class parkourModule implements ClientModInitializer {
     private static final DecimalFormat threeDecimals = new DecimalFormat("0.000");
 
 
-
     @Override
     public void onInitializeClient() {
-        LOGGER.info(">>> parkourModule initialized <<<");
         parkourDuelWinCheck();
+        playerSkipCheck();
 
         // Rainbow animation tick handler (only for WR case)
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
@@ -64,8 +64,8 @@ public class parkourModule implements ClientModInitializer {
                     .append(Text.literal(" ⭐")
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
 
-            mc.inGameHud.setTitle(title);
             mc.inGameHud.setTitleTicks(0, 2, 20);
+            mc.inGameHud.setTitle(title);
 
             Text subtitle = Text.empty()
                     .append(Text.literal("WR: ")
@@ -125,6 +125,7 @@ public class parkourModule implements ClientModInitializer {
                             rainbowRunning = true;
                             rainbowTick = 0;
                             LOGGER.info("Got WR, rainbow animation started");
+
                         } else if (pbDiff < 0) { // Personal best
                             int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
                             int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
@@ -153,9 +154,9 @@ public class parkourModule implements ClientModInitializer {
                                     .append(Text.literal(formatDiff(pbDiff))
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
 
+                            client.inGameHud.setTitleTicks(0, 100, 20);
                             client.inGameHud.setTitle(title);
                             client.inGameHud.setSubtitle(subtitle);
-                            client.inGameHud.setTitleTicks(0, 100, 20);
 
                             LOGGER.info("Got PB, splits displayed without server title");
                         } else { // No record
@@ -186,9 +187,9 @@ public class parkourModule implements ClientModInitializer {
                                     .append(Text.literal(formatDiff(pbDiff))
                                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
 
+                            client.inGameHud.setTitleTicks(0, 100, 20);
                             client.inGameHud.setTitle(title);
                             client.inGameHud.setSubtitle(subtitle);
-                            client.inGameHud.setTitleTicks(0, 100, 20);
 
                             LOGGER.info("No WR or PB, splits displayed without server title");
                         }
@@ -196,6 +197,40 @@ public class parkourModule implements ClientModInitializer {
                         Thread.currentThread().interrupt();
                     }
                 }).start();
+            }
+        });
+    }
+
+    public void playerSkipCheck() {
+        ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
+            String msg = message.getString();
+            MinecraftClient client = MinecraftClient.getInstance();
+            String playerName = client.player != null ? client.player.getName().getString() : "";
+
+            if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[") && inDuelChecks.inDuel()) {
+                Text subtitle = Text.empty()
+                        .append(Text.literal("⌚ ")
+                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x545454))))
+                        .append(Text.literal("ᴠɪʜᴏʟʟɪɴᴇɴ ʜᴀʟᴜᴀᴀ ᴏʜɪᴛᴛᴀᴀ ᴋᴀʀᴛᴀɴ!")
+                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xfc5454)).withBold(true)))
+                        .append(Text.literal(" ⌚")
+                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x545454))));
+
+                client.inGameHud.setTitle(Text.literal(""));
+                client.inGameHud.setSubtitle(Text.literal(""));
+                client.inGameHud.setTitleTicks(0, 2, 0);
+
+                MutableText title = Text.literal("");
+                client.inGameHud.setTitleTicks(0, 72000, 20);
+                client.inGameHud.setTitle(title);
+                client.inGameHud.setSubtitle(subtitle);
+
+                LOGGER.info("Vihu haluaa skipata!");
+            }
+            if (msg.contains("hyväksyi kartan ohituksen!") && !msg.contains("[") && inDuelChecks.inDuel()) {
+                client.inGameHud.setTitle(Text.literal(""));
+                client.inGameHud.setSubtitle(Text.literal(""));
+                client.inGameHud.setTitleTicks(0, 0, 0);
             }
         });
     }
