@@ -15,7 +15,7 @@ Kauna ei anna yhtään etua muihin pelaajiin verrattuna, lisää vain elämänla
 
 ### 📥 Lataus
 
-Lataus ei ole mahdollista tällä hetkellä, koska en osaa koodaa ja ei tää oo vielä valmis.
+[Lataa modi](https://github.com/wilkyyb/Kauna/releases/tag/alpha), en kyl suosittele sisältää jotai bugei
 
 ### 🖥️ Käyttöohjeet
 
