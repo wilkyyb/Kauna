@@ -10,12 +10,12 @@ import net.minecraft.world.GameMode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
+
 public class inDuelChecks implements ClientModInitializer {
 
     private static boolean inDuel = false;
     private static boolean inParkourDuel = false;
-
-    public static final Logger LOGGER = LogManager.getLogger("KaunaInDuelChecks");
 
     public void onInitializeClient() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
@@ -30,7 +30,7 @@ public class inDuelChecks implements ClientModInitializer {
                         client.inGameHud.setTitle(Text.literal(""));
                         client.inGameHud.setSubtitle(Text.literal(""));
                         client.inGameHud.setTitleTicks(0, 0, 0);
-                        LOGGER.info("Duel ended");
+                        debugLog("Duel ended");
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -41,7 +41,7 @@ public class inDuelChecks implements ClientModInitializer {
             String msg = message.getString();
             if (msg.contains("Aloitetaan kaksintaistoa..") && !msg.contains("[")) {
                 inDuel=true;
-                LOGGER.info("Duel started");
+                debugLog("Duel started");
             }
         });
         MinecraftClient clientt = MinecraftClient.getInstance();
@@ -49,7 +49,7 @@ public class inDuelChecks implements ClientModInitializer {
             String msg = message.getString();
             if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.interactionManager != null && clientt.interactionManager.getCurrentGameMode() == GameMode.SPECTATOR)) {
                 inParkourDuel=true;
-                LOGGER.info("Parkour Duel started");
+                debugLog("Parkour Duel started");
             }
         });
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
@@ -58,7 +58,7 @@ public class inDuelChecks implements ClientModInitializer {
             client.inGameHud.setTitle(Text.literal(""));
             client.inGameHud.setSubtitle(Text.literal(""));
             client.inGameHud.setTitleTicks(0, 0, 0);
-            LOGGER.info("Duel ended due to disconnect");
+            debugLog("Duel ended due to disconnect");
         });
     }
     public static boolean inDuel() {

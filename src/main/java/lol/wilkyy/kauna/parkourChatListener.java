@@ -5,9 +5,10 @@ import org.apache.logging.log4j.Logger;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import org.apache.logging.log4j.LogManager;
 
+import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
+
 
 public class parkourChatListener implements ClientModInitializer {
-    public static final Logger LOGGER = LogManager.getLogger("KaunaParkour");
 
     public static double time = 0.0;
     public static double worldRecord = 0;
@@ -23,12 +24,12 @@ public class parkourChatListener implements ClientModInitializer {
                         // Extract everything after "Aika:"
                         String numberPart = msg.substring(msg.indexOf("Aika:") + 5).trim();
                         time = Double.parseDouble(numberPart);
-                        LOGGER.info("Updated Time: {}", time);
+                        debugLog("Updated Time: {}", time);
                     } catch (NumberFormatException e) {
-                        LOGGER.warn("Failed to parse Time: {}", msg);
+                        debugLog("Failed to parse Time: {}", msg);
                     }
                 }
-                LOGGER.info("Received Time: {}", msg);
+                debugLog("Received Time: {}", msg);
             }
 
             if (msg.contains("Aikaisempi:")) {
@@ -36,12 +37,12 @@ public class parkourChatListener implements ClientModInitializer {
                     try {
                         String numberPart = msg.substring(msg.indexOf("Aikaisempi:") + 11).trim();
                         personalBest = Double.parseDouble(numberPart);
-                        LOGGER.info("Updated PersonalBest (aikaisempi): {}", personalBest);
+                        debugLog("Updated PersonalBest (aikaisempi): {}", personalBest);
                     } catch (NumberFormatException e) {
-                        LOGGER.warn("Failed to parse PB (aikaisempi): {}", msg);
+                        debugLog("Failed to parse PB (aikaisempi): {}", msg);
                     }
                 }
-                LOGGER.info("Received PB: {}", msg);
+                debugLog("Received PB: {}", msg);
             }
 
 
@@ -50,12 +51,12 @@ public class parkourChatListener implements ClientModInitializer {
                     try {
                         String numberPart = msg.substring(msg.indexOf("PB:") + 3).trim();
                         personalBest = Double.parseDouble(numberPart);
-                        LOGGER.info("Updated PersonalBest (PB): {}", personalBest);
+                        debugLog("Updated PersonalBest (PB): {}", personalBest);
                     } catch (NumberFormatException e) {
-                        LOGGER.warn("Failed to parse PB (PB): {}", msg);
+                        debugLog("Failed to parse PB (PB): {}", msg);
                     }
                 }
-                LOGGER.info("Received PB: {}", msg);
+                debugLog("Received PB: {}", msg);
             }
 
             if (msg.contains("Paras aika:")) {
@@ -64,9 +65,9 @@ public class parkourChatListener implements ClientModInitializer {
                         // Take everything after the last colon
                         String numberPart = msg.substring(msg.lastIndexOf(":") + 1).trim();
                         worldRecord = Double.parseDouble(numberPart);
-                        LOGGER.info("Updated WorldRecord: {}", worldRecord);
+                        debugLog("Updated WorldRecord: {}", worldRecord);
                     } catch (Exception e) {
-                        LOGGER.warn("Failed to parse WR: {}", msg);
+                        debugLog("Failed to parse WR: {}", msg);
                     }
 
                 }

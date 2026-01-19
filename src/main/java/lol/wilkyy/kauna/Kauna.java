@@ -1,5 +1,6 @@
 package lol.wilkyy.kauna;
 
+import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -10,16 +11,18 @@ import net.minecraft.text.TextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
+
 public class Kauna implements ModInitializer {
 
     private static boolean inKahakka = false;
-    public static final Logger LOGGER = LogManager.getLogger("Kauna");
 
 
     public void onInitialize() {
+        KaunaConfig.load(); // ✅ load config at startup
         kahakkaJoinCheck();
         kahakkaLeaveCheck();
-        LOGGER.info("Kannat kaunaa... Mod initialized!");
+        debugLog("Kannat kaunaa... Mod initialized!");
     }
 
     public void kahakkaJoinCheck() {
@@ -39,20 +42,19 @@ public class Kauna implements ModInitializer {
                                         .withItalic(true))
                 );
                 client.inGameHud.setTitleTicks(10, 15, 10);
-                LOGGER.info("Player joined Kahakka");
+                debugLog("Player joined Kahakka");
             }
         });
     }
 
-
     public void kahakkaLeaveCheck() {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             inKahakka = false;
-            LOGGER.info("Player disconnected from Kahakka");
+            debugLog("Player disconnected from Kahakka");
         });
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             inKahakka = false;
-            LOGGER.info("Joined different server, reset inKahakka");
+            debugLog("Joined different server, reset inKahakka");
         });
     }
 

@@ -14,11 +14,10 @@ import net.minecraft.text.MutableText;
 import java.text.DecimalFormat;
 
 
+import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 import static lol.wilkyy.kauna.parkourChatListener.*;
 
 public class parkourModule implements ClientModInitializer {
-
-    public static final Logger LOGGER = LogManager.getLogger("KaunaParkour");
 
     private static boolean rainbowRunning = false;
     private static int rainbowTick = 0;
@@ -85,7 +84,7 @@ public class parkourModule implements ClientModInitializer {
 
             mc.inGameHud.setSubtitle(subtitle);
 
-            if (rainbowTick > 200) {
+            if (rainbowTick > 80) {
                 rainbowRunning = false;
                 mc.inGameHud.setTitle(Text.literal(""));
                 mc.inGameHud.setSubtitle(Text.literal(""));
@@ -111,7 +110,7 @@ public class parkourModule implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             if (msg.contains("Aika:") && !msg.contains("[")) {
-                LOGGER.info("Duel Won");
+                debugLog("Duel Won");
                 new Thread(() -> {
                     try {
                         Thread.sleep(1);
@@ -124,7 +123,7 @@ public class parkourModule implements ClientModInitializer {
                         if (wrDiff < 0) { // World record
                             rainbowRunning = true;
                             rainbowTick = 0;
-                            LOGGER.info("Got WR, rainbow animation started");
+                            debugLog("Got WR, rainbow animation started");
 
                         } else if (pbDiff < 0) { // Personal best
                             int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
@@ -158,7 +157,7 @@ public class parkourModule implements ClientModInitializer {
                             client.inGameHud.setTitle(title);
                             client.inGameHud.setSubtitle(subtitle);
 
-                            LOGGER.info("Got PB, splits displayed without server title");
+                            debugLog("Got PB, splits displayed without server title");
                         } else { // No record
                             int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
                             int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
@@ -191,7 +190,7 @@ public class parkourModule implements ClientModInitializer {
                             client.inGameHud.setTitle(title);
                             client.inGameHud.setSubtitle(subtitle);
 
-                            LOGGER.info("No WR or PB, splits displayed without server title");
+                            debugLog("No WR or PB, splits displayed without server title");
                         }
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
@@ -209,12 +208,9 @@ public class parkourModule implements ClientModInitializer {
 
             if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[") && inDuelChecks.inDuel()) {
                 Text subtitle = Text.empty()
-                        .append(Text.literal("⌚ ")
-                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x545454))))
-                        .append(Text.literal("ᴠɪʜᴏʟʟɪɴᴇɴ ʜᴀʟᴜᴀᴀ ᴏʜɪᴛᴛᴀᴀ ᴋᴀʀᴛᴀɴ!")
-                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xfc5454)).withBold(true)))
-                        .append(Text.literal(" ⌚")
-                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x545454))));
+                        .append(Text.literal("⌚")
+                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbe0100))));
+
 
                 client.inGameHud.setTitle(Text.literal(""));
                 client.inGameHud.setSubtitle(Text.literal(""));
@@ -225,7 +221,7 @@ public class parkourModule implements ClientModInitializer {
                 client.inGameHud.setTitle(title);
                 client.inGameHud.setSubtitle(subtitle);
 
-                LOGGER.info("Vihu haluaa skipata!");
+                debugLog("Vihu haluaa skipata!");
             }
             if (msg.contains("hyväksyi kartan ohituksen!") && !msg.contains("[") && inDuelChecks.inDuel()) {
                 client.inGameHud.setTitle(Text.literal(""));
