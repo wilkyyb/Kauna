@@ -18,12 +18,12 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
 
             general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("Enable Hype Song"), KaunaConfig.tääeiteemitäänxD)
+                    .startBooleanToggle(Text.literal("tääeiteemitäänxD"), KaunaConfig.tääeiteemitäänxD)
                     .setSaveConsumer(newValue -> KaunaConfig.tääeiteemitäänxD = newValue)
                     .build());
 
             general.addEntry(builder.entryBuilder()
-                    .startFloatField(Text.literal("Hype Song Volume"), KaunaConfig.tääeiteemitäänxD2)
+                    .startFloatField(Text.literal("tääeiteemitäänxD2"), KaunaConfig.tääeiteemitäänxD2)
                     .setSaveConsumer(newValue -> KaunaConfig.tääeiteemitäänxD2 = newValue)
                     .setMin(0.0F).setMax(1.0F)
                     .build());
