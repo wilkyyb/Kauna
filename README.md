@@ -1,40 +1,30 @@
-<img src="src/main/resources/assets/kauna/icon.png" width="128">
+![asdabsd](https://i.e-z.host/arq0vhwn.png)
+![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
 
-# Kauna
+### 🔔 Tietoa
 
-Kauna on Realmi.fi palveinta varten luotu QOL modi, jolla saat tällä hetkellä pelkästään jotain Parkour duels ominaisuuksia.
+Kauna on Realmi.fi QOL modi, jolla saat ominaisuuksia jota Kakkuh ei osannut itse lisätä. Alussa vain parkour lisäyksiä, mutta tulevaisuudessa toivottavasti jotain hullua 🤩
 
-Kauna ei anna yhtään etua muihin pelaajiin verrattuna, lisää vain elämänlaatua parantavia asioita.
+<br>![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
 
----
+### 💎 Ominaisuudet
 
-![](https://i.e-z.host/do0vejq1.png)
-![](https://i.e-z.host/9dfc0xka.png)
+* "Maailman Ennätys" ruutu, kun saat uuden parhaan ajan Parkour kartassa.
+* "Oma Ennätys" ruutu, kun saat uuden oman parhaan ajan Parkour kartassa.
+* Voittaessa näkyy, kuinka lähellä olit kartan parasta aikaa, omaa parasta aikaa ja oman ajan Voittaja tekstin alla.
 
----
+![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
 
-### 📥 Lataus
+### ⛏️ Modin käyttö ja tarvittavat modit
 
-Lataus ei ole mahdollista tällä hetkellä, koska en osaa koodaa ja ei tää oo vielä valmis.
+Kaunaa tulee kantaa ainoastaan **1.21.11** versiolla **Fabric Mod Loaderin** kanssa. Kauna tarvii myös toimiakseen Fabric APIn
 
-### 🖥️ Käyttöohjeet
+![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
 
-Vaatii Fabric Apin, lataa se.
+### 🖼️ Kuvia modista
 
-### 📃 Modin Toiminta
+![](https://i.e-z.host/ph6i7230.png)
+![](https://i.e-z.host/19ypzcnj.png)
+![](https://i.e-z.host/cz7q5s5v.png)
 
-Kauna lisää: <br>
-Parkouriin pelin loppuessa "Voittaja" tekstin alle erotuksen parhaasta ajasta, aika jonka sait ja erotus parhaasta omasta ajastasi. <br>
-Parkouriin pelin loppuessa jos saat maailman ennätyksen, näyttää modi "Voittaja" titlen sijaan "Maailman Ennätys". <br>
-Parkouriin pelin loppuessa jos saat oman ennätyksen, näyttää modi "Voittaja" titlen sijaan "Oma Ennätys". <br>
-
-Kauna myös: <br> 
-**Poistaa lähtölaskenta titlen** (actionbarissa tää on kuiteski) (tää on bugi kattoo jos fixaan), <br> 
-**Poistaa "Vihollinen haluaa skipata kartan" titlen** (chatis näkyy kuiteski) (tää myöski bugi. tän tuun fixaa),
-
-### ✒️TODO list
-
-vihu haluaa skippaa ikuiseks subtitelks (kosk ite aina unohan xD) <br>
-AutoGG <br>
-AutoEz (vähä troll mut ihsm) <br>
-Mod menu ja Cloth config integraatio <br>
+<br>![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
