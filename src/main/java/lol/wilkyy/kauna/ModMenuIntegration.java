@@ -18,13 +18,13 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
 
             general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("Enable Hype Song"), KaunaConfig.enableHypeSong)
-                    .setSaveConsumer(newValue -> KaunaConfig.enableHypeSong = newValue)
+                    .startBooleanToggle(Text.literal("Enable Hype Song"), KaunaConfig.tääeiteemitäänxD)
+                    .setSaveConsumer(newValue -> KaunaConfig.tääeiteemitäänxD = newValue)
                     .build());
 
             general.addEntry(builder.entryBuilder()
-                    .startFloatField(Text.literal("Hype Song Volume"), KaunaConfig.hypeSongVolume)
-                    .setSaveConsumer(newValue -> KaunaConfig.hypeSongVolume = newValue)
+                    .startFloatField(Text.literal("Hype Song Volume"), KaunaConfig.tääeiteemitäänxD2)
+                    .setSaveConsumer(newValue -> KaunaConfig.tääeiteemitäänxD2 = newValue)
                     .setMin(0.0F).setMax(1.0F)
                     .build());
 
@@ -32,8 +32,8 @@ public class ModMenuIntegration implements ModMenuApi {
         };
     }
     public class KaunaConfig {
-        public static boolean enableHypeSong = true;
-        public static float hypeSongVolume = 1.0F;
+        public static boolean tääeiteemitäänxD = true;
+        public static float tääeiteemitäänxD2 = 1.0F;
 
     }
 }
