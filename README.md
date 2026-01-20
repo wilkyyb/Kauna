@@ -15,9 +15,9 @@ Kauna on Realmi.fi QOL modi, jolla saat ominaisuuksia jota Kakkuh ei osannut its
 
 ![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
 
-### ⛏️ Modin käyttö ja tarvittavat modit
+### ⛏️ Discord
 
-Kaunaa tulee kantaa ainoastaan **1.21.11** versiolla **Fabric Mod Loaderin** kanssa. Kauna tarvii myös toimiakseen Fabric APIn
+Joinaa discordiin jos kiinnostaa modi https://discord.gg/invite/62g27Unbk4
 
 ![Divider](https://tr7zw.github.io/uikit/divider_faded/Divider_01.png)
 
