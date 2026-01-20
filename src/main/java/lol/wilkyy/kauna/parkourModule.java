@@ -2,17 +2,16 @@ package lol.wilkyy.kauna;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import org.apache.logging.log4j.Logger;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import org.apache.logging.log4j.LogManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.text.MutableText;
 
 import java.text.DecimalFormat;
-
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 import static lol.wilkyy.kauna.parkourChatListener.*;
@@ -39,7 +38,6 @@ public class parkourModule implements ClientModInitializer {
         parkourDuelWinCheck();
         playerSkipCheck();
 
-        // Rainbow animation tick handler (only for WR case)
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             if (!rainbowRunning) return;
             if (mc.world.getTime() % 2 == 0) { // every 2 ticks
@@ -109,9 +107,12 @@ public class parkourModule implements ClientModInitializer {
     public void parkourDuelWinCheck() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
+
+            MinecraftClient client = MinecraftClient.getInstance();
+
             if (msg.contains("Aika:") && !msg.contains("[")) {
                 debugLog("Duel Won");
-                new Thread(() -> {
+                client.execute(() -> {
                     try {
                         Thread.sleep(1);
                         wrDiff = time - worldRecord;
@@ -123,12 +124,17 @@ public class parkourModule implements ClientModInitializer {
                         if (wrDiff < 0) { // World record
                             rainbowRunning = true;
                             rainbowTick = 0;
+
+                            if (client.player != null) {
+                                SoundEvent event = SoundEvents.GOAT_HORN_SOUNDS.get(0).value();
+                                client.player.playSound(event, 1.0f, 1.0f);
+                            }
+
                             debugLog("Got WR, rainbow animation started");
 
                         } else if (pbDiff < 0) { // Personal best
                             int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
                             int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
-                            MinecraftClient client = MinecraftClient.getInstance();
 
                             MutableText title = Text.literal("⭐ ")
                                     .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
@@ -161,7 +167,6 @@ public class parkourModule implements ClientModInitializer {
                         } else { // No record
                             int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
                             int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
-                            MinecraftClient client = MinecraftClient.getInstance();
 
                             MutableText title = Text.literal("⭐ ")
                                     .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
@@ -195,7 +200,7 @@ public class parkourModule implements ClientModInitializer {
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
-                }).start();
+                });
             }
         });
     }
@@ -209,7 +214,7 @@ public class parkourModule implements ClientModInitializer {
             if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[") && inDuelChecks.inDuel()) {
                 Text subtitle = Text.empty()
                         .append(Text.literal("⌚")
-                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbe0100))));
+                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbebebe))));
 
 
                 client.inGameHud.setTitle(Text.literal(""));

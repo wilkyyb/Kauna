@@ -21,7 +21,15 @@ public class KaunaConfig {
     // ✅ Your config options
     public boolean test1 = true;
     public float test2 = 1.0F;
+
     public boolean debugLogging = false;
+
+    public boolean autoGG = true;              // normal AutoGG toggle
+    public int autoGGDelay = 0;                  // delay in seconds before sending AutoGG
+    public boolean customAutoGG = false;       // toggle for custom message
+    public String customAutoGGText = "gg";     // default custom message
+
+
 
     // Singleton instance
     public static KaunaConfig INSTANCE = new KaunaConfig();
@@ -31,13 +39,24 @@ public class KaunaConfig {
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
                 INSTANCE = GSON.fromJson(reader, KaunaConfig.class);
-            } catch (IOException e) {
-                e.printStackTrace();
+
+                if (INSTANCE == null) {
+                    // Defensive: if Gson returns null
+                    LOGGER.warn("Config file empty or invalid, resetting to defaults.");
+                    INSTANCE = new KaunaConfig();
+                    save();
+                }
+            } catch (Exception e) {
+                // Catch *any* error (syntax, type mismatch, IO)
+                LOGGER.error("Failed to load config, resetting to defaults.", e);
+                INSTANCE = new KaunaConfig();
+                save();
             }
         } else {
             save(); // create default file
         }
     }
+
 
     // Save config to disk
     public static void save() {

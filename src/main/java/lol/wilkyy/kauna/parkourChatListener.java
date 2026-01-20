@@ -1,9 +1,7 @@
 package lol.wilkyy.kauna;
 
 import net.fabricmc.api.ClientModInitializer;
-import org.apache.logging.log4j.Logger;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import org.apache.logging.log4j.LogManager;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 

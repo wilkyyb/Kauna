@@ -8,8 +8,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
@@ -19,7 +17,7 @@ public class Kauna implements ModInitializer {
 
 
     public void onInitialize() {
-        KaunaConfig.load(); // ✅ load config at startup
+        KaunaConfig.load();
         kahakkaJoinCheck();
         kahakkaLeaveCheck();
         debugLog("Kannat kaunaa... Mod initialized!");
@@ -61,4 +59,5 @@ public class Kauna implements ModInitializer {
     public static boolean inKahakka() {
         return inKahakka;
     }
+
 }

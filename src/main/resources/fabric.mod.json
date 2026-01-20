@@ -22,7 +22,8 @@
     "client": [
       "lol.wilkyy.kauna.parkourChatListener",
       "lol.wilkyy.kauna.parkourModule",
-      "lol.wilkyy.kauna.inDuelChecks"
+      "lol.wilkyy.kauna.inDuelChecks",
+      "lol.wilkyy.kauna.autoChat"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"
