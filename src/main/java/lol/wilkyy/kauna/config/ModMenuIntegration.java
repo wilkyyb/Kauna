@@ -94,6 +94,14 @@ public class ModMenuIntegration implements ModMenuApi {
                     })
                     .build());
 
+            general.addEntry(builder.entryBuilder()
+                    .startBooleanToggle(Text.literal("Auto Ready Up"), KaunaConfig.INSTANCE.autoReadyUp)
+                    .setSaveConsumer(newValue -> {
+                        KaunaConfig.INSTANCE.autoReadyUp = newValue;
+                        KaunaConfig.save();
+                    })
+                    .build());
+
 
             return builder.build();
         };

@@ -3,7 +3,8 @@
 	"package": "lol.wilkyy.kauna.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"NoServerTitleMixin"
+		"NoServerTitleMixin",
+		"TitleMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

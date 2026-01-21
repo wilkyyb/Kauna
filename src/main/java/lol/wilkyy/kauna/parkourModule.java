@@ -6,10 +6,11 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
-import net.minecraft.text.MutableText;
+import net.minecraft.util.Formatting;
 
 import java.text.DecimalFormat;
 
@@ -28,10 +29,16 @@ public class parkourModule implements ClientModInitializer {
 
     private static double pbDiff = 0.0;
     private static double wrDiff = 0.0;
+    private static boolean pendingDisplay = false;
 
-    // formatter for always three decimals
+    // Formatter for always three decimals
     private static final DecimalFormat threeDecimals = new DecimalFormat("0.000");
 
+    // Colors
+    int otherTextColor = 0xbebebe;
+    int timeColor = 0xFFFFFF;
+    int dividerColor = 0x545454;
+    int starColor = 0xFDD000;
 
     @Override
     public void onInitializeClient() {
@@ -39,8 +46,17 @@ public class parkourModule implements ClientModInitializer {
         playerSkipCheck();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
+            // 1. Check if we need to calculate and show splits (waits for ChatListener to finish)
+            if (pendingDisplay && parkourChatListener.statsUpdatedThisTick) {
+                calculateAndShowSplits(mc);
+                pendingDisplay = false;
+                parkourChatListener.statsUpdatedThisTick = false;
+            }
+
+            // 2. Rainbow Title Animation Logic
             if (!rainbowRunning) return;
-            if (mc.world.getTime() % 2 == 0) { // every 2 ticks
+
+            if (mc.world != null && mc.world.getTime() % 2 == 0) {
                 rainbowTick++;
             }
 
@@ -55,6 +71,7 @@ public class parkourModule implements ClientModInitializer {
                 rainbowText.append(Text.literal(String.valueOf(worldRecordText.charAt(i)))
                         .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color)).withBold(true)));
             }
+
             MutableText title = Text.literal("⭐ ")
                     .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
                     .append(rainbowText)
@@ -63,24 +80,7 @@ public class parkourModule implements ClientModInitializer {
 
             mc.inGameHud.setTitleTicks(0, 2, 20);
             mc.inGameHud.setTitle(title);
-
-            Text subtitle = Text.empty()
-                    .append(Text.literal("WR: ")
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
-                    .append(Text.literal(formatDiff(wrDiff))
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
-                    .append(Text.literal(" | ")
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
-                    .append(Text.literal(threeDecimals.format(time))
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
-                    .append(Text.literal(" | ")
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
-                    .append(Text.literal("PB: ")
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
-                    .append(Text.literal(formatDiff(pbDiff))
-                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
-
-            mc.inGameHud.setSubtitle(subtitle);
+            mc.inGameHud.setSubtitle(generateSubtitle(wrColor, pbColor));
 
             if (rainbowTick > 80) {
                 rainbowRunning = false;
@@ -90,117 +90,82 @@ public class parkourModule implements ClientModInitializer {
         });
     }
 
-    // helper method
-    private static String formatDiff(double value) {
-        String formatted = threeDecimals.format(value);
-        if (value > 0) {
-            return "+" + formatted;
+    private void calculateAndShowSplits(MinecraftClient client) {
+        wrDiff = time - worldRecord;
+        pbDiff = time - personalBest;
+
+        int pbTitleColor = 0x61c6ee;
+        int noRecordTitleColor = 0xf9d301;
+
+        int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
+        int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
+
+        if (wrDiff < 0) { // World record
+            rainbowRunning = true;
+            rainbowTick = 0;
+
+            if (client.player != null) {
+                client.player.playSound(SoundEvents.GOAT_HORN_SOUNDS.get(0).value(), 1.0f, 1.0f);
+            }
+            debugLog("Got WR, rainbow animation started");
+
+        } else if (pbDiff < 0) { // Personal best
+            MutableText title = Text.literal("⭐ ")
+                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
+                    .append(Text.literal("Oma Ennätys")
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbTitleColor)).withBold(true)))
+                    .append(Text.literal(" ⭐")
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
+
+            client.inGameHud.setTitleTicks(0, 100, 20);
+            client.inGameHud.setTitle(title);
+            client.inGameHud.setSubtitle(generateSubtitle(wrColor, pbColor));
+            debugLog("Got PB, splits displayed");
+
+        } else { // No record
+            MutableText title = Text.literal("⭐ ")
+                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
+                    .append(Text.literal("Voittaja")
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(noRecordTitleColor)).withBold(true)))
+                    .append(Text.literal(" ⭐")
+                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
+
+            client.inGameHud.setTitleTicks(0, 100, 20);
+            client.inGameHud.setTitle(title);
+            client.inGameHud.setSubtitle(generateSubtitle(wrColor, pbColor));
+            debugLog("No WR or PB, showing standard splits");
         }
-        return formatted;
     }
 
-    int otherTextColor = 0xbebebe;
-    int timeColor = 0xFFFFFF;
-    int dividerColor = 0x545454;
-    int starColor = 0xFDD000;
+    private Text generateSubtitle(int wrColor, int pbColor) {
+        return Text.empty()
+                .append(Text.literal("WR ")
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
+                .append(Text.literal(formatDiff(wrDiff))
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
+                .append(Text.literal(" | ")
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
+                .append(Text.literal(threeDecimals.format(time))
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
+                .append(Text.literal(" | ")
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
+                .append(Text.literal("PB ")
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
+                .append(Text.literal(formatDiff(pbDiff))
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
+    }
+
+    private static String formatDiff(double value) {
+        String formatted = threeDecimals.format(value);
+        return (value > 0) ? "+" + formatted : formatted;
+    }
 
     public void parkourDuelWinCheck() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
-
-            MinecraftClient client = MinecraftClient.getInstance();
-
+            // Just trigger the pending flag
             if (msg.contains("Aika:") && !msg.contains("[")) {
-                debugLog("Duel Won");
-                client.execute(() -> {
-                    try {
-                        Thread.sleep(1);
-                        wrDiff = time - worldRecord;
-                        pbDiff = time - personalBest;
-
-                        int pbTitleColor = 0x61c6ee;
-                        int noRecordTitleColor = 0xf9d301;
-
-                        if (wrDiff < 0) { // World record
-                            rainbowRunning = true;
-                            rainbowTick = 0;
-
-                            if (client.player != null) {
-                                SoundEvent event = SoundEvents.GOAT_HORN_SOUNDS.get(0).value();
-                                client.player.playSound(event, 1.0f, 1.0f);
-                            }
-
-                            debugLog("Got WR, rainbow animation started");
-
-                        } else if (pbDiff < 0) { // Personal best
-                            int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
-                            int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
-
-                            MutableText title = Text.literal("⭐ ")
-                                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
-                                    .append(Text.literal("Oma Ennätys")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbTitleColor)).withBold(true)))
-                                    .append(Text.literal(" ⭐")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
-
-                            Text subtitle = Text.empty()
-                                    .append(Text.literal("WR ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
-                                    .append(Text.literal(formatDiff(wrDiff))
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
-                                    .append(Text.literal(" | ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
-                                    .append(Text.literal(threeDecimals.format(time))
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
-                                    .append(Text.literal(" | ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
-                                    .append(Text.literal("PB ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
-                                    .append(Text.literal(formatDiff(pbDiff))
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
-
-                            client.inGameHud.setTitleTicks(0, 100, 20);
-                            client.inGameHud.setTitle(title);
-                            client.inGameHud.setSubtitle(subtitle);
-
-                            debugLog("Got PB, splits displayed without server title");
-                        } else { // No record
-                            int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
-                            int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
-
-                            MutableText title = Text.literal("⭐ ")
-                                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true))
-                                    .append(Text.literal("Voittaja")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(noRecordTitleColor)).withBold(true)))
-                                    .append(Text.literal(" ⭐")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
-
-                            Text subtitle = Text.empty()
-                                    .append(Text.literal("WR ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
-                                    .append(Text.literal(formatDiff(wrDiff))
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(wrColor))))
-                                    .append(Text.literal(" | ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
-                                    .append(Text.literal(threeDecimals.format(time))
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(timeColor))))
-                                    .append(Text.literal(" | ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(dividerColor))))
-                                    .append(Text.literal("PB ")
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(otherTextColor))))
-                                    .append(Text.literal(formatDiff(pbDiff))
-                                            .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(pbColor))));
-
-                            client.inGameHud.setTitleTicks(0, 100, 20);
-                            client.inGameHud.setTitle(title);
-                            client.inGameHud.setSubtitle(subtitle);
-
-                            debugLog("No WR or PB, splits displayed without server title");
-                        }
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                });
+                pendingDisplay = true;
             }
         });
     }
@@ -211,27 +176,21 @@ public class parkourModule implements ClientModInitializer {
             MinecraftClient client = MinecraftClient.getInstance();
             String playerName = client.player != null ? client.player.getName().getString() : "";
 
-            if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[") && inDuelChecks.inDuel()) {
+            if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[")) {
                 Text subtitle = Text.empty()
                         .append(Text.literal("⌚")
                                 .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbebebe))));
 
-
-                client.inGameHud.setTitle(Text.literal(""));
-                client.inGameHud.setSubtitle(Text.literal(""));
-                client.inGameHud.setTitleTicks(0, 2, 0);
-
-                MutableText title = Text.literal("");
                 client.inGameHud.setTitleTicks(0, 72000, 20);
-                client.inGameHud.setTitle(title);
+                client.inGameHud.setTitle(Text.literal(""));
                 client.inGameHud.setSubtitle(subtitle);
-
-                debugLog("Vihu haluaa skipata!");
+                debugLog("Vastustaja haluaa skipata!");
             }
-            if (msg.contains("hyväksyi kartan ohituksen!") && !msg.contains("[") && inDuelChecks.inDuel()) {
+
+            if (msg.contains("hyväksyi kartan ohituksen!") && !msg.contains("[")) {
+                client.inGameHud.setTitleTicks(0, 0, 0);
                 client.inGameHud.setTitle(Text.literal(""));
                 client.inGameHud.setSubtitle(Text.literal(""));
-                client.inGameHud.setTitleTicks(0, 0, 0);
             }
         });
     }

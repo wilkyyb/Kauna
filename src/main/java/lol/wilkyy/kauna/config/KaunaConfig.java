@@ -29,7 +29,7 @@ public class KaunaConfig {
     public boolean customAutoGG = false;       // toggle for custom message
     public String customAutoGGText = "gg";     // default custom message
 
-
+    public boolean autoReadyUp = true;
 
     // Singleton instance
     public static KaunaConfig INSTANCE = new KaunaConfig();
