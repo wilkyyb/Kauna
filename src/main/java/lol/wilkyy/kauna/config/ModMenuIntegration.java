@@ -102,6 +102,14 @@ public class ModMenuIntegration implements ModMenuApi {
                     })
                     .build());
 
+            general.addEntry(builder.entryBuilder()
+                    .startBooleanToggle(Text.literal("AutoEz"), KaunaConfig.INSTANCE.autoEz)
+                    .setSaveConsumer(newValue -> {
+                        KaunaConfig.INSTANCE.autoEz = newValue;
+                        KaunaConfig.save();
+                    })
+                    .build());
+
 
             return builder.build();
         };

@@ -29,6 +29,8 @@ public class KaunaConfig {
     public boolean customAutoGG = false;       // toggle for custom message
     public String customAutoGGText = "gg";     // default custom message
 
+    public boolean autoEz = false;
+
     public boolean autoReadyUp = true;
 
     // Singleton instance

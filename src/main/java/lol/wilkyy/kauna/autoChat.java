@@ -40,6 +40,22 @@ public class autoChat implements ClientModInitializer {
                         }
                     }, "AutoGG-Delay-Thread").start();
                 }
+                if (client.player != null) {
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(KaunaConfig.INSTANCE.autoGGDelay + 300);
+
+                            if (KaunaConfig.INSTANCE.autoEz) {
+                                if (client.player != null) {
+                                    client.player.networkHandler.sendChatMessage("ez");
+                                    debugLog("AutoEz sent after delay: {}");
+                                }
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    });
+                }
             }
         });
     }
