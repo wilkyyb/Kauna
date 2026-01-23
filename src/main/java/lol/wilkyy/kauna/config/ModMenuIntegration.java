@@ -73,6 +73,15 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(true)
                     .build());
 
+            // --- SECTION: FRIENDS  ---
+            general.addEntry(eb.startTextDescription(Text.literal("Kaverit")
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.DARK_AQUA)))
+                    .build());
+
+            general.addEntry(eb.startStrList(Text.literal("Kaverilista"), KaunaConfig.INSTANCE.friendsList)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.friendsList = val)
+                    .setDefaultValue(new java.util.ArrayList<>(java.util.List.of("hullu")))
+                    .build());
 
             return builder.build();
         };

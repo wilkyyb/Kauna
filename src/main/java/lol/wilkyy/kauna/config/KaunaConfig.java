@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.client.MinecraftClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.File;
 import java.io.FileReader;
@@ -28,6 +30,10 @@ public class KaunaConfig {
     public boolean autoReadyUp = false;
 
     public boolean CheckForUpdates = true;
+
+
+    // Initialize with the default name
+    public List<String> friendsList = new ArrayList<>(List.of("hullu"));
 
     // Singleton instance
     public static KaunaConfig INSTANCE = new KaunaConfig();

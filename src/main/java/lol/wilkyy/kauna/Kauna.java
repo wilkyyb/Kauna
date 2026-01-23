@@ -19,6 +19,7 @@ public class Kauna implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        GListScanner.init();
         autoReadyUp.init();
         versionCheck.checkVersion();
         KaunaConfig.load();
