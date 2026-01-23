@@ -1,6 +1,7 @@
 package lol.wilkyy.kauna.mixin;
 
 import lol.wilkyy.kauna.autoReadyUp;
+import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.statsChecker;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.text.Text;
@@ -11,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static lol.wilkyy.kauna.statsChecker.triggerStatsLookup;
 
 
 @Mixin(InGameHud.class)
@@ -51,9 +50,10 @@ public class TitleMixin {
 
     @Inject(method = "setOverlayMessage", at = @At("HEAD"))
     private void onSetOverlayMessage(Text message, boolean tinted, CallbackInfo ci) {
-        if (message != null) {
-            // Pass the text to your autoCrouch logic
-            autoReadyUp.handleActionbarText(message.getString());
+        if (message != null && message.getString().contains("(kyykkää)")) {
+            if (KaunaConfig.INSTANCE.autoReadyUp) {
+                autoReadyUp.startCrouch(2);
+            }
         }
     }
 }

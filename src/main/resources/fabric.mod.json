@@ -24,8 +24,7 @@
       "lol.wilkyy.kauna.parkourModule",
       "lol.wilkyy.kauna.inDuelChecks",
       "lol.wilkyy.kauna.autoChat",
-      "lol.wilkyy.kauna.statsChecker",
-      "lol.wilkyy.kauna.autoReadyUp"
+      "lol.wilkyy.kauna.statsChecker"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"

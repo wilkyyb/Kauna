@@ -56,11 +56,15 @@ public class parkourChatListener implements ClientModInitializer {
                 }
             }
 
+// Inside parkourChatListener.java
             if (msg.contains("Paras aika:")) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.lastIndexOf(":") + 1).trim();
                         worldRecord = Double.parseDouble(numberPart);
+                        // ADD THIS: In case WR is the last message sent by the server
+                        statsUpdatedThisTick = true;
+                        debugLog("Updated WR: {}", worldRecord);
                     } catch (Exception e) {
                         debugLog("Failed to parse WR: {}", msg);
                     }

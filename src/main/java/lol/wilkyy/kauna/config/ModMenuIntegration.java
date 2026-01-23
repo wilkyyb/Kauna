@@ -1,113 +1,76 @@
 package lol.wilkyy.kauna.config;
 
-import com.terraformersmc.modmenu.api.ModMenuApi;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-
-import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
+import net.minecraft.util.Formatting;
 
 public class ModMenuIntegration implements ModMenuApi {
+
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> {
             ConfigBuilder builder = ConfigBuilder.create()
                     .setParentScreen(parent)
-                    .setTitle(Text.literal("Kauna Config"));
+                    .setTitle(Text.literal("Kauna Configuration"))
+                    .setSavingRunnable(KaunaConfig::save);
 
-
+            ConfigEntryBuilder eb = builder.entryBuilder();
             ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
 
-            // Test1 Boolean toggle
-            general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("Testi 1"), KaunaConfig.INSTANCE.test1)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.test1 = newValue;
-                        KaunaConfig.save(); // persist immediately
-                        debugLog("New value set for Testi 1: {}", newValue);
-                    })
-                    .setTooltip(Text.literal("Tää ei tee yhtään mitään, testausmielessä vaan."))
+            // --- SECTION: AUTO GG ---
+            general.addEntry(eb.startTextDescription(Text.literal("AutoGG Asetukset")
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GREEN)))
                     .build());
 
-            // Test2 Float slider
-            general.addEntry(builder.entryBuilder()
-                    .startFloatField(Text.literal("Testi 2"), KaunaConfig.INSTANCE.test2)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.test2 = newValue;
-                        KaunaConfig.save(); // persist immediately
-                        debugLog("New value set for Testi 2: {}", newValue);
-                    })
-                    .setMin(0.0F).setMax(1.0F)
-                    .setTooltip(Text.literal("Tää ei tee yhtään mitään, testausmielessä vaan."))
+            general.addEntry(eb.startBooleanToggle(Text.literal("AutoGG"), KaunaConfig.INSTANCE.autoGG)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoGG = val)
+                    .setDefaultValue(true)
+                    .build());
+
+            general.addEntry(eb.startStrField(Text.literal("AutoGG Viesti"), KaunaConfig.INSTANCE.AutoGGText)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.AutoGGText = val)
+                    .setDefaultValue("gg")
+                    .build());
+
+            // UPDATED: Now an Int Slider from 0 to 1000
+            general.addEntry(eb.startIntSlider(Text.literal("AutoGG Viive (ms)"), KaunaConfig.INSTANCE.autoGGDelay, 0, 1000)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoGGDelay = val)
+                    .setDefaultValue(250)
+                    .build());
+
+            // --- SECTION: AUTOMATION ---
+            general.addEntry(eb.startTextDescription(Text.literal("Muut Automaattiset")
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)))
+                    .build());
+
+            general.addEntry(eb.startBooleanToggle(Text.literal("AutoEz (3s viive)"), KaunaConfig.INSTANCE.autoEz)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoEz = val)
+                    .build());
+
+            general.addEntry(eb.startBooleanToggle(Text.literal("Auto ReadyUp"), KaunaConfig.INSTANCE.autoReadyUp)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoReadyUp = val)
+                    .setDefaultValue(false)
                     .build());
 
 
-            // Debug Logging toggle
-            general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("Debug Logging"), KaunaConfig.INSTANCE.debugLogging)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.debugLogging = newValue;
-                        KaunaConfig.save();
-                    })
-                    .setTooltip(Text.literal("Loggaa modin toiminnan tietoja konsoliin."))
+            // --- SECTION: SYSTEM ---
+            general.addEntry(eb.startTextDescription(Text.literal("Dev Asetukset")
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.YELLOW)))
                     .build());
 
-
-            // AUTO GG ASETUKSET
-
-            general.addEntry(builder.entryBuilder()
-                    .startTextDescription(Text.literal("AutoGG Asetukset")
-                            .setStyle(Style.EMPTY.withBold(true)))
+            general.addEntry(eb.startBooleanToggle(Text.literal("Debug Logging"), KaunaConfig.INSTANCE.debugLogging)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.debugLogging = val)
+                    .setDefaultValue(false)
                     .build());
 
-            general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("AutoGG"), KaunaConfig.INSTANCE.autoGG)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.autoGG = newValue;
-                        KaunaConfig.save();
-                    })
-                    .build());
-
-            general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("Custom AutoGG"), KaunaConfig.INSTANCE.customAutoGG)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.customAutoGG = newValue;
-                        KaunaConfig.save();
-                    })
-                    .build());
-
-            general.addEntry(builder.entryBuilder()
-                    .startStrField(Text.literal("Custom AutoGG viesti"), KaunaConfig.INSTANCE.customAutoGGText)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.customAutoGGText = newValue;
-                        KaunaConfig.save();
-                    })
-                    .build());
-
-            general.addEntry(builder.entryBuilder()
-                    .startIntField(Text.literal("AutoGG Viive (ms)"), KaunaConfig.INSTANCE.autoGGDelay)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.autoGGDelay = newValue;
-                        KaunaConfig.save();
-                    })
-                    .build());
-
-            general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("Auto Ready Up"), KaunaConfig.INSTANCE.autoReadyUp)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.autoReadyUp = newValue;
-                        KaunaConfig.save();
-                    })
-                    .build());
-
-            general.addEntry(builder.entryBuilder()
-                    .startBooleanToggle(Text.literal("AutoEz"), KaunaConfig.INSTANCE.autoEz)
-                    .setSaveConsumer(newValue -> {
-                        KaunaConfig.INSTANCE.autoEz = newValue;
-                        KaunaConfig.save();
-                    })
+            general.addEntry(eb.startBooleanToggle(Text.literal("Tarkista Päivitykset"), KaunaConfig.INSTANCE.CheckForUpdates)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.CheckForUpdates = val)
+                    .setDefaultValue(true)
                     .build());
 
 

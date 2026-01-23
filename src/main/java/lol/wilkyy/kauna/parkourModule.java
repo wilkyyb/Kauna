@@ -100,10 +100,10 @@ public class parkourModule implements ClientModInitializer {
         int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
         int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
 
-        if (wrDiff < 0) { // World record
+        if (time <= worldRecord && worldRecord != 0) {
             rainbowRunning = true;
             rainbowTick = 0;
-
+            // ... rest of logic
             if (client.player != null) {
                 client.player.playSound(SoundEvents.GOAT_HORN_SOUNDS.get(0).value(), 1.0f, 1.0f);
             }

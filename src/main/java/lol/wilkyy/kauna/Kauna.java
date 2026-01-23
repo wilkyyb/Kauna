@@ -5,9 +5,11 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
@@ -15,8 +17,10 @@ public class Kauna implements ModInitializer {
 
     private static boolean inKahakka = false;
 
-
+    @Override
     public void onInitialize() {
+        autoReadyUp.init();
+        versionCheck.checkVersion();
         KaunaConfig.load();
         kahakkaJoinCheck();
         kahakkaLeaveCheck();
@@ -28,19 +32,34 @@ public class Kauna implements ModInitializer {
             String msg = message.getString();
             if (msg.contains("Realmin Kahakkaan!") && !msg.contains("[")) {
                 MinecraftClient client = MinecraftClient.getInstance();
+                if (client.inGameHud == null) return;
 
                 inKahakka = true;
 
-                client.inGameHud.setTitle(Text.literal(""));
-                client.inGameHud.setSubtitle(
-                        Text.literal("ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ")
-                                .setStyle(Style.EMPTY
-                                        .withColor(TextColor.fromRgb(0xDE2B56))
-                                        .withBold(true)
-                                        .withItalic(true))
-                );
-                client.inGameHud.setTitleTicks(10, 15, 10);
-                debugLog("Player joined Kahakka");
+
+                // Create the primary subtitle: ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ
+                MutableText subtitleText = Text.literal("ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ")
+                        .setStyle(Style.EMPTY
+                                .withColor(TextColor.fromRgb(0xDE2B56))
+                                .withBold(true)
+                                .withItalic(true));
+
+                // If an update is found, append a new line with the warning
+                if (versionCheck.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
+                    MutableText titleText = (Text.literal("Päivitys saatavilla!")
+                            .setStyle(Style.EMPTY
+                                    .withColor(Formatting.GOLD)
+                                    .withBold(true)
+                                    .withItalic(false)));
+                    client.inGameHud.setTitle(titleText);
+                } else {
+                    client.inGameHud.setTitle(Text.literal(""));
+                }
+
+                client.inGameHud.setSubtitle(subtitleText);
+                client.inGameHud.setTitleTicks(10, 40, 10); // Increased stay time to 40 ticks (2s) so player can read both lines
+
+                debugLog("Player joined Kahakka" + (versionCheck.updateAvailable ? " (Update Notified)" : ""));
             }
         });
     }

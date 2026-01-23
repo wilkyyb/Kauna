@@ -18,20 +18,16 @@ public class KaunaConfig {
 
     public static final Logger LOGGER = LogManager.getLogger("Kauna");
 
-    // ✅ Your config options
-    public boolean test1 = true;
-    public float test2 = 1.0F;
-
     public boolean debugLogging = false;
 
     public boolean autoGG = true;              // normal AutoGG toggle
     public int autoGGDelay = 0;                  // delay in seconds before sending AutoGG
-    public boolean customAutoGG = false;       // toggle for custom message
-    public String customAutoGGText = "gg";     // default custom message
+    public String AutoGGText = "gg";     // default custom message
 
     public boolean autoEz = false;
+    public boolean autoReadyUp = false;
 
-    public boolean autoReadyUp = true;
+    public boolean CheckForUpdates = true;
 
     // Singleton instance
     public static KaunaConfig INSTANCE = new KaunaConfig();
@@ -77,5 +73,4 @@ public class KaunaConfig {
             LOGGER.info(format, args); // Log4j supports {} placeholders
         }
     }
-
 }
