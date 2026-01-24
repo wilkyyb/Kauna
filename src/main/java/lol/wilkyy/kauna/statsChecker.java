@@ -174,7 +174,8 @@ public class statsChecker implements ClientModInitializer {
 
         // 1. Calculate Ratio as a double to avoid the "0" integer issue
         // We check if pelattu > 0 to avoid division by zero crashes
-        double ratio = (pelattu > 0) ? (double) voittoja / pelattu : 0.0;
+        double lost = pelattu - voittoja;
+        double ratio = (pelattu > 0) ? (double) voittoja / lost : 0.0;
 
         // 2. Format the ratio to 2 decimal places (e.g., 0.50)
         String formattedRatio = String.format("%.2f", ratio);
