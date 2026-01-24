@@ -17,6 +17,8 @@ public class inDuelChecks implements ClientModInitializer {
 
     private static int duelEndTimer = -1; // -1 means timer is not running
 
+    public static boolean duelStarted = false;
+
     public void onInitializeClient() {
         // Handle the countdown and HUD clearing
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

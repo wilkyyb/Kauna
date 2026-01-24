@@ -125,7 +125,7 @@ public class statsChecker implements ClientModInitializer {
                 client.execute(() -> {
                     client.player.closeHandledScreen();
                     // 5 ticks (approx 250ms) is the reliable standard for macro-crouching
-                    if (KaunaConfig.INSTANCE.autoReadyUp) {
+                    if (KaunaConfig.INSTANCE.autoReadyUp && !statsChecker.duelName.contains("Parkour")) {
                         this.crouchTicks = 5;
                     }
                 });
@@ -148,7 +148,9 @@ public class statsChecker implements ClientModInitializer {
                 hasScraped = true;
                 client.execute(() -> {
                     client.player.closeHandledScreen();
-                    crouchTicks = 2;
+                    if (!statsChecker.duelName.contains("Parkour")) {
+                        crouchTicks = 2;
+                    }
                 });
                 resetState();
             }

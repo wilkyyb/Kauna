@@ -44,6 +44,7 @@ public class parkourModule implements ClientModInitializer {
     public void onInitializeClient() {
         parkourDuelWinCheck();
         playerSkipCheck();
+        countdown();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             // 1. Check if we need to calculate and show splits (waits for ChatListener to finish)
@@ -191,6 +192,27 @@ public class parkourModule implements ClientModInitializer {
                 client.inGameHud.setTitleTicks(0, 0, 0);
                 client.inGameHud.setTitle(Text.literal(""));
                 client.inGameHud.setSubtitle(Text.literal(""));
+            }
+        });
+    }
+    public void countdown() {
+        // Inside your onInitializeClient or similar setup
+        ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
+            String content = message.getString();
+            // Matches "Kierroksen alkuun 3..", "Kierroksen alkuun 2..", etc.
+            if (content.contains("Kierroksen alkuun")) {
+                String number = content.replaceAll("[^0-9]", "");
+                if (!number.isEmpty()) {
+                    MinecraftClient client = MinecraftClient.getInstance();
+
+                    // Create a nice big bold title
+                    Text countdownTitle = Text.literal(number)
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GOLD));
+
+                    // Set ticks: 0 fade in, 20 ticks (1s) stay, 5 ticks fade out
+                    client.inGameHud.setTitleTicks(0, 20, 5);
+                    client.inGameHud.setTitle(countdownTitle);
+                }
             }
         });
     }

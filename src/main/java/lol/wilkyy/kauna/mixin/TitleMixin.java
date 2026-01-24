@@ -2,9 +2,12 @@ package lol.wilkyy.kauna.mixin;
 
 import lol.wilkyy.kauna.autoReadyUp;
 import lol.wilkyy.kauna.config.KaunaConfig;
+import lol.wilkyy.kauna.inDuelChecks;
 import lol.wilkyy.kauna.statsChecker;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static lol.wilkyy.kauna.statsChecker.duelName;
 
 
 @Mixin(InGameHud.class)
@@ -41,18 +46,61 @@ public class TitleMixin {
                     statsChecker.triggerStatsLookup(type, statsChecker.targetOpponent);
                 } else {
                     // If title came first, just save the duel name and wait for chat
-                    statsChecker.duelName = type;
+                    duelName = type;
                 }
                 break;
             }
         }
     }
 
-    @Inject(method = "setOverlayMessage", at = @At("HEAD"))
+    @Inject(method = "setOverlayMessage", at = @At("HEAD"), cancellable = true)
     private void onSetOverlayMessage(Text message, boolean tinted, CallbackInfo ci) {
-        if (message != null && message.getString().contains("(kyykkää)")) {
-            if (KaunaConfig.INSTANCE.autoReadyUp) {
-                autoReadyUp.startCrouch(2);
+        if (message == null) return;
+        String content = message.getString();
+
+        if (content.contains("Kierroksen alkuun")) {
+            String number = content.replaceAll("[^0-9]", "");
+
+            if (!number.isEmpty()) {
+                MinecraftClient client = MinecraftClient.getInstance();
+
+                inDuelChecks.duelStarted = false;
+                // Handle the specific cases for 5 and 4
+                if (number.equals("5")) {
+                } else if (number.equals("4")) {
+                } else {
+                    // Standard 3, 2, 1 logic
+                    Formatting color = switch (number) {
+                        case "3" -> Formatting.GREEN;
+                        case "2" -> Formatting.YELLOW;
+                        case "1" -> Formatting.RED;
+                        default -> Formatting.GOLD;
+                    };
+
+                    Text countdownTitle = Text.literal(number)
+                            .setStyle(net.minecraft.text.Style.EMPTY.withBold(true).withColor(color));
+
+                    client.inGameHud.setTitleTicks(0, 30, 5);
+                    client.inGameHud.setTitle(countdownTitle);
+                    client.inGameHud.setSubtitle(Text.literal(""));
+                }
+                return;
+            }
+        }
+
+        if (content.contains("PB") && !inDuelChecks.duelStarted) {
+            MinecraftClient client = MinecraftClient.getInstance();
+
+            client.inGameHud.setTitleTicks(0, 20, 5);
+            client.inGameHud.setTitle(Text.literal(""));
+            client.inGameHud.setSubtitle(Text.literal("GLHF!").formatted(Formatting.GOLD));
+            inDuelChecks.duelStarted = true;
+        }
+
+        // Existing autoReadyUp kyykkää logic
+        if (content.contains("(kyykkää)")) {
+            if (KaunaConfig.INSTANCE.autoReadyUp && !statsChecker.duelName.contains("Parkour")) {
+                lol.wilkyy.kauna.autoReadyUp.startCrouch(2);
             }
         }
     }
