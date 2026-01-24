@@ -172,33 +172,56 @@ public class statsChecker implements ClientModInitializer {
             if (text.contains("pelattu:")) pelattu = parseNumber(text);
         }
 
-        // 1. Calculate Ratio as a double to avoid the "0" integer issue
-        // We check if pelattu > 0 to avoid division by zero crashes
+        // 1. Calculate Ratio
         double lost = pelattu - voittoja;
-        double ratio = (pelattu > 0) ? (double) voittoja / lost : 0.0;
+        double winloseratio = (pelattu > 0) ? (lost <= 0 ? (double) voittoja : (double) voittoja / lost) : 0.0;
+        String formattedRatio = String.format("%.2f", winloseratio);
 
-        // 2. Format the ratio to 2 decimal places (e.g., 0.50)
-        String formattedRatio = String.format("%.2f", ratio);
+        // 2. Win/Loss Ratio Colors
+        Formatting ratioColor;
+        boolean boldRatio = false;
 
-        // 3. Determine color: Green if ratio >= 1.0 (positive performance), Red if below
-        // (Or stick to your preference: Green if > 0)
-        Formatting ratioColor = (ratio >= 1.0) ? Formatting.GREEN : Formatting.RED;
+        if (winloseratio >= 200) { ratioColor = Formatting.DARK_PURPLE; boldRatio = true; }
+        else if (winloseratio >= 150) ratioColor = Formatting.LIGHT_PURPLE;
+        else if (winloseratio >= 100) ratioColor = Formatting.DARK_BLUE;
+        else if (winloseratio >= 50) ratioColor = Formatting.BLUE;
+        else if (winloseratio >= 25) ratioColor = Formatting.YELLOW;
+        else if (winloseratio >= 10) ratioColor = Formatting.AQUA;
+        else if (winloseratio >= 5.0) ratioColor = Formatting.DARK_AQUA;
+        else if (winloseratio >= 2.0) ratioColor = Formatting.DARK_GREEN;
+        else if (winloseratio >= 1.0) ratioColor = Formatting.GREEN;
+        else ratioColor = Formatting.GRAY;
 
-        // Build the formatted message
+        // 3. Wins Color Logic (Mapped to same colors as Ratio)
+        Formatting winColor;
+        boolean boldWins = false;
+
+        if (voittoja >= 5000) { winColor = Formatting.DARK_PURPLE; boldWins = true; }
+        else if (voittoja >= 3500) winColor = Formatting.LIGHT_PURPLE;
+        else if (voittoja >= 2000) winColor = Formatting.DARK_BLUE;
+        else if (voittoja >= 1000) winColor = Formatting.BLUE;
+        else if (voittoja >= 750)  winColor = Formatting.YELLOW;
+        else if (voittoja >= 500)  winColor = Formatting.AQUA;
+        else if (voittoja >= 300)  winColor = Formatting.DARK_AQUA;
+        else if (voittoja >= 200)  winColor = Formatting.DARK_GREEN;
+        else if (voittoja >= 100)  winColor = Formatting.GREEN;
+        else winColor = Formatting.GRAY;
+
+        // 4. Build the Message
         Text message = Text.empty()
                 .append(Text.literal("|").formatted(Formatting.BOLD))
                 .append(Text.literal(" " + targetOpponent + " ").setStyle(net.minecraft.text.Style.EMPTY.withBold(true).withColor(Formatting.GOLD)))
                 .append(Text.literal("- ").formatted(Formatting.GRAY))
-                .append(Text.literal(duelName + " statistiikat").formatted(Formatting.AQUA))
+                .append(Text.literal(duelName + " stats").formatted(Formatting.AQUA))
                 .append(Text.literal("\n"))
                 .append(Text.literal("| ").setStyle(net.minecraft.text.Style.EMPTY.withBold(true).withColor(Formatting.WHITE)))
+                // Wins Section
                 .append(Text.literal("Voitot: ").formatted(Formatting.WHITE))
-                .append(Text.literal(voittoja + " ").formatted(Formatting.GREEN))
-                .append(Text.literal("Pelattu: ").formatted(Formatting.WHITE))
-                .append(Text.literal(pelattu + " ").formatted(Formatting.DARK_AQUA))
-                .append(Text.literal("- ").formatted(Formatting.GRAY))
+                .append(Text.literal(String.valueOf(voittoja)).setStyle(net.minecraft.text.Style.EMPTY.withColor(winColor).withBold(boldWins)))
+                .append(Text.literal("  - ").formatted(Formatting.GRAY))
+                // Ratio Section
                 .append(Text.literal("W/L: ").formatted(Formatting.WHITE))
-                .append(Text.literal(formattedRatio).formatted(ratioColor)); // Use formatted string here
+                .append(Text.literal(formattedRatio).setStyle(net.minecraft.text.Style.EMPTY.withColor(ratioColor).withBold(boldRatio)));
 
         client.player.sendMessage(message, false);
     }
