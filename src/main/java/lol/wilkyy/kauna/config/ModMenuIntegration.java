@@ -37,7 +37,6 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue("gg")
                     .build());
 
-            // UPDATED: Now an Int Slider from 0 to 1000
             general.addEntry(eb.startIntSlider(Text.literal("AutoGG Viive (ms)"), KaunaConfig.INSTANCE.autoGGDelay, 0, 1000)
                     .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoGGDelay = val)
                     .setDefaultValue(250)
@@ -55,6 +54,20 @@ public class ModMenuIntegration implements ModMenuApi {
             general.addEntry(eb.startBooleanToggle(Text.literal("Auto ReadyUp"), KaunaConfig.INSTANCE.autoReadyUp)
                     .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoReadyUp = val)
                     .setDefaultValue(false)
+                    .build());
+
+            general.addEntry(eb.startBooleanToggle(Text.literal("Stats Lookup"), KaunaConfig.INSTANCE.autoStatsLookup)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.autoStatsLookup = val)
+                    .setDefaultValue(true)
+                    .build());
+
+            // --- SECTION: PARKOUR ---
+            general.addEntry(eb.startTextDescription(Text.literal("Parkour Duel")
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GREEN)))
+                    .build());
+            general.addEntry(eb.startBooleanToggle(Text.literal("Pysyvä ohitus-ilmoitus"), KaunaConfig.INSTANCE.stickySkipNotification)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.stickySkipNotification = val)
+                    .setDefaultValue(true)
                     .build());
 
 

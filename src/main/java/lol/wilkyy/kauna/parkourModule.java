@@ -1,5 +1,6 @@
 package lol.wilkyy.kauna;
 
+import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -175,26 +176,44 @@ public class parkourModule implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             MinecraftClient client = MinecraftClient.getInstance();
-            String playerName = client.player != null ? client.player.getName().getString() : "";
+            if (client.player == null) return;
+
+            String playerName = client.player.getName().getString();
 
             if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[")) {
-                Text subtitle = Text.empty()
-                        .append(Text.literal("⌚")
-                                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbebebe))));
 
-                client.inGameHud.setTitleTicks(0, 72000, 20);
-                client.inGameHud.setTitle(Text.literal(""));
-                client.inGameHud.setSubtitle(subtitle);
-                debugLog("Vastustaja haluaa skipata!");
+                if (KaunaConfig.INSTANCE.stickySkipNotification) {
+                    Text subtitle = Text.empty()
+                            .append(Text.literal("⌚")
+                                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbebebe))));
+
+                    client.inGameHud.setTitleTicks(0, 72000, 20);
+                    client.inGameHud.setTitle(Text.literal("")); // Clear main title
+                    client.inGameHud.setSubtitle(subtitle);
+                } else {
+                    Text mainTitle = Text.literal("Vihollinen haluaa skipata")
+                            .formatted(Formatting.RED)
+                            .formatted(Formatting.BOLD);
+                    Text subtitle = Text.literal("Ohita kartta ohittamalla kartta")
+                            .formatted(Formatting.GRAY);
+
+                    client.inGameHud.setTitleTicks(2, 30, 20);
+                    client.inGameHud.setTitle(mainTitle);
+                    client.inGameHud.setSubtitle(subtitle);
+                }
+
+                debugLog("Skip-ilmoitus näytetty. Pysyvä: " + KaunaConfig.INSTANCE.stickySkipNotification);
             }
 
-            if (msg.contains("hyväksyi kartan ohituksen!") && !msg.contains("[")) {
+            // Standard clearing logic when skip is accepted or game starts
+            if ((msg.contains("hyväksyi kartan ohituksen!") || msg.contains("Peli alkoi!")) && !msg.contains("[")) {
                 client.inGameHud.setTitleTicks(0, 0, 0);
                 client.inGameHud.setTitle(Text.literal(""));
                 client.inGameHud.setSubtitle(Text.literal(""));
             }
         });
     }
+
     public void countdown() {
         // Inside your onInitializeClient or similar setup
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {

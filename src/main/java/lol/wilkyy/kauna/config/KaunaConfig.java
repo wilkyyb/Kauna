@@ -28,8 +28,10 @@ public class KaunaConfig {
 
     public boolean autoEz = false;
     public boolean autoReadyUp = false;
+    public boolean autoStatsLookup = true; // Add this line
 
     public boolean CheckForUpdates = true;
+    public boolean stickySkipNotification = true; // Default to the behavior you have now
 
 
     // Initialize with the default name

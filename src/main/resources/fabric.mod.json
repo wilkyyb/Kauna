@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "kauna",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "name": "Kauna",
   "description": "An utility mod for Realmi.fi (specifically Kahakka)",
   "authors": [
@@ -24,7 +24,8 @@
       "lol.wilkyy.kauna.parkourModule",
       "lol.wilkyy.kauna.inDuelChecks",
       "lol.wilkyy.kauna.autoChat",
-      "lol.wilkyy.kauna.statsChecker"
+      "lol.wilkyy.kauna.statsChecker",
+      "lol.wilkyy.kauna.GListScanner"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"

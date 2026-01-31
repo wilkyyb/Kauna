@@ -62,8 +62,10 @@ public class statsChecker implements ClientModInitializer {
             }
         });
 
-        // 2. Chat Listener
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
+            // Check if the feature is enabled in config first
+            if (!KaunaConfig.INSTANCE.autoStatsLookup) return;
+
             String content = message.getString();
             Pattern pattern = Pattern.compile("Realmi » Valmistaudu! Vastustaja: (\\w+)");
             Matcher matcher = pattern.matcher(content);
