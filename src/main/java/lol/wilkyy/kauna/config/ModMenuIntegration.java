@@ -70,6 +70,15 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(true)
                     .build());
 
+            // --- SECTION: FRIENDS  ---
+            general.addEntry(eb.startTextDescription(Text.literal("Kaverit")
+                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.DARK_AQUA)))
+                    .build());
+
+            general.addEntry(eb.startStrList(Text.literal("Kaverilista"), KaunaConfig.INSTANCE.friendsList)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.friendsList = val)
+                    .setDefaultValue(new java.util.ArrayList<>(java.util.List.of("hullu")))
+                    .build());
 
             // --- SECTION: SYSTEM ---
             general.addEntry(eb.startTextDescription(Text.literal("Dev Asetukset")
@@ -86,14 +95,11 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(true)
                     .build());
 
-            // --- SECTION: FRIENDS  ---
-            general.addEntry(eb.startTextDescription(Text.literal("Kaverit")
-                            .setStyle(Style.EMPTY.withBold(true).withColor(Formatting.DARK_AQUA)))
-                    .build());
-
-            general.addEntry(eb.startStrList(Text.literal("Kaverilista"), KaunaConfig.INSTANCE.friendsList)
-                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.friendsList = val)
-                    .setDefaultValue(new java.util.ArrayList<>(java.util.List.of("hullu")))
+            // Add this in the "General" category or a new "Server" category
+            general.addEntry(eb.startBooleanToggle(Text.literal("Vain Realmi.fi"), KaunaConfig.INSTANCE.inRealmiCheck)
+                    .setSaveConsumer(val -> KaunaConfig.INSTANCE.inRealmiCheck = val)
+                    .setDefaultValue(true)
+                    .setTooltip(Text.literal("Modin toiminnot ovat päällä vain Realmi.fi -palvelimella"))
                     .build());
 
             return builder.build();

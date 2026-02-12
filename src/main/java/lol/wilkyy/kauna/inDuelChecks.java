@@ -44,7 +44,7 @@ public class inDuelChecks implements ClientModInitializer {
         // Detect Duel Start
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
-            if (msg.contains("Aloitetaan kaksintaistoa..") && !msg.contains("[")) {
+            if (msg.contains("Aloitetaan kaksintaistoa..") && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
                 inDuel = true;
                 debugLog("Duel started");
             }
@@ -54,7 +54,7 @@ public class inDuelChecks implements ClientModInitializer {
         MinecraftClient clientt = MinecraftClient.getInstance();
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
-            if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.interactionManager != null && clientt.interactionManager.getCurrentGameMode() == GameMode.SPECTATOR)) {
+            if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.interactionManager != null && clientt.interactionManager.getCurrentGameMode() == GameMode.SPECTATOR && Kauna.isCurrentlyOnRealmi())) {
                 inParkourDuel = true;
                 debugLog("Parkour Duel started");
             }
@@ -64,7 +64,7 @@ public class inDuelChecks implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             // Check for game end OR leaving spectator mode
-            if ((msg.contains("Peli päättyi!") && !msg.contains("["))) {
+            if ((msg.contains("Peli päättyi!") && !msg.contains("["))&& Kauna.isCurrentlyOnRealmi()) {
                 duelEndTimer = 80; // Triggers the 4-second reset countdown
                 debugLog("Duel end message detected, starting reset timer.");
             }

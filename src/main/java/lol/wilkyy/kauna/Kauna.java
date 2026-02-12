@@ -28,10 +28,21 @@ public class Kauna implements ModInitializer {
         debugLog("Kannat kaunaa... Mod initialized!");
     }
 
+    public static boolean isCurrentlyOnRealmi() {
+        if (!KaunaConfig.INSTANCE.inRealmiCheck) return true; // If toggle is off, allow everywhere
+
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.getCurrentServerEntry() != null) {
+            String address = client.getCurrentServerEntry().address.toLowerCase();
+            return address.contains("realmi.fi");
+        }
+        return false;
+    }
+
     public void kahakkaJoinCheck() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
-            if (msg.contains("Realmin Kahakkaan!") && !msg.contains("[")) {
+            if (msg.contains("Realmin Kahakkaan!") && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
                 MinecraftClient client = MinecraftClient.getInstance();
                 if (client.inGameHud == null) return;
 

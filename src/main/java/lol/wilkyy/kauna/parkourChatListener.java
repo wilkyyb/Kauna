@@ -16,7 +16,7 @@ public class parkourChatListener implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
 
-            if (msg.contains("Aika:")) {
+            if (msg.contains("Aika:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.indexOf("Aika:") + 5).trim();
@@ -30,7 +30,7 @@ public class parkourChatListener implements ClientModInitializer {
 
             // Set the flag true ONLY when the PB/Previous time arrives,
             // as this is usually the last message in the sequence
-            if (msg.contains("Aikaisempi:")) {
+            if (msg.contains("Aikaisempi:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.indexOf("Aikaisempi:") + 11).trim();
@@ -43,7 +43,7 @@ public class parkourChatListener implements ClientModInitializer {
                 }
             }
 
-            if (msg.contains("PB:")) {
+            if (msg.contains("PB:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.indexOf("PB:") + 3).trim();
@@ -57,7 +57,7 @@ public class parkourChatListener implements ClientModInitializer {
             }
 
 // Inside parkourChatListener.java
-            if (msg.contains("Paras aika:")) {
+            if (msg.contains("Paras aika:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.lastIndexOf(":") + 1).trim();

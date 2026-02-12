@@ -166,7 +166,7 @@ public class parkourModule implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             // Just trigger the pending flag
-            if (msg.contains("Aika:") && !msg.contains("[")) {
+            if (msg.contains("Aika:") && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
                 pendingDisplay = true;
             }
         });
@@ -176,11 +176,11 @@ public class parkourModule implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             MinecraftClient client = MinecraftClient.getInstance();
-            if (client.player == null) return;
+            if (client.player == null ) return;
 
             String playerName = client.player.getName().getString();
 
-            if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[")) {
+            if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
 
                 if (KaunaConfig.INSTANCE.stickySkipNotification) {
                     Text subtitle = Text.empty()
@@ -206,7 +206,7 @@ public class parkourModule implements ClientModInitializer {
             }
 
             // Standard clearing logic when skip is accepted or game starts
-            if ((msg.contains("hyväksyi kartan ohituksen!") || msg.contains("Peli alkoi!")) && !msg.contains("[")) {
+            if ((msg.contains("hyväksyi kartan ohituksen!") || msg.contains("Peli alkoi!")) && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
                 client.inGameHud.setTitleTicks(0, 0, 0);
                 client.inGameHud.setTitle(Text.literal(""));
                 client.inGameHud.setSubtitle(Text.literal(""));
@@ -219,7 +219,7 @@ public class parkourModule implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String content = message.getString();
             // Matches "Kierroksen alkuun 3..", "Kierroksen alkuun 2..", etc.
-            if (content.contains("Kierroksen alkuun")) {
+            if (content.contains("Kierroksen alkuun") && Kauna.isCurrentlyOnRealmi()) {
                 String number = content.replaceAll("[^0-9]", "");
                 if (!number.isEmpty()) {
                     MinecraftClient client = MinecraftClient.getInstance();

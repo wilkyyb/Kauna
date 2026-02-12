@@ -28,7 +28,7 @@ public class autoChat implements ClientModInitializer {
             }
 
             // Handle AutoGG - Now always uses AutoGGText
-            if (KaunaConfig.INSTANCE.autoGG) {
+            if (KaunaConfig.INSTANCE.autoGG && Kauna.isCurrentlyOnRealmi()) {
                 String messageToSend = KaunaConfig.INSTANCE.AutoGGText;
 
                 scheduler.schedule(() -> {
@@ -42,7 +42,7 @@ public class autoChat implements ClientModInitializer {
             }
 
             // Handle AutoEz
-            if (KaunaConfig.INSTANCE.autoEz) {
+            if (KaunaConfig.INSTANCE.autoEz && Kauna.isCurrentlyOnRealmi()) {
                 // Scheduled for the GG delay + 3100ms
                 long ezDelay = KaunaConfig.INSTANCE.autoGGDelay + 3100;
 

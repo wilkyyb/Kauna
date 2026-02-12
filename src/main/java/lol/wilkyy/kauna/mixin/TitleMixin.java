@@ -1,5 +1,6 @@
 package lol.wilkyy.kauna.mixin;
 
+import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.autoReadyUp;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.inDuelChecks;
@@ -36,7 +37,7 @@ public class TitleMixin {
 
     @Inject(method = "setTitle", at = @At("HEAD"))
     private void onSetTitle(Text title, CallbackInfo ci) {
-        if (title == null) return;
+        if (title == null &&  Kauna.isCurrentlyOnRealmi()) return;
         String titleText = title.getString();
 
         for (String type : DUEL_TYPES) {
@@ -55,7 +56,7 @@ public class TitleMixin {
 
     @Inject(method = "setOverlayMessage", at = @At("HEAD"), cancellable = true)
     private void onSetOverlayMessage(Text message, boolean tinted, CallbackInfo ci) {
-        if (message == null) return;
+        if (message == null && Kauna.isCurrentlyOnRealmi()) return;
         String content = message.getString();
 
         if (content.contains("Kierroksen alkuun")) {
@@ -88,7 +89,7 @@ public class TitleMixin {
             }
         }
 
-        if (content.contains("PB") && !inDuelChecks.duelStarted) {
+        if (content.contains("PB") && !inDuelChecks.duelStarted && Kauna.isCurrentlyOnRealmi()) {
             MinecraftClient client = MinecraftClient.getInstance();
 
             client.inGameHud.setTitleTicks(0, 20, 5);
@@ -98,7 +99,7 @@ public class TitleMixin {
         }
 
         // Existing autoReadyUp kyykkää logic
-        if (content.contains("(kyykkää)")) {
+        if (content.contains("(kyykkää)") && Kauna.isCurrentlyOnRealmi()) {
             if (KaunaConfig.INSTANCE.autoReadyUp && !statsChecker.duelName.contains("Parkour")) {
                 lol.wilkyy.kauna.autoReadyUp.startCrouch(2);
             }

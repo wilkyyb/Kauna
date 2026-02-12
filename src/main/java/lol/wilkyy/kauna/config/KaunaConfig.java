@@ -33,6 +33,8 @@ public class KaunaConfig {
     public boolean CheckForUpdates = true;
     public boolean stickySkipNotification = true; // Default to the behavior you have now
 
+    // Add this inside public class KaunaConfig
+    public boolean inRealmiCheck = true;
 
     // Initialize with the default name
     public List<String> friendsList = new ArrayList<>(List.of("hullu"));
