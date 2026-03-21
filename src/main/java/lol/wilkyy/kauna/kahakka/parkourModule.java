@@ -1,11 +1,11 @@
-package lol.wilkyy.kauna;
+package lol.wilkyy.kauna.kahakka;
 
+import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -16,7 +16,7 @@ import net.minecraft.util.Formatting;
 import java.text.DecimalFormat;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
-import static lol.wilkyy.kauna.parkourChatListener.*;
+import static lol.wilkyy.kauna.kahakka.parkourChatListener.*;
 
 public class parkourModule implements ClientModInitializer {
 

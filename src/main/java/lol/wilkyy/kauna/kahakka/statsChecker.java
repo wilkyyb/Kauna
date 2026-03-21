@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna;
+package lol.wilkyy.kauna.kahakka;
 
 import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.api.ClientModInitializer;

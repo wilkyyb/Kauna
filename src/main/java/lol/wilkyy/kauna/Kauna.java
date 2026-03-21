@@ -1,6 +1,8 @@
 package lol.wilkyy.kauna;
 
+import lol.wilkyy.kauna.config.ConfigHandler;
 import lol.wilkyy.kauna.config.KaunaConfig;
+import lol.wilkyy.kauna.kahakka.autoReadyUp;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -23,18 +25,21 @@ public class Kauna implements ModInitializer {
         autoReadyUp.init();
         versionCheck.checkVersion();
         KaunaConfig.load();
+
+        net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+            ConfigHandler.register(dispatcher);
+        });
+
         kahakkaJoinCheck();
         kahakkaLeaveCheck();
         debugLog("Kannat kaunaa... Mod initialized!");
     }
 
     public static boolean isCurrentlyOnRealmi() {
-        if (!KaunaConfig.INSTANCE.inRealmiCheck) return true; // If toggle is off, allow everywhere
-
+        if (!KaunaConfig.INSTANCE.inRealmiCheck) return true;
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.getCurrentServerEntry() != null) {
-            String address = client.getCurrentServerEntry().address.toLowerCase();
-            return address.contains("realmi.fi");
+            return client.getCurrentServerEntry().address.toLowerCase().contains("realmi.fi");
         }
         return false;
     }
@@ -45,50 +50,27 @@ public class Kauna implements ModInitializer {
             if (msg.contains("Realmin Kahakkaan!") && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
                 MinecraftClient client = MinecraftClient.getInstance();
                 if (client.inGameHud == null) return;
-
                 inKahakka = true;
 
-
-                // Create the primary subtitle: ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ
                 MutableText subtitleText = Text.literal("ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ")
-                        .setStyle(Style.EMPTY
-                                .withColor(TextColor.fromRgb(0xDE2B56))
-                                .withBold(true)
-                                .withItalic(true));
+                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xDE2B56)).withBold(true).withItalic(true));
 
-                // If an update is found, append a new line with the warning
                 if (versionCheck.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
-                    MutableText titleText = (Text.literal("Päivitys saatavilla!")
-                            .setStyle(Style.EMPTY
-                                    .withColor(Formatting.GOLD)
-                                    .withBold(true)
-                                    .withItalic(false)));
-                    client.inGameHud.setTitle(titleText);
+                    client.inGameHud.setTitle(Text.literal("Päivitys saatavilla!").formatted(Formatting.GOLD).copy().append(""));
                 } else {
                     client.inGameHud.setTitle(Text.literal(""));
                 }
 
                 client.inGameHud.setSubtitle(subtitleText);
-                client.inGameHud.setTitleTicks(10, 40, 10); // Increased stay time to 40 ticks (2s) so player can read both lines
-
-                debugLog("Player joined Kahakka" + (versionCheck.updateAvailable ? " (Update Notified)" : ""));
+                client.inGameHud.setTitleTicks(10, 40, 10);
             }
         });
     }
 
     public void kahakkaLeaveCheck() {
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            inKahakka = false;
-            debugLog("Player disconnected from Kahakka");
-        });
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            inKahakka = false;
-            debugLog("Joined different server, reset inKahakka");
-        });
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> inKahakka = false);
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> inKahakka = false);
     }
 
-    public static boolean inKahakka() {
-        return inKahakka;
-    }
-
+    public static boolean inKahakka() { return inKahakka; }
 }

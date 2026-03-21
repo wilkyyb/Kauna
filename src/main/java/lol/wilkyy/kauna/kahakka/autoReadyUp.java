@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna;
+package lol.wilkyy.kauna.kahakka;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 

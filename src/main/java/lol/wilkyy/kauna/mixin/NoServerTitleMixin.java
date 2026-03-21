@@ -1,9 +1,8 @@
 package lol.wilkyy.kauna.mixin;
 
 import lol.wilkyy.kauna.Kauna;
-import lol.wilkyy.kauna.inDuelChecks;
+import lol.wilkyy.kauna.kahakka.inDuelChecks;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;

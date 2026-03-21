@@ -1,10 +1,9 @@
 package lol.wilkyy.kauna.mixin;
 
 import lol.wilkyy.kauna.Kauna;
-import lol.wilkyy.kauna.autoReadyUp;
 import lol.wilkyy.kauna.config.KaunaConfig;
-import lol.wilkyy.kauna.inDuelChecks;
-import lol.wilkyy.kauna.statsChecker;
+import lol.wilkyy.kauna.kahakka.inDuelChecks;
+import lol.wilkyy.kauna.kahakka.statsChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.text.Text;
@@ -17,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Arrays;
 import java.util.List;
 
-import static lol.wilkyy.kauna.statsChecker.duelName;
+import static lol.wilkyy.kauna.kahakka.statsChecker.duelName;
 
 
 @Mixin(InGameHud.class)
@@ -101,7 +100,7 @@ public class TitleMixin {
         // Existing autoReadyUp kyykkää logic
         if (content.contains("(kyykkää)") && Kauna.isCurrentlyOnRealmi()) {
             if (KaunaConfig.INSTANCE.autoReadyUp && !statsChecker.duelName.contains("Parkour")) {
-                lol.wilkyy.kauna.autoReadyUp.startCrouch(2);
+                lol.wilkyy.kauna.kahakka.autoReadyUp.startCrouch(2);
             }
         }
     }

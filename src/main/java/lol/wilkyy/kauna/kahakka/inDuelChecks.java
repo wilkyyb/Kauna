@@ -1,5 +1,6 @@
-package lol.wilkyy.kauna;
+package lol.wilkyy.kauna.kahakka;
 
+import lol.wilkyy.kauna.Kauna;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;

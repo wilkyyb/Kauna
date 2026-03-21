@@ -20,15 +20,12 @@
       "lol.wilkyy.kauna.Kauna"
     ],
     "client": [
-      "lol.wilkyy.kauna.parkourChatListener",
-      "lol.wilkyy.kauna.parkourModule",
-      "lol.wilkyy.kauna.inDuelChecks",
-      "lol.wilkyy.kauna.autoChat",
-      "lol.wilkyy.kauna.statsChecker",
+      "lol.wilkyy.kauna.kahakka.parkourChatListener",
+      "lol.wilkyy.kauna.kahakka.parkourModule",
+      "lol.wilkyy.kauna.kahakka.inDuelChecks",
+      "lol.wilkyy.kauna.kahakka.autoChat",
+      "lol.wilkyy.kauna.kahakka.statsChecker",
       "lol.wilkyy.kauna.GListScanner"
-    ],
-    "modmenu": [
-      "lol.wilkyy.kauna.config.ModMenuIntegration"
     ]
   },
   "mixins": [
