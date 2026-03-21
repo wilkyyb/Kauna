@@ -52,66 +52,78 @@ public class GListScanner implements ClientModInitializer {
         ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
             String content = message.getString();
             MinecraftClient client = MinecraftClient.getInstance();
+            if (client.player == null) return true;
 
-            boolean isHeader = content.contains("» Realmi «");
-            boolean isFooter = content.contains("Pelaajia yhteensä:");
             Matcher matcher = PROXY_PATTERN.matcher(content);
             boolean isProxyLine = matcher.find();
+            boolean isFooter = content.contains("Pelaajia yhteensä:");
 
             if (isProxyLine) {
                 String proxyName = matcher.group(1);
-                String[] onlinePlayers = matcher.group(2).split(", ");
+                String rawPlayers = matcher.group(2);
+                String[] onlinePlayers = rawPlayers.split(", ");
 
-                if (searchTarget != null) {
-                    for (String p : onlinePlayers) {
-                        if (p.trim().replace(".", "").equalsIgnoreCase(searchTarget)) {
-                            searchResultProxy = proxyName;
-                        }
-                    }
-                }
+                // We will build a new formatted string for this line
+                StringBuilder highlightedLine = new StringBuilder("§8[§6" + proxyName + "§8] §8(§6" + onlinePlayers.length + "§8) §2» ");
 
-                for (String friend : KaunaConfig.INSTANCE.friendsList) {
-                    for (String p : onlinePlayers) {
-                        if (p.trim().replace(".", "").equalsIgnoreCase(friend.trim())) {
-                            foundFriends.add("§b" + friend + " §8-> §a" + proxyName);
+                for (int i = 0; i < onlinePlayers.length; i++) {
+                    String p = onlinePlayers[i].trim();
+                    String cleanName = p.replace(".", "");
+                    boolean isFriend = false;
+
+                    // Check if this player is in the config friends list
+                    for (String friend : KaunaConfig.INSTANCE.friendsList) {
+                        if (cleanName.equalsIgnoreCase(friend.trim())) {
+                            isFriend = true;
+                            foundFriends.add("§8[§a" + proxyName + "§8] "  + "§7" + friend);
                             break;
                         }
                     }
+
+                    // Highlight friend with Aqua (&b), others stay Gray (&7)
+                    if (isFriend) {
+                        highlightedLine.append("§a").append(p);
+                    } else {
+                        highlightedLine.append("§7").append(p);
+                    }
+
+                    // Add comma if not the last player
+                    if (i < onlinePlayers.length - 1) {
+                        highlightedLine.append("§8, ");
+                    }
+
+                    // Manual search logic
+                    if (searchTarget != null && cleanName.equalsIgnoreCase(searchTarget)) {
+                        searchResultProxy = proxyName;
+                    }
                 }
+
+                // Send the highlighted line and CANCEL the original server message
+                client.player.sendMessage(Text.literal(highlightedLine.toString()), false);
+                return false; // This cancels the original gray server message
             }
 
             if (isFooter) {
-                if (client.player != null) {
-                    if (isManualSearch && searchTarget != null) {
-                        if (searchResultProxy != null) {
-                            client.player.sendMessage(Text.literal(" §7- §b" + searchTarget + " §8-> §a" + searchResultProxy), false);
-                        } else {
-                            client.player.sendMessage(Text.literal(" §7- §c" + searchTarget + " (Ei paikalla)"), false);
-                        }
-                    }
-
-                    client.player.sendMessage(Text.literal("§c§l» §6§lKavereita paikalla:"), false);
-
-
-                    if (!foundFriends.isEmpty()) {
-                        for (String line : foundFriends) {
-                            client.player.sendMessage(Text.literal(" §7- " + line), false);
-                        }
-                    } else {
-                        client.player.sendMessage(Text.literal(" §7- §oEi ketään online."), false);
-                    }
-
-
-                    client.player.sendMessage(Text.literal(""), false);
+                // Your existing summary logic...
+                if (isManualSearch && searchTarget != null) {
+                    client.player.sendMessage(Text.literal(" §7- " + (searchResultProxy != null ? "§b" + searchTarget + " §8-> §a" + searchResultProxy : "§c" + searchTarget + " (Ei paikalla)")), false);
                 }
 
+                client.player.sendMessage(Text.literal("§2» §6Kavereita paikalla:"), false);
+
+                if (!foundFriends.isEmpty()) {
+                    for (String line : foundFriends) client.player.sendMessage(Text.literal(" §7- " + line), false);
+                } else {
+                    client.player.sendMessage(Text.literal(" §7- §oEi ketään online."), false);
+                }
+
+                client.player.sendMessage(Text.literal(""), false);
                 foundFriends.clear();
                 isManualSearch = false;
                 searchTarget = null;
-                return true;
+                return true; // Let the footer show
             }
 
-            // Return true for everything else so the original glist still displays
             return true;
         });
     }

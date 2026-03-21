@@ -75,8 +75,9 @@ public class ConfigHandler {
                 // Friend management remains the same...
                 .then(literal("friend")
                         .then(literal("list").executes(ctx -> {
-                            ctx.getSource().sendFeedback(Text.literal("Kaverit: ").formatted(Formatting.GOLD)
-                                    .append(Text.literal(String.join(", ", KaunaConfig.INSTANCE.friendsList)).formatted(Formatting.WHITE)));
+                            ctx.getSource().sendFeedback(getPrefix()
+                                    .append(Text.literal("Kaverit:\n §8- §a").formatted(Formatting.GRAY)
+                                    .append(Text.literal(String.join("\n §8-§a ", KaunaConfig.INSTANCE.friendsList)).formatted(Formatting.GREEN))));
                             return 1;
                         }))
                         .then(literal("add")
