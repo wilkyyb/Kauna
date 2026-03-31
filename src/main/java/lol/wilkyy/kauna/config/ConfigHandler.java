@@ -29,7 +29,8 @@ public class ConfigHandler {
                 .append(Text.literal("] ").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
     }
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal("kauna")
+        var kaunaCommand = dispatcher.register(
+                literal("kauna")
                 .then(literal("config")
                         // AutoGG
                         .then(literal("AutoGG")
@@ -83,7 +84,7 @@ public class ConfigHandler {
 
 
                         .then(literal("DebugLogging")
-                                .executes(ctx -> showStatus(ctx, "Check if update available", KaunaConfig.INSTANCE.debugLogging))
+                                .executes(ctx -> showStatus(ctx, "Enable Debug Logging", KaunaConfig.INSTANCE.debugLogging))
                                 .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "DebugLogging", "debugLogging"))))
 
                 )
@@ -134,6 +135,12 @@ public class ConfigHandler {
                                             return 1;
                                         })))
                 )
+        );
+        dispatcher.register(
+                literal("k").redirect(kaunaCommand)
+        );
+        dispatcher.register(
+                literal("kc").redirect(kaunaCommand.getChild("config"))
         );
     }
 
