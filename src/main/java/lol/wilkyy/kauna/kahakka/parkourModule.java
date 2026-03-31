@@ -187,7 +187,7 @@ public class parkourModule implements ClientModInitializer {
                             .append(Text.literal("⌚")
                                     .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbebebe))));
 
-                    client.inGameHud.setTitleTicks(0, 72000, 20);
+                    client.inGameHud.setTitleTicks(0, 280, 20);
                     client.inGameHud.setTitle(Text.literal("")); // Clear main title
                     client.inGameHud.setSubtitle(subtitle);
                 } else {

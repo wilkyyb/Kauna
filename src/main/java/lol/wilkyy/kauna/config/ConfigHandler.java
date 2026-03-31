@@ -71,6 +71,21 @@ public class ConfigHandler {
                         .then(literal("StickySkip")
                                 .executes(ctx -> showStatus(ctx, "Pysyvä Skip-ilmoitus", KaunaConfig.INSTANCE.stickySkipNotification))
                                 .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "Sticky Skip", "stickySkipNotification"))))
+
+                        .then(literal("inRealmiCheck")
+                                .executes(ctx -> showStatus(ctx, "Check if server is Realmi", KaunaConfig.INSTANCE.inRealmiCheck))
+                                .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "inRealmiCheck", "inRealmiCheck"))))
+
+
+                        .then(literal("CheckForUpdates")
+                                .executes(ctx -> showStatus(ctx, "Check if update available", KaunaConfig.INSTANCE.CheckForUpdates))
+                                .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "CheckForUpdates", "CheckForUpdates"))))
+
+
+                        .then(literal("DebugLogging")
+                                .executes(ctx -> showStatus(ctx, "Check if update available", KaunaConfig.INSTANCE.debugLogging))
+                                .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "DebugLogging", "debugLogging"))))
+
                 )
                 // Friend management remains the same...
                 .then(literal("friend")

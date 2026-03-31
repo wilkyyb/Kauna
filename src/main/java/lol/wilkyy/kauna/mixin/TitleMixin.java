@@ -28,10 +28,10 @@ public class TitleMixin {
             "Mace", "Crystal", "Spear (Mace)", "Spear (Elytra)", "Sword", "Axe",
             "Realistic", "Parkour", "Diamond SMP", "Creeper", "SMP", "Netherite Potion",
             "Sumo", "UHC", "Diamond Potion", "Cart", "Spleef", "Bed", "Diamond Mace",
-            "OG Vanilla", "Spear", "Shieldless UHC", "Archer", "OneShot", "Ghast",
+            "OG Vanilla", "Spear", "Hoplite", "Archer", "OneShot", "Ghast",
             "Tavallinen", "Boxing", "Soppa", "Speed", "Trident", "Elytra", "Cart (HT)",
             "Netherite Potion (Vanha)", "Diamond Potion (Vanha)", "SMP (Vanha)",
-            "UHC (Uusi)", "Mace (Vanha)"
+            "UHC (Uusi)", "Mace (Vanha)", "Assembly", "Paukutus"
     );
 
     @Inject(method = "setTitle", at = @At("HEAD"))

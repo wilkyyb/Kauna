@@ -169,23 +169,22 @@ public class statsChecker implements ClientModInitializer {
                 TooltipType.BASIC
         );
 
-        int voittoja = 0, pelattu = 0;
+        int wins = 0, pelattu = 0;
         for (Text line : lines) {
             String text = line.getString().toLowerCase();
-            if (text.contains("voittoja:")) voittoja = parseNumber(text);
+            if (text.contains("voittoja:")) wins = parseNumber(text);
             if (text.contains("pelattu:")) pelattu = parseNumber(text);
         }
 
         // 1. Calculate Ratio
-        double lost = pelattu - voittoja;
-        double winloseratio = (pelattu > 0) ? (lost <= 0 ? (double) voittoja : (double) voittoja / lost) : 0.0;
+        int lost = pelattu - wins;
+        double winloseratio = (pelattu > 0) ? (lost <= 0 ? (double) wins : (double) wins / lost) : 0.0;
         String formattedRatio = String.format("%.2f", winloseratio);
 
         // 2. Win/Loss Ratio Colors
         Formatting ratioColor;
-        boolean boldRatio = false;
 
-        if (winloseratio >= 200) { ratioColor = Formatting.DARK_PURPLE; boldRatio = true; }
+        if (winloseratio >= 200) ratioColor = Formatting.DARK_PURPLE;
         else if (winloseratio >= 150) ratioColor = Formatting.LIGHT_PURPLE;
         else if (winloseratio >= 100) ratioColor = Formatting.DARK_BLUE;
         else if (winloseratio >= 50) ratioColor = Formatting.BLUE;
@@ -198,34 +197,33 @@ public class statsChecker implements ClientModInitializer {
 
         // 3. Wins Color Logic (Mapped to same colors as Ratio)
         Formatting winColor;
-        boolean boldWins = false;
 
-        if (voittoja >= 5000) { winColor = Formatting.DARK_PURPLE; boldWins = true; }
-        else if (voittoja >= 3500) winColor = Formatting.LIGHT_PURPLE;
-        else if (voittoja >= 2000) winColor = Formatting.DARK_BLUE;
-        else if (voittoja >= 1000) winColor = Formatting.BLUE;
-        else if (voittoja >= 750)  winColor = Formatting.YELLOW;
-        else if (voittoja >= 500)  winColor = Formatting.AQUA;
-        else if (voittoja >= 300)  winColor = Formatting.DARK_AQUA;
-        else if (voittoja >= 200)  winColor = Formatting.DARK_GREEN;
-        else if (voittoja >= 100)  winColor = Formatting.GREEN;
+        if (wins >= 5000) winColor = Formatting.DARK_PURPLE;
+        else if (wins >= 3500) winColor = Formatting.LIGHT_PURPLE;
+        else if (wins >= 2000) winColor = Formatting.DARK_BLUE;
+        else if (wins >= 1000) winColor = Formatting.BLUE;
+        else if (wins >= 750)  winColor = Formatting.YELLOW;
+        else if (wins >= 500)  winColor = Formatting.AQUA;
+        else if (wins >= 300)  winColor = Formatting.DARK_AQUA;
+        else if (wins >= 200)  winColor = Formatting.DARK_GREEN;
+        else if (wins >= 100)  winColor = Formatting.GREEN;
         else winColor = Formatting.GRAY;
+
 
         // 4. Build the Message
         Text message = Text.empty()
-                .append(Text.literal("|").formatted(Formatting.BOLD))
-                .append(Text.literal(" " + targetOpponent + " ").setStyle(net.minecraft.text.Style.EMPTY.withBold(true).withColor(Formatting.GOLD)))
-                .append(Text.literal("- ").formatted(Formatting.GRAY))
-                .append(Text.literal(duelName + " stats").formatted(Formatting.AQUA))
+                .append(Text.literal(targetOpponent).setStyle(net.minecraft.text.Style.EMPTY.withColor(Formatting.GOLD).withBold(true)))
+                .append(Text.literal(" - ").formatted(Formatting.WHITE))
+                .append(Text.literal(duelName).formatted(Formatting.AQUA))
                 .append(Text.literal("\n"))
-                .append(Text.literal("| ").setStyle(net.minecraft.text.Style.EMPTY.withBold(true).withColor(Formatting.WHITE)))
                 // Wins Section
-                .append(Text.literal("Voitot: ").formatted(Formatting.WHITE))
-                .append(Text.literal(String.valueOf(voittoja)).setStyle(net.minecraft.text.Style.EMPTY.withColor(winColor).withBold(boldWins)))
-                .append(Text.literal("  - ").formatted(Formatting.GRAY))
+                .append(Text.literal("🏆 ").setStyle(net.minecraft.text.Style.EMPTY.withColor(Formatting.YELLOW).withBold(true)))
+                .append(Text.literal(String.valueOf(wins)).setStyle(net.minecraft.text.Style.EMPTY.withColor(winColor)))
+                .append(Text.literal(" ☠ ").formatted(Formatting.WHITE))
+                .append(Text.literal(String.valueOf(lost)).formatted((Formatting.RED)))
                 // Ratio Section
-                .append(Text.literal("W/L: ").formatted(Formatting.WHITE))
-                .append(Text.literal(formattedRatio).setStyle(net.minecraft.text.Style.EMPTY.withColor(ratioColor).withBold(boldRatio)));
+                .append(Text.literal(" W/L: ").formatted(Formatting.WHITE))
+                .append(Text.literal(formattedRatio).setStyle(net.minecraft.text.Style.EMPTY.withColor(ratioColor)));
 
         client.player.sendMessage(message, false);
     }
