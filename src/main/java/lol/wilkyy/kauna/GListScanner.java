@@ -40,11 +40,11 @@ public class GListScanner {
             if (content.contains("Pelaajia yhteensä:") && !foundFriends.isEmpty()) {
                 Minecraft client = Minecraft.getInstance();
                 if (client.player != null) {
-                    client.player.displayClientMessage(Component.literal("§2» §6Kavereita paikalla:"), false);
+                    client.player.sendSystemMessage(Component.literal("§2» §6Kavereita paikalla:"));
                     for (String line : foundFriends) {
-                        client.player.displayClientMessage(Component.literal(" §7- " + line), false);
+                        client.player.sendSystemMessage(Component.literal(" §7- " + line));
                     }
-                    client.player.displayClientMessage(Component.literal(""), false);
+                    client.player.sendSystemMessage(Component.literal(""));
                 }
                 foundFriends.clear();
             }

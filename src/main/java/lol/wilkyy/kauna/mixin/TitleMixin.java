@@ -3,7 +3,6 @@ package lol.wilkyy.kauna.mixin;
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.kahakka.inDuelChecks;
-import lol.wilkyy.kauna.kahakka.statsChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
@@ -15,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static lol.wilkyy.kauna.kahakka.statsChecker.duelName;
 
 
 @Mixin(Gui.class)
@@ -32,22 +29,6 @@ public class TitleMixin {
             "UHC (Uusi)", "Mace (Vanha)", "Assembly", "Paukutus", "TNT-Sota", "Arrow Toss"
     );
 
-    @Inject(method = "setTitle", at = @At("HEAD"))
-    private void onSetTitle(Component title, CallbackInfo ci) {
-        if (title == null &&  Kauna.isCurrentlyOnRealmi()) return;
-        String titleText = title.getString();
-
-        for (String type : DUEL_TYPES) {
-            if (titleText.equalsIgnoreCase(type)) {
-                if (!statsChecker.targetOpponent.isEmpty()) {
-                    statsChecker.triggerStatsLookup(type, statsChecker.targetOpponent);
-                } else {
-                    duelName = type;
-                }
-                break;
-            }
-        }
-    }
 
     @Inject(method = "setOverlayMessage", at = @At("HEAD"), cancellable = true)
     private void onSetOverlayMessage(Component message, boolean tinted, CallbackInfo ci) {
@@ -89,12 +70,6 @@ public class TitleMixin {
             client.gui.setTitle(Component.literal(""));
             client.gui.setSubtitle(Component.literal("GLHF!").withStyle(ChatFormatting.GOLD));
             inDuelChecks.duelStarted = true;
-        }
-
-        if (content.contains("(kyykkää)") && Kauna.isCurrentlyOnRealmi()) {
-            if (KaunaConfig.INSTANCE.autoReadyUp && !statsChecker.duelName.contains("Parkour")) {
-                lol.wilkyy.kauna.kahakka.autoReadyUp.startCrouch(2);
-            }
         }
     }
 }
