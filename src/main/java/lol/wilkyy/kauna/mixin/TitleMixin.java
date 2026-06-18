@@ -4,10 +4,10 @@ import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.kahakka.inDuelChecks;
 import lol.wilkyy.kauna.kahakka.statsChecker;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,11 +19,9 @@ import java.util.List;
 import static lol.wilkyy.kauna.kahakka.statsChecker.duelName;
 
 
-@Mixin(InGameHud.class)
+@Mixin(Gui.class)
 public class TitleMixin {
 
-
-    // The list of all duel types you want to track
     private static final List<String> DUEL_TYPES = Arrays.asList(
             "Mace", "Crystal", "Spear (Mace)", "Spear (Elytra)", "Sword", "Axe",
             "Realistic", "Parkour", "Diamond SMP", "Creeper", "SMP", "Netherite Potion",
@@ -31,21 +29,19 @@ public class TitleMixin {
             "OG Vanilla", "Spear", "Hoplite", "Archer", "OneShot", "Ghast",
             "Tavallinen", "Boxing", "Soppa", "Speed", "Trident", "Elytra", "Cart (HT)",
             "Netherite Potion (Vanha)", "Diamond Potion (Vanha)", "SMP (Vanha)",
-            "UHC (Uusi)", "Mace (Vanha)", "Assembly", "Paukutus"
+            "UHC (Uusi)", "Mace (Vanha)", "Assembly", "Paukutus", "TNT-Sota", "Arrow Toss"
     );
 
     @Inject(method = "setTitle", at = @At("HEAD"))
-    private void onSetTitle(Text title, CallbackInfo ci) {
+    private void onSetTitle(Component title, CallbackInfo ci) {
         if (title == null &&  Kauna.isCurrentlyOnRealmi()) return;
         String titleText = title.getString();
 
         for (String type : DUEL_TYPES) {
             if (titleText.equalsIgnoreCase(type)) {
-                // Check if we already found the opponent from chat
                 if (!statsChecker.targetOpponent.isEmpty()) {
                     statsChecker.triggerStatsLookup(type, statsChecker.targetOpponent);
                 } else {
-                    // If title came first, just save the duel name and wait for chat
                     duelName = type;
                 }
                 break;
@@ -54,7 +50,7 @@ public class TitleMixin {
     }
 
     @Inject(method = "setOverlayMessage", at = @At("HEAD"), cancellable = true)
-    private void onSetOverlayMessage(Text message, boolean tinted, CallbackInfo ci) {
+    private void onSetOverlayMessage(Component message, boolean tinted, CallbackInfo ci) {
         if (message == null && Kauna.isCurrentlyOnRealmi()) return;
         String content = message.getString();
 
@@ -62,42 +58,39 @@ public class TitleMixin {
             String number = content.replaceAll("[^0-9]", "");
 
             if (!number.isEmpty()) {
-                MinecraftClient client = MinecraftClient.getInstance();
+                Minecraft client = Minecraft.getInstance();
 
                 inDuelChecks.duelStarted = false;
-                // Handle the specific cases for 5 and 4
                 if (number.equals("5")) {
                 } else if (number.equals("4")) {
                 } else {
-                    // Standard 3, 2, 1 logic
-                    Formatting color = switch (number) {
-                        case "3" -> Formatting.GREEN;
-                        case "2" -> Formatting.YELLOW;
-                        case "1" -> Formatting.RED;
-                        default -> Formatting.GOLD;
+                    ChatFormatting color = switch (number) {
+                        case "3" -> ChatFormatting.GREEN;
+                        case "2" -> ChatFormatting.YELLOW;
+                        case "1" -> ChatFormatting.RED;
+                        default -> ChatFormatting.GOLD;
                     };
 
-                    Text countdownTitle = Text.literal(number)
-                            .setStyle(net.minecraft.text.Style.EMPTY.withBold(true).withColor(color));
+                    Component countdownTitle = Component.literal(number)
+                            .setStyle(net.minecraft.network.chat.Style.EMPTY.withBold(true).withColor(color));
 
-                    client.inGameHud.setTitleTicks(0, 30, 5);
-                    client.inGameHud.setTitle(countdownTitle);
-                    client.inGameHud.setSubtitle(Text.literal(""));
+                    client.gui.setTimes(0, 30, 5);
+                    client.gui.setTitle(countdownTitle);
+                    client.gui.setSubtitle(Component.literal(""));
                 }
                 return;
             }
         }
 
         if (content.contains("PB") && !inDuelChecks.duelStarted && Kauna.isCurrentlyOnRealmi()) {
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
 
-            client.inGameHud.setTitleTicks(0, 20, 5);
-            client.inGameHud.setTitle(Text.literal(""));
-            client.inGameHud.setSubtitle(Text.literal("GLHF!").formatted(Formatting.GOLD));
+            client.gui.setTimes(0, 20, 5);
+            client.gui.setTitle(Component.literal(""));
+            client.gui.setSubtitle(Component.literal("GLHF!").withStyle(ChatFormatting.GOLD));
             inDuelChecks.duelStarted = true;
         }
 
-        // Existing autoReadyUp kyykkää logic
         if (content.contains("(kyykkää)") && Kauna.isCurrentlyOnRealmi()) {
             if (KaunaConfig.INSTANCE.autoReadyUp && !statsChecker.duelName.contains("Parkour")) {
                 lol.wilkyy.kauna.kahakka.autoReadyUp.startCrouch(2);

@@ -2,35 +2,35 @@ package lol.wilkyy.kauna.mixin;
 
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.kahakka.inDuelChecks;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
-import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ClientPlayNetworkHandler.class)
+@Mixin(ClientPacketListener.class)
 public class NoServerTitleMixin {
 
-	@Inject(method = "onTitle", at = @At("HEAD"), cancellable = true)
-	private void swallowTitle(TitleS2CPacket packet, CallbackInfo ci) {
+	@Inject(method = "setTitleText", at = @At("HEAD"), cancellable = true)
+	private void swallowTitle(ClientboundSetTitleTextPacket packet, CallbackInfo ci) {
 		if (inDuelChecks.inParkourDuel() && Kauna.inKahakka()) {
 			ci.cancel();
 		}
 	}
 
-	@Inject(method = "onSubtitle", at = @At("HEAD"), cancellable = true)
-	private void swallowSubtitle(SubtitleS2CPacket packet, CallbackInfo ci) {
+	@Inject(method = "setSubtitleText", at = @At("HEAD"), cancellable = true)
+	private void swallowSubtitle(ClientboundSetSubtitleTextPacket packet, CallbackInfo ci) {
 		if (inDuelChecks.inParkourDuel() && Kauna.inKahakka()) {
 			ci.cancel();
 		}
 	}
 
 
-	@Inject(method = "onTitleFade", at = @At("HEAD"), cancellable = true)
-	private void swallowFade(TitleFadeS2CPacket packet, CallbackInfo ci) {
+	@Inject(method = "setTitlesAnimation", at = @At("HEAD"), cancellable = true)
+	private void swallowFade(ClientboundSetTitlesAnimationPacket packet, CallbackInfo ci) {
 		if (inDuelChecks.inParkourDuel() && Kauna.inKahakka()) {
 			ci.cancel();
 		}

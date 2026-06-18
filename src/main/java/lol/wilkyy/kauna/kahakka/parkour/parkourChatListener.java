@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.kahakka;
+package lol.wilkyy.kauna.kahakka.parkour;
 
 import lol.wilkyy.kauna.Kauna;
 import net.fabricmc.api.ClientModInitializer;
@@ -10,7 +10,6 @@ public class parkourChatListener implements ClientModInitializer {
     public static double time = 0.0;
     public static double worldRecord = 0;
     public static double personalBest = 0;
-    // FLAG: Tells the module that parsing for this race is complete
     public static boolean statsUpdatedThisTick = false;
 
     public void onInitializeClient() {
@@ -29,8 +28,6 @@ public class parkourChatListener implements ClientModInitializer {
                 }
             }
 
-            // Set the flag true ONLY when the PB/Previous time arrives,
-            // as this is usually the last message in the sequence
             if (msg.contains("Aikaisempi:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
@@ -57,13 +54,11 @@ public class parkourChatListener implements ClientModInitializer {
                 }
             }
 
-// Inside parkourChatListener.java
             if (msg.contains("Paras aika:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.lastIndexOf(":") + 1).trim();
                         worldRecord = Double.parseDouble(numberPart);
-                        // ADD THIS: In case WR is the last message sent by the server
                         statsUpdatedThisTick = true;
                         debugLog("Updated WR: {}", worldRecord);
                     } catch (Exception e) {

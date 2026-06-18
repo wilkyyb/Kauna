@@ -8,21 +8,19 @@ public class autoReadyUp {
 
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            // Handle the active crouching logic
             if (crouchTimer > 0) {
                 if (client.options != null) {
-                    client.options.sneakKey.setPressed(true);
+                    client.options.keyShift.setDown(true);
                 }
                 crouchTimer--;
 
                 if (crouchTimer == 0) {
                     if (client.options != null) {
-                        client.options.sneakKey.setPressed(false);
+                        client.options.keyShift.setDown(false);
                     }
                 }
             }
 
-            // Handle the cooldown logic
             if (cooldownTimer > 0) {
                 cooldownTimer--;
             }
@@ -30,11 +28,8 @@ public class autoReadyUp {
     }
 
     public static void startCrouch(int ticks) {
-        // Only start a crouch if we are not currently on cooldown
         if (cooldownTimer <= 0) {
             crouchTimer = ticks;
-            // Set cooldown to 100 ticks (5 seconds) to prevent spamming
-            // during the same pregame countdown
             cooldownTimer = 100;
         }
     }

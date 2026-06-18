@@ -2,7 +2,7 @@ package lol.wilkyy.kauna.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
@@ -16,30 +16,24 @@ import java.io.IOException;
 public class KaunaConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE =
-            new File(MinecraftClient.getInstance().runDirectory, "config/kauna.json");
+            new File(Minecraft.getInstance().gameDirectory, "config/kauna.json");
 
     public static final Logger LOGGER = LogManager.getLogger("Kauna");
 
     public boolean debugLogging = false;
 
-    public boolean autoGG = true;              // normal AutoGG toggle
-    public int autoGGDelay = 0;                  // delay in seconds before sending AutoGG
-    public String AutoGGText = "gg";     // default custom message
+    public boolean autoGG = true;
 
-    public boolean autoEz = false;
     public boolean autoReadyUp = false;
-    public boolean autoStatsLookup = true; // Add this line
+    public boolean autoStatsLookup = true;
 
     public boolean CheckForUpdates = true;
-    public boolean stickySkipNotification = true; // Default to the behavior you have now
+    public boolean stickySkipNotification = true;
 
-    // Add this inside public class KaunaConfig
     public boolean inRealmiCheck = true;
 
-    // Initialize with the default name
     public List<String> friendsList = new ArrayList<>(List.of("hullu"));
 
-    // Singleton instance
     public static KaunaConfig INSTANCE = new KaunaConfig();
 
     // Load config from disk

@@ -6,12 +6,12 @@ import lol.wilkyy.kauna.kahakka.autoReadyUp;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.ChatFormatting;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
@@ -37,9 +37,9 @@ public class Kauna implements ModInitializer {
 
     public static boolean isCurrentlyOnRealmi() {
         if (!KaunaConfig.INSTANCE.inRealmiCheck) return true;
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.getCurrentServerEntry() != null) {
-            return client.getCurrentServerEntry().address.toLowerCase().contains("realmi.fi");
+        Minecraft client = Minecraft.getInstance();
+        if (client.getCurrentServer() != null) {
+            return client.getCurrentServer().ip.toLowerCase().contains("realmi.fi");
         }
         return false;
     }
@@ -48,21 +48,21 @@ public class Kauna implements ModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             if (msg.contains("Realmin Kahakkaan!") && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
-                MinecraftClient client = MinecraftClient.getInstance();
-                if (client.inGameHud == null) return;
+                Minecraft client = Minecraft.getInstance();
+                if (client.gui == null) return;
                 inKahakka = true;
 
-                MutableText subtitleText = Text.literal("ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ")
+                MutableComponent subtitleText = Component.literal("ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ")
                         .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xDE2B56)).withBold(true).withItalic(true));
 
                 if (versionCheck.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
-                    client.inGameHud.setTitle(Text.literal("Päivitys saatavilla!").formatted(Formatting.GOLD).copy().append(""));
+                    client.gui.setTitle(Component.literal("Päivitys saatavilla!").withStyle(ChatFormatting.GOLD).copy().append(""));
                 } else {
-                    client.inGameHud.setTitle(Text.literal(""));
+                    client.gui.setTitle(Component.literal(""));
                 }
 
-                client.inGameHud.setSubtitle(subtitleText);
-                client.inGameHud.setTitleTicks(10, 40, 10);
+                client.gui.setSubtitle(subtitleText);
+                client.gui.setTimes(10, 40, 10);
             }
         });
     }

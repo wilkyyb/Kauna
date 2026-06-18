@@ -5,9 +5,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.world.GameMode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.GameType;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
@@ -16,12 +16,11 @@ public class inDuelChecks implements ClientModInitializer {
     private static boolean inDuel = false;
     private static boolean inParkourDuel = false;
 
-    private static int duelEndTimer = -1; // -1 means timer is not running
+    private static int duelEndTimer = -1; // -1 = not running
 
     public static boolean duelStarted = false;
 
     public void onInitializeClient() {
-        // Handle the countdown and HUD clearing
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (duelEndTimer > 0) {
                 duelEndTimer--;
@@ -30,10 +29,10 @@ public class inDuelChecks implements ClientModInitializer {
                     inDuel = false;
                     inParkourDuel = false;
 
-                    if (client.inGameHud != null) {
-                        client.inGameHud.setTitle(Text.literal(""));
-                        client.inGameHud.setSubtitle(Text.literal(""));
-                        client.inGameHud.setTitleTicks(0, 0, 0);
+                    if (client.gui != null) {
+                        client.gui.setTitle(Component.literal(""));
+                        client.gui.setSubtitle(Component.literal(""));
+                        client.gui.setTimes(0, 0, 0);
                     }
 
                     debugLog("Duel state and HUD reset.");
@@ -52,16 +51,16 @@ public class inDuelChecks implements ClientModInitializer {
         });
 
         // Detect Parkour Duel Start
-        MinecraftClient clientt = MinecraftClient.getInstance();
+        Minecraft clientt = Minecraft.getInstance();
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
-            if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.interactionManager != null && clientt.interactionManager.getCurrentGameMode() == GameMode.SPECTATOR && Kauna.isCurrentlyOnRealmi())) {
+            if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.gameMode != null && clientt.gameMode.getPlayerMode() == GameType.SPECTATOR && Kauna.isCurrentlyOnRealmi())) {
                 inParkourDuel = true;
                 debugLog("Parkour Duel started");
             }
         });
 
-        // NEW: Detect Duel End / Spectator Exit
+        // Detect Duel End / Spectator Exit
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             // Check for game end OR leaving spectator mode
@@ -70,7 +69,7 @@ public class inDuelChecks implements ClientModInitializer {
                 debugLog("Duel end message detected, starting reset timer.");
             }
         });
-        // NEW: Detect Duel End / Spectator Exit
+        // Detect Duel End / Spectator Exit
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             if (msg.contains("Poistuit kaksintaiston katselemisesta!")) {
@@ -78,10 +77,10 @@ public class inDuelChecks implements ClientModInitializer {
                 inParkourDuel = false;
                 debugLog("Exited duel spectator mode, starting reset timer.");
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                    if (client.inGameHud != null) {
-                        client.inGameHud.setTitle(Text.literal(""));
-                        client.inGameHud.setSubtitle(Text.literal(""));
-                        client.inGameHud.setTitleTicks(0, 0, 0);
+                    if (client.gui != null) {
+                        client.gui.setTitle(Component.literal(""));
+                        client.gui.setSubtitle(Component.literal(""));
+                        client.gui.setTimes(0, 0, 0);
                     }
                 });
             }
@@ -91,9 +90,9 @@ public class inDuelChecks implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             inDuel = false;
             inParkourDuel = false;
-            client.inGameHud.setTitle(Text.literal(""));
-            client.inGameHud.setSubtitle(Text.literal(""));
-            client.inGameHud.setTitleTicks(0, 0, 0);
+            client.gui.setTitle(Component.literal(""));
+            client.gui.setSubtitle(Component.literal(""));
+            client.gui.setTimes(0, 0, 0);
             duelEndTimer = -1;
             debugLog("Duel ended due to disconnect");
         });
