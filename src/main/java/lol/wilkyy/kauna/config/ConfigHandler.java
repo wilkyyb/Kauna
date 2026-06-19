@@ -1,14 +1,14 @@
 package lol.wilkyy.kauna.config;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import dev.isxander.yacl3.api.ConfigCategory;
+import dev.isxander.yacl3.api.ListOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
-import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
+import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,10 +19,80 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.ChatFormatting;
 
+import java.util.ArrayList;
+
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class ConfigHandler {
+
+    // Main structural factory matching Zoomify's modular clean entry layout
+    public static Screen createConfigScreen(Screen parentScreen) {
+        return YetAnotherConfigLib.createBuilder()
+                .title(Component.literal("Kauna Config").withStyle(ChatFormatting.BOLD))
+                .category(buildKahakkaCategory())
+                .category(buildYstavatCategory())
+                .category(buildSystemCategory())
+                .save(KaunaConfig::save)
+                .build()
+                .generateScreen(parentScreen);
+    }
+
+    // --- Modular Category Builders ---
+
+    private static ConfigCategory buildKahakkaCategory() {
+        return ConfigCategory.createBuilder()
+                .name(Component.literal("Kahakka"))
+                .option(buildBooleanOption("AutoGG", "Lähetä 'gg' pelin loppuessa",
+                        () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val, "preview_autogg.webp"))
+                .option(buildBooleanOption("AutoReady", "Kyykkää automaattisesti erän alkaessa",
+                        () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val, null))
+                .option(buildBooleanOption("Pysyvä Skip Indikaattori", "Näyttää koko skipattavan ajan indikaattorin siitä, että voi skipata",
+                        () -> KaunaConfig.INSTANCE.stickySkipNotification, val -> KaunaConfig.INSTANCE.stickySkipNotification = val, null))
+                .build();
+    }
+
+    private static ConfigCategory buildYstavatCategory() {
+        return ConfigCategory.createBuilder()
+                .name(Component.literal("Ystävät"))
+                .option(ListOption.<String>createBuilder()
+                        .name(Component.literal("Kaverilista"))
+                        .description(OptionDescription.of(Component.literal("Hallitse tallennettuja ystäviäsi.")))
+                        .binding(new ArrayList<>(), () -> KaunaConfig.INSTANCE.friendsList, val -> KaunaConfig.INSTANCE.friendsList = val)
+                        .controller(StringControllerBuilder::create)
+                        .initial("")
+                        .build())
+                .build();
+    }
+
+    private static ConfigCategory buildSystemCategory() {
+        return ConfigCategory.createBuilder()
+                .name(Component.literal("System"))
+                .option(buildBooleanOption("Varmista Realmi.fi Palvelin", "Varmista, että pelaaja on Realmi.fi palvelimella tehdessään mitään. !! Modi saattaa rikkoutua, jos laitat tämän pois.",
+                        () -> KaunaConfig.INSTANCE.inRealmiCheck, val -> KaunaConfig.INSTANCE.inRealmiCheck = val, null))
+                .option(buildBooleanOption("Tarkista Päivitykset", "Tarkista onko päivityksiä saatavilla",
+                        () -> KaunaConfig.INSTANCE.CheckForUpdates, val -> KaunaConfig.INSTANCE.CheckForUpdates = val, null))
+                .option(buildBooleanOption("Debug", "Kirjaa loki-tiedostoihin debuggaamiseen liittyviä asioita.",
+                        () -> KaunaConfig.INSTANCE.debugLogging, val -> KaunaConfig.INSTANCE.debugLogging = val, null))
+                .build();
+    }
+
+    // --- Zoomify-Style Functional Reusable Helper Abstractions ---
+
+    private static Option<Boolean> buildBooleanOption(String name, String desc, java.util.function.Supplier<Boolean> getter, java.util.function.Consumer<Boolean> setter, String imageFileName) {
+        OptionDescription.Builder descBuilder = OptionDescription.createBuilder().text(Component.literal(desc));
+
+        return Option.<Boolean>createBuilder()
+                .name(Component.literal(name))
+                .description(descBuilder.build())
+                .binding(true, getter, setter)
+                .controller(opt -> BooleanControllerBuilder.create(opt)
+                        .valueFormatter(val -> val ? Component.literal("Päällä") : Component.literal("Pois Päältä"))
+                        .coloured(true))
+                .build();
+    }
+
+    // --- Chat Command Implementations ---
 
     public static MutableComponent getPrefix() {
         return Component.literal("[").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY))
@@ -34,84 +104,12 @@ public class ConfigHandler {
                 .append(Component.literal("] ").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY)));
     }
 
-    // Method to build and display the YACL Configuration GUI screen
-    public static net.minecraft.client.gui.screens.Screen createConfigScreen(net.minecraft.client.gui.screens.Screen parentScreen) {
-        return YetAnotherConfigLib.createBuilder()
-                .title(Component.literal("Kauna Config").withStyle(ChatFormatting.BOLD))
-                .category(ConfigCategory.createBuilder()
-                        .name(Component.literal("Kahakka"))
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.literal("AutoGG"))
-                                .description(OptionDescription.of(Component.literal("Lähetä 'gg' pelin loppuessa")))
-                                .binding(true, () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.literal("AutoReady"))
-                                .description(OptionDescription.of(Component.literal("Kyykkää automaattisesti erän alkaessa")))
-                                .binding(true, () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.literal("Pysyvä Skip Indikaattori"))
-                                .description(OptionDescription.of(Component.literal("Näyttää koko skipattavan ajan indikaattorin siitä, että voi skipata")))
-                                .binding(false, () -> KaunaConfig.INSTANCE.stickySkipNotification, val -> KaunaConfig.INSTANCE.stickySkipNotification = val)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .build())
-                .category(ConfigCategory.createBuilder()
-                        .name(Component.literal("System"))
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.literal("Varmista Realmi.fi Palvelin"))
-                                .description(OptionDescription.of(Component.literal("Varmista, että pelaaja on Realmi.fi palvelimella tehdessään mitään. !! Modi saattaa rikkoutua, jos laitat tämän pois.")))
-                                .binding(true, () -> KaunaConfig.INSTANCE.inRealmiCheck, val -> KaunaConfig.INSTANCE.inRealmiCheck = val)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.literal("Tarkista Päivitykset"))
-                                .description(OptionDescription.of(Component.literal("Tarkista onko päivityksiä saatavilla")))
-                                .binding(true, () -> KaunaConfig.INSTANCE.CheckForUpdates, val -> KaunaConfig.INSTANCE.CheckForUpdates = val)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.literal("Debug"))
-                                .description(OptionDescription.of(Component.literal("Kirjaa loki-tiedostoihin debuggaamiseen liittyviä asioita.")))
-                                .binding(false, () -> KaunaConfig.INSTANCE.debugLogging, val -> KaunaConfig.INSTANCE.debugLogging = val)
-                                .controller(TickBoxControllerBuilder::create)
-                                .build())
-                        .build())
-                .save(KaunaConfig::save)
-                .build()
-                .generateScreen(parentScreen);
-    }
-
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         var kaunaCommand = dispatcher.register(
                 literal("kauna")
                         .executes(ctx -> openGuiScreen())
                         .then(literal("config")
                                 .executes(ctx -> openGuiScreen())
-                                .then(literal("AutoGG")
-                                        .executes(ctx -> showStatus(ctx, "AutoGG", KaunaConfig.INSTANCE.autoGG))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "AutoGG", "autoGG"))))
-                                .then(literal("AutoReady")
-                                        .executes(ctx -> showStatus(ctx, "AutoReady", KaunaConfig.INSTANCE.autoReady))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "AutoReady", "autoReady"))))
-                                .then(literal("AutoLookupDuelStats")
-                                        .executes(ctx -> showStatus(ctx, "Stats Lookup", KaunaConfig.INSTANCE.autoStatsLookup))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "Stats Lookup", "autoStatsLookup"))))
-                                .then(literal("StickySkip")
-                                        .executes(ctx -> showStatus(ctx, "Pysyvä Skip-ilmoitus", KaunaConfig.INSTANCE.stickySkipNotification))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "Sticky Skip", "stickySkipNotification"))))
-                                .then(literal("inRealmiCheck")
-                                        .executes(ctx -> showStatus(ctx, "Check if server is Realmi", KaunaConfig.INSTANCE.inRealmiCheck))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "inRealmiCheck", "inRealmiCheck"))))
-                                .then(literal("CheckForUpdates")
-                                        .executes(ctx -> showStatus(ctx, "Check if update available", KaunaConfig.INSTANCE.CheckForUpdates))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "CheckForUpdates", "CheckForUpdates"))))
-                                .then(literal("DebugLogging")
-                                        .executes(ctx -> showStatus(ctx, "Enable Debug Logging", KaunaConfig.INSTANCE.debugLogging))
-                                        .then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> setBool(ctx, "DebugLogging", "debugLogging"))))
                         )
                         .then(literal("friend")
                                 .then(literal("list").executes(ctx -> {
@@ -160,48 +158,13 @@ public class ConfigHandler {
                         )
         );
         dispatcher.register(literal("k").redirect(kaunaCommand));
-        dispatcher.register(literal("kc").redirect(kaunaCommand.getChild("config")));
+        dispatcher.register(literal("kc").executes(ctx -> openGuiScreen()));
     }
 
     private static int openGuiScreen() {
         Minecraft.getInstance().execute(() -> {
             Minecraft.getInstance().setScreen(createConfigScreen(Minecraft.getInstance().screen));
         });
-        return 1;
-    }
-
-    private static int showStatus(CommandContext<FabricClientCommandSource> ctx, String name, boolean val) {
-        ctx.getSource().sendFeedback(getPrefix().append(Component.literal(name)
-                        .withStyle(ChatFormatting.WHITE)
-                        .append(Component.literal(" on tällä hetkellä: ").withStyle(ChatFormatting.GRAY)))
-                .append(Component.literal(val ? "PÄÄLLÄ" : "POIS").withStyle(val ? ChatFormatting.GREEN : ChatFormatting.RED)));
-        return 1;
-    }
-
-    private static int setBool(CommandContext<FabricClientCommandSource> ctx, String displayName, String fieldName) {
-        boolean val = BoolArgumentType.getBool(ctx, "enabled");
-        try {
-            KaunaConfig.class.getField(fieldName).set(KaunaConfig.INSTANCE, val);
-        } catch (Exception ignored) {
-            if (fieldName.equals("inRealmiCheck")) KaunaConfig.INSTANCE.inRealmiCheck = val;
-            if (fieldName.equals("autoGG")) KaunaConfig.INSTANCE.autoGG = val;
-            if (fieldName.equals("autoReadyUp")) KaunaConfig.INSTANCE.autoReady = val;
-            if (fieldName.equals("autoStatsLookup")) KaunaConfig.INSTANCE.autoStatsLookup = val;
-            if (fieldName.equals("stickySkipNotification")) KaunaConfig.INSTANCE.stickySkipNotification = val;
-        }
-        return notify(ctx, displayName, val ? "PÄÄLLÄ" : "POIS");
-    }
-
-    private static int notify(CommandContext<FabricClientCommandSource> ctx, String name, String status) {
-        KaunaConfig.save();
-        ChatFormatting statusColor = ChatFormatting.YELLOW;
-        if (status.equalsIgnoreCase("PÄÄLLÄ")) statusColor = ChatFormatting.GREEN;
-        if (status.equalsIgnoreCase("POIS")) statusColor = ChatFormatting.RED;
-
-        ctx.getSource().sendFeedback(getPrefix()
-                .append(Component.literal(name).withStyle(ChatFormatting.WHITE)
-                        .append(Component.literal(" asetettiin: ").withStyle(ChatFormatting.GRAY)))
-                .append(Component.literal(status).withStyle(statusColor)));
         return 1;
     }
 }
