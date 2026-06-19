@@ -52,8 +52,22 @@ public class Kauna implements ModInitializer {
                 if (client.gui == null) return;
                 inKahakka = true;
 
-                MutableComponent subtitleText = Component.literal("ᴋᴀɴɴᴀᴛ ᴋᴀᴜɴᴀᴀ")
-                        .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xDE2B56)).withBold(true).withItalic(true));
+                MutableComponent subtitleText = Component.literal("")
+                        .append(Component.literal("ᴋ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA01C3C)).withBold(true)))
+                        .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xAA1F40)).withBold(true)))
+                        .append(Component.literal("ɴ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xB52145)).withBold(true)))
+                        .append(Component.literal("ɴ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xBF2449)).withBold(true)))
+                        .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xC9264D)).withBold(true)))
+                        .append(Component.literal("ᴛ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD42952)).withBold(true)))
+
+                        .append(Component.literal(" ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD42952))))
+
+                        .append(Component.literal("ᴋ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xD42952)).withBold(true)))
+                        .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xC9264D)).withBold(true)))
+                        .append(Component.literal("ᴜ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xBF2449)).withBold(true)))
+                        .append(Component.literal("ɴ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xB52145)).withBold(true)))
+                        .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xAA1F40)).withBold(true)))
+                        .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA01C3C)).withBold(true)));
 
                 if (versionCheck.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
                     client.gui.setTitle(Component.literal("Päivitys saatavilla!").withStyle(ChatFormatting.GOLD).copy().append(""));

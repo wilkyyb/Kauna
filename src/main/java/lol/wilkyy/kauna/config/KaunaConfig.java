@@ -24,7 +24,7 @@ public class KaunaConfig {
 
     public boolean autoGG = true;
 
-    public boolean autoReadyUp = false;
+    public boolean autoReady = false;
     public boolean autoStatsLookup = true;
 
     public boolean CheckForUpdates = true;

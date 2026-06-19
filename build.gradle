@@ -12,7 +12,7 @@ base {
 
 repositories {
 	maven { url "https://maven.terraformersmc.com/releases/" } // Mod Menu
-	maven { url "https://maven.shedaniel.me/" }               // Cloth Config
+	maven {url 'https://maven.isxander.dev/releases'} // YetAnotherConfigLib
 }
 
 
@@ -27,6 +27,9 @@ dependencies {
 	implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
 	implementation "com.google.code.gson:gson:2.10.1"
+
+	implementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+
 	
 }
 
@@ -50,30 +53,4 @@ java {
 
 	sourceCompatibility = JavaVersion.VERSION_26
 	targetCompatibility = JavaVersion.VERSION_26
-}
-
-jar {
-	inputs.property "archivesName", project.base.archivesName
-
-	from("LICENSE") {
-		rename { "${it}_${inputs.properties.archivesName}"}
-	}
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
 }
