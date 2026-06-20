@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
-public class autoChat implements ClientModInitializer {
+public class AutoGG implements ClientModInitializer {
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 

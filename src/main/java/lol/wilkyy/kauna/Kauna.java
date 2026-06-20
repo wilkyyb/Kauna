@@ -2,7 +2,7 @@ package lol.wilkyy.kauna;
 
 import lol.wilkyy.kauna.config.ConfigHandler;
 import lol.wilkyy.kauna.config.KaunaConfig;
-import lol.wilkyy.kauna.kahakka.autoReadyUp;
+import lol.wilkyy.kauna.kahakka.AutoReadyUp;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -22,8 +22,8 @@ public class Kauna implements ModInitializer {
     @Override
     public void onInitialize() {
         GListScanner.init();
-        autoReadyUp.init();
-        versionCheck.checkVersion();
+        AutoReadyUp.init();
+        UpdateChecker.checkVersion();
         KaunaConfig.load();
 
         net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
@@ -69,7 +69,7 @@ public class Kauna implements ModInitializer {
                         .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xAA1F40)).withBold(true)))
                         .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA01C3C)).withBold(true)));
 
-                if (versionCheck.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
+                if (UpdateChecker.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
                     client.gui.setTitle(Component.literal("Päivitys saatavilla!").withStyle(ChatFormatting.GOLD).copy().append(""));
                 } else {
                     client.gui.setTitle(Component.literal(""));

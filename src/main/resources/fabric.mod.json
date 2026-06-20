@@ -22,7 +22,7 @@
       "lol.wilkyy.kauna.kahakka.parkour.parkourChatListener",
       "lol.wilkyy.kauna.kahakka.parkour.parkourModule",
       "lol.wilkyy.kauna.kahakka.inDuelChecks",
-      "lol.wilkyy.kauna.kahakka.autoChat"
+      "lol.wilkyy.kauna.kahakka.AutoGG"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"

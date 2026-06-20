@@ -9,7 +9,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 
-public class versionCheck {
+public class UpdateChecker {
     private static final String VERSION_URL = "https://raw.githubusercontent.com/wilkyyb/Kauna/refs/heads/master/version.txt";
     private static final String CURRENT_VERSION = "0.7.3";
     public static boolean updateAvailable = false;
