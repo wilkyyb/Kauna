@@ -8,6 +8,7 @@ import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -20,13 +21,13 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.ChatFormatting;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class ConfigHandler {
 
-    // Main structural factory matching Zoomify's modular clean entry layout
     public static Screen createConfigScreen(Screen parentScreen) {
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.literal("Kauna Config").withStyle(ChatFormatting.BOLD))
@@ -38,17 +39,35 @@ public class ConfigHandler {
                 .generateScreen(parentScreen);
     }
 
-    // --- Modular Category Builders ---
-
     private static ConfigCategory buildKahakkaCategory() {
+        List<String> themeOptions = List.of("Rainbow", "Gay", "Lesbian", "Trans");
+
         return ConfigCategory.createBuilder()
                 .name(Component.literal("Kahakka"))
+
+                // First Section (Example)
                 .option(buildBooleanOption("AutoGG", "Lähetä 'gg' pelin loppuessa",
-                        () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val, "preview_autogg.webp"))
+                        () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val, null))
                 .option(buildBooleanOption("AutoReady", "Kyykkää automaattisesti erän alkaessa",
                         () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val, null))
-                .option(buildBooleanOption("Pysyvä Skip Indikaattori", "Näyttää koko skipattavan ajan indikaattorin siitä, että voi skipata",
-                        () -> KaunaConfig.INSTANCE.stickySkipNotification, val -> KaunaConfig.INSTANCE.stickySkipNotification = val, null))
+
+                // --- THIS ACTS AS YOUR DIVIDER TITLE ---
+                .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
+                        .name(Component.literal("Parkour Asetukset").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                        .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Parkour-moduulin lisäasetukset")))
+
+                        // Options placed inside this group will appear under the divider title
+                        .option(buildBooleanOption("Pysyvä Skip Indikaattori", "Näyttää koko skipattavan ajan indikaattorin siitä, että voi skipata",
+                                () -> KaunaConfig.INSTANCE.stickySkipNotification, val -> KaunaConfig.INSTANCE.stickySkipNotification = val, null))
+
+                        .option(Option.<String>createBuilder()
+                                .name(Component.literal("Maailman Ennätys Väriteema"))
+                                .binding("Rainbow", () -> KaunaConfig.INSTANCE.wrColorTheme, val -> KaunaConfig.INSTANCE.wrColorTheme = val)
+                                .controller(opt -> dev.isxander.yacl3.api.controller.CyclingListControllerBuilder.create(opt)
+                                        .values(themeOptions)
+                                        .valueFormatter(Colors::getFormattedThemeName))
+                                .build())
+                        .build()) // Ends the group section
                 .build();
     }
 
@@ -77,8 +96,6 @@ public class ConfigHandler {
                 .build();
     }
 
-    // --- Zoomify-Style Functional Reusable Helper Abstractions ---
-
     private static Option<Boolean> buildBooleanOption(String name, String desc, java.util.function.Supplier<Boolean> getter, java.util.function.Consumer<Boolean> setter, String imageFileName) {
         OptionDescription.Builder descBuilder = OptionDescription.createBuilder().text(Component.literal(desc));
 
@@ -91,8 +108,6 @@ public class ConfigHandler {
                         .coloured(true))
                 .build();
     }
-
-    // --- Chat Command Implementations ---
 
     public static MutableComponent getPrefix() {
         return Component.literal("[").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY))

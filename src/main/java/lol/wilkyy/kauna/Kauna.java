@@ -2,6 +2,7 @@ package lol.wilkyy.kauna;
 
 import lol.wilkyy.kauna.config.ConfigHandler;
 import lol.wilkyy.kauna.config.KaunaConfig;
+import lol.wilkyy.kauna.kahakka.AutoGG;
 import lol.wilkyy.kauna.kahakka.AutoReadyUp;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -25,6 +26,7 @@ public class Kauna implements ModInitializer {
         AutoReadyUp.init();
         UpdateChecker.checkVersion();
         KaunaConfig.load();
+        AutoGG.init();
 
         net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             ConfigHandler.register(dispatcher);

@@ -28,6 +28,7 @@ public class KaunaConfig {
 
     public boolean CheckForUpdates = true;
     public boolean stickySkipNotification = true;
+    public String wrColorTheme = "Rainbow";
 
     public boolean inRealmiCheck = true;
 

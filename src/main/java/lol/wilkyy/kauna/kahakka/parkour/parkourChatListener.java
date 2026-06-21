@@ -12,6 +12,7 @@ public class parkourChatListener implements ClientModInitializer {
     public static double personalBest = 0;
     public static boolean statsUpdatedThisTick = false;
 
+
     public void onInitializeClient() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();

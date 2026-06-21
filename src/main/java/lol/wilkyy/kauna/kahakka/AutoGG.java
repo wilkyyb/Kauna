@@ -12,12 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
-public class AutoGG implements ClientModInitializer {
+public class AutoGG {
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-    @Override
-    public void onInitializeClient() {
+    public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             Minecraft client = Minecraft.getInstance();

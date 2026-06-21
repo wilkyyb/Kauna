@@ -46,11 +46,9 @@ public class AutoReadyUp {
             } else if (wasForcedByMod) {
                 wasForcedByMod = false;
 
-                // Use the Accessor to cleanly pull whatever custom key is actively bound
                 InputConstants.Key boundKey = ((KeyMappingAccessor) sneakKey).getBoundKey();
                 int currentBindingCode = boundKey.getValue();
 
-                // Instantly checks if your finger is physically on that specific key configuration
                 if (!InputConstants.isKeyDown(client.getWindow(), currentBindingCode)) {
                     sneakKey.setDown(false);
                 }
