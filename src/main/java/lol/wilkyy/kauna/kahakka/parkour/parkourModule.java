@@ -95,7 +95,7 @@ public class parkourModule implements ClientModInitializer {
         int wrColor = (wrDiff < 0) ? 0x00FF00 : 0xfc5454;
         int pbColor = (pbDiff < 0) ? 0x00FF00 : 0xfc5454;
 
-        if (time <= worldRecord && worldRecord != 0) { // World Record
+        if (time < worldRecord && worldRecord != 0) { // World Record
             rainbowRunning = true;
             rainbowTick = 0;
             if (client.player != null) {
@@ -188,9 +188,7 @@ public class parkourModule implements ClientModInitializer {
             Minecraft client = Minecraft.getInstance();
             if (client.player == null ) return;
 
-            String playerName = client.player.getName().getString();
-
-            if (msg.contains("ehdotti kartan ohitusta!") && !msg.contains(playerName) && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
+            if (msg.contains("ehdotti kartan ohitusta!") && Kauna.isCurrentlyOnRealmi()) {
 
                 if (KaunaConfig.INSTANCE.stickySkipNotification) {
                     Component subtitle = Component.empty()
@@ -201,11 +199,9 @@ public class parkourModule implements ClientModInitializer {
                     client.gui.setTitle(Component.literal("")); // Clear main title
                     client.gui.setSubtitle(subtitle);
                 } else {
-                    Component mainTitle = Component.literal("Vihollinen haluaa skipata")
-                            .withStyle(ChatFormatting.RED)
-                            .withStyle(ChatFormatting.BOLD);
-                    Component subtitle = Component.literal("Ohita kartta ohittamalla kartta")
-                            .withStyle(ChatFormatting.GRAY);
+                    Component mainTitle = Component.literal("");
+                    Component subtitle = Component.literal("Vastustaja haluaa ohittaa kartan")
+                            .withStyle(ChatFormatting.RED);
 
                     client.gui.setTimes(2, 30, 20);
                     client.gui.setTitle(mainTitle);
