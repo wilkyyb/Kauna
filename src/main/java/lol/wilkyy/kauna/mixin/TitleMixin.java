@@ -24,19 +24,14 @@ public class TitleMixin {
 
         String content = message.getString();
 
-        // AutoReadyUp
         if (content != null) {
-            String text = message.getString();
-
-            if (text.contains("kyykkää")) {
+            if (content.contains("kyykkää")) {
                 AutoReadyUp.tryTriggerCrouch();
             }
         }
 
         if (content != null) {
-            String text = message.getString();
-
-            if (text.contains("↑") || text.contains("←") || text.contains("↓") || text.contains("→")) {
+            if (content.contains("↑") || content.contains("←") || content.contains("↓") || content.contains("→")) {
                 AutoReadyUp.isSearchingForReady = false;
             }
         }
