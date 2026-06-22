@@ -12,7 +12,7 @@ import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
 public class AutoReadyUp {
 
-    private static boolean isSearchingForReady = false;
+    public static boolean isSearchingForReady = false;
     private static boolean wasForcedByMod = false;
     private static long cooldownEndTime = 0;
     private static final long COOLDOWN_MS = 7000;

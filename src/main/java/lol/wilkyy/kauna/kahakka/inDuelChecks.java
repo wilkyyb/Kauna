@@ -67,6 +67,7 @@ public class inDuelChecks implements ClientModInitializer {
             if ((msg.contains("Peli päättyi!") && !msg.contains("["))&& Kauna.isCurrentlyOnRealmi()) {
                 duelEndTimer = 80; // Triggers the 4-second reset countdown
                 debugLog("Duel end message detected, starting reset timer.");
+                AutoReadyUp.isSearchingForReady = false;
             }
         });
         // Detect Duel End / Spectator Exit
@@ -75,7 +76,7 @@ public class inDuelChecks implements ClientModInitializer {
             if (msg.contains("Poistuit kaksintaiston katselemisesta!")) {
                 inDuel = false;
                 inParkourDuel = false;
-                debugLog("Exited duel spectator mode, starting reset timer.");
+                debugLog("Exited duel spectator mode");
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
                     if (client.gui != null) {
                         client.gui.setTitle(Component.literal(""));
@@ -83,6 +84,14 @@ public class inDuelChecks implements ClientModInitializer {
                         client.gui.setTimes(0, 0, 0);
                     }
                 });
+            }
+        });
+
+        // Round AutoReadyUp Reset
+        ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
+            String msg = message.getString();
+            if (msg.contains("Voitti kierroksen!")) {
+                AutoReadyUp.isSearchingForReady = false;
             }
         });
 
