@@ -33,6 +33,14 @@ public class TitleMixin {
             }
         }
 
+        if (content != null) {
+            String text = message.getString();
+
+            if (text.contains("↑") || text.contains("←") || text.contains("↓") || text.contains("→")) {
+                AutoReadyUp.isSearchingForReady = false;
+            }
+        }
+
         // Parkour stuff
         if (content.contains("Kierroksen alkuun")) {
             String number = content.replaceAll("[^0-9]", "");
