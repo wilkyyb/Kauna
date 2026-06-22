@@ -24,7 +24,7 @@ public class KaunaConfig {
 
     public boolean autoGG = true;
 
-    public boolean autoReady = false;
+    public static boolean autoReady = false;
 
     public boolean CheckForUpdates = true;
     public boolean stickySkipNotification = true;

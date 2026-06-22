@@ -1,6 +1,7 @@
 package lol.wilkyy.kauna.kahakka;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.mixin.KeyMappingAccessor; // Import your accessor
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -25,7 +26,7 @@ public class AutoReadyUp {
             String playerName = client.player.getGameProfile().name();
             String chatText = ChatFormatting.stripFormatting(message.getString());
 
-            if (chatText.contains("on valmis!")) {
+            if (chatText.contains("on valmis!") || KaunaConfig.autoReady) {
                 debugLog("Detected readiness chat message: '" + chatText + "'");
 
                 if (chatText.contains(playerName)) {

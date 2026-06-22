@@ -25,7 +25,7 @@ public class TitleMixin {
         String content = message.getString();
 
         if (content != null) {
-            if (content.contains("kyykkää")) {
+            if (content.contains("kyykkää") || KaunaConfig.autoReady) {
                 AutoReadyUp.tryTriggerCrouch();
             }
         }
