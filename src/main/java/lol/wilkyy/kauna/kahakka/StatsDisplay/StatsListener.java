@@ -1,5 +1,6 @@
 package lol.wilkyy.kauna.kahakka.StatsDisplay;
 
+import lol.wilkyy.kauna.kahakka.parkour.parkourChatListener;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.Minecraft;
 
@@ -64,9 +65,11 @@ public class StatsListener {
             if (leftSide.equalsIgnoreCase(playerName)) {
                 StatsManager.addWin();
                 StatsManager.addKitWin(StatsManager.getCurrentKit());
+                parkourChatListener.currentTime = 0.0;
             } else if (rightName.equalsIgnoreCase(playerName)) {
                 StatsManager.addLoss();
                 StatsManager.addKitLoss(StatsManager.getCurrentKit());
+                parkourChatListener.currentTime = 0.0;
             }
         });
     }

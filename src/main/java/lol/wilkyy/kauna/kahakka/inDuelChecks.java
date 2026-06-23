@@ -1,6 +1,7 @@
 package lol.wilkyy.kauna.kahakka;
 
 import lol.wilkyy.kauna.Kauna;
+import lol.wilkyy.kauna.kahakka.parkour.parkourChatListener;
 import lol.wilkyy.kauna.kahakka.parkour.parkourModule;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -70,6 +71,7 @@ public class inDuelChecks implements ClientModInitializer {
                 duelEndTimer = 80; // Triggers the 4-second reset countdown
                 debugLog("Duel end message detected, starting reset timer.");
                 AutoReadyUp.isSearchingForReady = false;
+                parkourChatListener.currentTime = 0.0;
             }
         });
         // Detect Duel End / Spectator Exit
