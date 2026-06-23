@@ -70,7 +70,7 @@ public class ConfigHandler {
                                 () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val, null))
                         .build())
                 .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
-                        .name(Component.literal("Stats Display").withStyle(ChatFormatting.BLUE, ChatFormatting.BOLD))
+                        .name(Component.literal("Stats Display").withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD))
                         .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Näe pelisession statistiikat ruudullasi!")))
 
                         .option(buildBooleanOption("Stats Display", "Näytä kit-kohtaiset tai globaalit stats ruudulla",
