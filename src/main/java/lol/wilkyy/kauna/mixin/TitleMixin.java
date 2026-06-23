@@ -22,6 +22,36 @@ import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 @Mixin(Gui.class)
 public class TitleMixin {
 
+    private static final List<String> KITS = List.of(
+            "Mace", "Crystal", "Sword", "Axe", "Smp", "Netherite Potion", "UHC",
+            "Diamond Potion", "Diamond SMP", "Creeper", "Cart", "Bed", "OG Vanilla",
+            "Archer", "Speed", "Trident", "Elytra", "Cart (HT)", "Parkour", "Sumo",
+            "Spleef", "OneShot", "Ghast", "Boxing", "Soppa", "Paukutus", "TNT-Sota",
+            "Arrow Toss", "Spear (Mace)", "Spear (Elytra)", "Spear", "Realistic",
+            "Diamond Mace", "Assembly", "Hoplite", "Tavallinen", "UHC (Vanha)"
+    );
+
+    @Inject(method = "setTitle", at = @At("HEAD"))
+    private void onSetTitle(Component message, CallbackInfo ci) {
+        if (message == null) return;
+        String content = message.getString();
+        if (content == null) return;
+
+        for (String kit : KITS) {
+            if (content.equalsIgnoreCase(kit)) {
+                // Extract the TextColor object directly
+                net.minecraft.network.chat.TextColor textColor = message.getStyle().getColor();
+
+                // Pass both the name and color to the manager
+                StatsManager.setCurrentKit(kit, textColor);
+
+                String colorHex = (textColor != null) ? String.format("0x%08X", textColor.getValue()) : "None/Default";
+                debugLog("Kit detected: " + kit + " (Color: " + colorHex + ")");
+                break;
+            }
+        }
+    }
+
     @Inject(method = "setOverlayMessage", at = @At("HEAD"))
     private void onSetOverlayMessage(Component message, boolean tinted, CallbackInfo ci) {
 

@@ -208,8 +208,9 @@ public class parkourModule implements ClientModInitializer {
             String msg = message.getString();
             Minecraft client = Minecraft.getInstance();
             if (client.player == null ) return;
+            String playerName = client.player.getGameProfile().name();
 
-            if (msg.contains("ehdotti kartan ohitusta!") && Kauna.isCurrentlyOnRealmi()) {
+            if (msg.contains("ehdotti kartan ohitusta!") && Kauna.isCurrentlyOnRealmi() && !msg.contains(playerName)) {
                 if (KaunaConfig.INSTANCE.stickySkipNotification) {
                     Component subtitle = Component.empty()
                             .append(Component.literal("⌚")
