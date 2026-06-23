@@ -11,17 +11,19 @@ public class parkourChatListener implements ClientModInitializer {
     public static double worldRecord = 0;
     public static double personalBest = 0;
     public static boolean statsUpdatedThisTick = false;
+    public static double currentTime = 0.0;
 
 
     public void onInitializeClient() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
 
-            if (msg.contains("Aika:") && Kauna.isCurrentlyOnRealmi()) {
+            if (msg.contains("Aika:") && !msg.contains(" - PB:") && Kauna.isCurrentlyOnRealmi()) {
                 if (!msg.contains("[")) {
                     try {
                         String numberPart = msg.substring(msg.indexOf("Aika:") + 5).trim();
                         time = Double.parseDouble(numberPart);
+                        statsUpdatedThisTick = true; // always trigger splits display
                         debugLog("Updated Time: {}", time);
                     } catch (NumberFormatException e) {
                         debugLog("Failed to parse Time: {}", msg);
@@ -60,7 +62,7 @@ public class parkourChatListener implements ClientModInitializer {
                     try {
                         String numberPart = msg.substring(msg.lastIndexOf(":") + 1).trim();
                         worldRecord = Double.parseDouble(numberPart);
-                        statsUpdatedThisTick = true;
+                        statsUpdatedThisTick = false; // reset for new duel
                         debugLog("Updated WR: {}", worldRecord);
                     } catch (Exception e) {
                         debugLog("Failed to parse WR: {}", msg);

@@ -22,8 +22,8 @@
       "lol.wilkyy.kauna.kahakka.parkour.parkourChatListener",
       "lol.wilkyy.kauna.kahakka.parkour.parkourModule",
       "lol.wilkyy.kauna.kahakka.inDuelChecks",
-      "lol.wilkyy.kauna.kahakka.StatsDisplay.StatsHud"
-
+      "lol.wilkyy.kauna.kahakka.StatsDisplay.StatsHud",
+      "lol.wilkyy.kauna.kahakka.parkour.ParkourWrDiffHud"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"

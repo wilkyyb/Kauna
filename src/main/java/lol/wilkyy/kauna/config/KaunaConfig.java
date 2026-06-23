@@ -29,6 +29,7 @@ public class KaunaConfig {
     public boolean CheckForUpdates = true;
     public boolean stickySkipNotification = true;
     public String wrColorTheme = "Rainbow";
+    public static boolean worldRecordTimer = true;
 
     public boolean inRealmiCheck = true;
 

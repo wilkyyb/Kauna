@@ -19,26 +19,33 @@ public class StatsListener {
             }
 
             if (readingWinstreakLine) {
-                if (text.contains("Nykyinen:")) {
-                    String parts = text.split("Nykyinen:", 2)[1].trim();
-                    String numericPart = parts.split("[\\s\\(]")[0].trim();
+                if (text.contains("Nykyinen")) {
+                    // Split cleanly by the colon to separate the labels from the number
+                    String[] parts = text.split(":", 2);
+                    if (parts.length == 2) {
+                        // Isolate the numeric characters on the right side of the colon
+                        String numericPart = parts[1].replaceAll("[^0-9]", "").trim();
 
-                    try {
-                        int currentStreak = Integer.parseInt(numericPart);
-                        // Updates the kit-specific winstreak slot!
-                        StatsManager.setKitWinstreak(StatsManager.getCurrentKit(), currentStreak);
-                    } catch (NumberFormatException ignored) {}
+                        try {
+                            int currentStreak = Integer.parseInt(numericPart);
+                            StatsManager.setKitWinstreak(StatsManager.getCurrentKit(), currentStreak);
+                        } catch (NumberFormatException ignored) {}
+                    }
 
-                    if (text.contains("ennätys")) {
+                    // If this line contains 'ennätys', we know we can stop tracking the block
+                    if (text.toLowerCase().contains("ennätys")) {
                         readingWinstreakLine = false;
                     }
+                    return;
                 } else if (text.contains("Ennätys:")) {
                     readingWinstreakLine = false;
+                    return;
+                } else {
+                    readingWinstreakLine = false;
                 }
-                return;
             }
 
-            // 2. Local VS calculations
+            // 2. Local VS calculations (No longer blocked out permanently)
             if (!text.contains("⚔") || !text.contains("VS")) return;
 
             Minecraft mc = Minecraft.getInstance();
@@ -55,11 +62,11 @@ public class StatsListener {
             String rightName = rightSide.split("[\\(\\s]")[0].trim();
 
             if (leftSide.equalsIgnoreCase(playerName)) {
-                StatsManager.addWin(); // Handles global winstreak + global wins
-                StatsManager.addKitWin(StatsManager.getCurrentKit()); // Handles kit winstreak + kit wins
+                StatsManager.addWin();
+                StatsManager.addKitWin(StatsManager.getCurrentKit());
             } else if (rightName.equalsIgnoreCase(playerName)) {
-                StatsManager.addLoss(); // Resets global winstreak
-                StatsManager.addKitLoss(StatsManager.getCurrentKit()); // Resets kit winstreak
+                StatsManager.addLoss();
+                StatsManager.addKitLoss(StatsManager.getCurrentKit());
             }
         });
     }

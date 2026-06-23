@@ -125,6 +125,7 @@ public class parkourModule implements ClientModInitializer {
             if (client.player != null) {
                 client.player.playSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(0).value(), 1.0f, 1.0f);
             }
+            parkourChatListener.currentTime = 0.0;
             debugLog("Got WR, animation started");
 
         } else if (pbDiff < 0) { // Personal best
@@ -147,6 +148,7 @@ public class parkourModule implements ClientModInitializer {
             client.gui.setTimes(0, 100, 20);
             client.gui.setTitle(title);
             client.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
+            parkourChatListener.currentTime = 0.0;
             debugLog("Got PB, splits displayed");
 
         } else { // No record
@@ -166,6 +168,7 @@ public class parkourModule implements ClientModInitializer {
             client.gui.setTimes(0, 100, 20);
             client.gui.setTitle(title);
             client.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
+            parkourChatListener.currentTime = 0.0;
             debugLog("No WR or PB, showing standard splits");
         }
     }

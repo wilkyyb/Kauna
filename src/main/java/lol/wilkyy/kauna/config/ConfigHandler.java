@@ -98,6 +98,9 @@ public class ConfigHandler {
                         .option(buildBooleanOption("Pysyvä Skip Indikaattori", "Näyttää koko skipattavan ajan indikaattorin siitä, että voi skipata",
                                 () -> KaunaConfig.INSTANCE.stickySkipNotification, val -> KaunaConfig.INSTANCE.stickySkipNotification = val, null))
 
+                        .option(buildBooleanOption("Maailman Ennätys Ajastin", "Näytä crosshairin alla maailman ennätyksen aika maailmanennätykseen",
+                                () -> KaunaConfig.INSTANCE.worldRecordTimer, val -> KaunaConfig.INSTANCE.worldRecordTimer = val, null))
+
                         .option(Option.<String>createBuilder()
                                 .name(Component.literal("Maailman Ennätys Väriteema"))
                                 .binding("Rainbow", () -> KaunaConfig.INSTANCE.wrColorTheme, val -> KaunaConfig.INSTANCE.wrColorTheme = val)

@@ -5,6 +5,7 @@ import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.kahakka.AutoReadyUp;
 import lol.wilkyy.kauna.kahakka.StatsDisplay.StatsManager;
 import lol.wilkyy.kauna.kahakka.inDuelChecks;
+import lol.wilkyy.kauna.kahakka.parkour.parkourChatListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
@@ -94,6 +95,23 @@ public class TitleMixin {
                 }
                 return;
             }
+        }
+
+        if (content.contains("Aika:")) {
+            try {
+                String afterAika = content.substring(content.indexOf("Aika:") + 5).trim();
+
+                // If there is a suffix (like " - PB: 18.000"), isolate the number before it
+                if (afterAika.contains(" - ")) {
+                    afterAika = afterAika.substring(0, afterAika.indexOf(" - ")).trim();
+                } else {
+                    // If it contains trailing spaces or extra characters, isolate just the number string safely
+                    afterAika = afterAika.split("\\s+")[0].trim();
+                }
+
+                parkourChatListener.currentTime = Double.parseDouble(afterAika);
+                debugLog("currentTime set as " + afterAika);
+            } catch (NumberFormatException | IndexOutOfBoundsException ignored) {}
         }
 
         if (content.contains("PB") && !inDuelChecks.duelStarted) {
