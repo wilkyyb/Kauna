@@ -11,6 +11,8 @@ import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -39,24 +41,60 @@ public class ConfigHandler {
                 .generateScreen(parentScreen);
     }
 
+    private static Option<Integer> buildIntOption(String name, String desc, int min, int max,
+                                                  java.util.function.Supplier<Integer> getter, java.util.function.Consumer<Integer> setter) {
+        return Option.<Integer>createBuilder()
+                .name(Component.literal(name))
+                .description(OptionDescription.createBuilder().text(Component.literal(desc)).build())
+                .binding(getter.get(), getter, setter)
+                .controller(opt -> IntegerSliderControllerBuilder.create(opt).range(min, max).step(1))
+                .listener((opt, val) -> setter.accept(val))  // <-- fires on every slider change
+                .build();
+    }
+
     private static ConfigCategory buildKahakkaCategory() {
+        Minecraft mc = Minecraft.getInstance();
+        int maxX = mc.getWindow().getGuiScaledWidth();
+        int maxY = mc.getWindow().getGuiScaledHeight();
         List<String> themeOptions = List.of("Rainbow", "Gay", "Lesbian", "Trans");
 
         return ConfigCategory.createBuilder()
                 .name(Component.literal("Kahakka"))
+                .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
+                        .name(Component.literal("Kahakka").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                        .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Kahakka Asetukset")))
 
-                // First Section (Example)
-                .option(buildBooleanOption("AutoGG", "Lähetä 'gg' pelin loppuessa",
-                        () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val, null))
-                .option(buildBooleanOption("AutoReady", "Kyykkää automaattisesti erän alkaessa",
-                        () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val, null))
+                        .option(buildBooleanOption("AutoGG", "Lähetä 'gg' pelin loppuessa",
+                                () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val, null))
+                        .option(buildBooleanOption("AutoReady", "Kyykkää automaattisesti erän alkaessa",
+                                () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val, null))
+                        .build())
+                .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
+                        .name(Component.literal("Stats Display").withStyle(ChatFormatting.BLUE, ChatFormatting.BOLD))
+                        .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Näe pelisession statistiikat ruudullasi!")))
 
-                // --- THIS ACTS AS YOUR DIVIDER TITLE ---
+                        .option(buildBooleanOption("Stats Display", "Näytä kit-kohtaiset tai globaalit stats ruudulla",
+                                () -> KaunaConfig.INSTANCE.statsHud, val -> KaunaConfig.INSTANCE.statsHud = val, null))
+                        .option(buildBooleanOption("Global/Kit Stats", "Näytä kit-kohtaiset stats globaalien sijaan",
+                                () -> KaunaConfig.INSTANCE.showKitStats, val -> KaunaConfig.INSTANCE.showKitStats = val, null))
+                        .option(Option.<Float>createBuilder()
+                                .name(Component.literal("Stats HUD Background Opacity"))
+                                .description(OptionDescription.createBuilder().text(Component.literal("Taustan läpinäkyvyys")).build())
+                                .binding(0.5f, () -> KaunaConfig.INSTANCE.statsHudBackgroundOpacity, val -> KaunaConfig.INSTANCE.statsHudBackgroundOpacity = val)
+                                .controller(opt -> FloatSliderControllerBuilder.create(opt).range(0.0f, 1.0f).step(0.05f)
+                                        .valueFormatter(val -> Component.literal(String.format("%.0f%%", val * 100))))
+                                .listener((opt, val) -> KaunaConfig.INSTANCE.statsHudBackgroundOpacity = val)
+                                .build())
+                        .option(buildIntOption("Stats HUD X", "Vaakasuuntainen sijainti",
+                                0, maxX, () -> KaunaConfig.INSTANCE.statsHudX, val -> KaunaConfig.INSTANCE.statsHudX = val))
+                        .option(buildIntOption("Stats HUD Y", "Pystysuuntainen sijainti",
+                                0, maxY, () -> KaunaConfig.INSTANCE.statsHudY, val -> KaunaConfig.INSTANCE.statsHudY = val))
+                        .build())
+
                 .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
                         .name(Component.literal("Parkour Asetukset").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                         .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Parkour-moduulin lisäasetukset")))
 
-                        // Options placed inside this group will appear under the divider title
                         .option(buildBooleanOption("Pysyvä Skip Indikaattori", "Näyttää koko skipattavan ajan indikaattorin siitä, että voi skipata",
                                 () -> KaunaConfig.INSTANCE.stickySkipNotification, val -> KaunaConfig.INSTANCE.stickySkipNotification = val, null))
 
@@ -67,15 +105,15 @@ public class ConfigHandler {
                                         .values(themeOptions)
                                         .valueFormatter(Colors::getFormattedThemeName))
                                 .build())
-                        .build()) // Ends the group section
+                        .build())
                 .build();
     }
 
     private static ConfigCategory buildYstavatCategory() {
         return ConfigCategory.createBuilder()
-                .name(Component.literal("Ystävät"))
+                .name(Component.literal("Kaverit"))
                 .option(ListOption.<String>createBuilder()
-                        .name(Component.literal("Kaverilista"))
+                        .name(Component.literal("Kaverilista").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                         .description(OptionDescription.of(Component.literal("Hallitse tallennettuja ystäviäsi.")))
                         .binding(new ArrayList<>(), () -> KaunaConfig.INSTANCE.friendsList, val -> KaunaConfig.INSTANCE.friendsList = val)
                         .controller(StringControllerBuilder::create)
@@ -86,7 +124,7 @@ public class ConfigHandler {
 
     private static ConfigCategory buildSystemCategory() {
         return ConfigCategory.createBuilder()
-                .name(Component.literal("System"))
+                .name(Component.literal("Järjestelmä"))
                 .option(buildBooleanOption("Varmista Realmi.fi Palvelin", "Varmista, että pelaaja on Realmi.fi palvelimella tehdessään mitään. !! Modi saattaa rikkoutua, jos laitat tämän pois.",
                         () -> KaunaConfig.INSTANCE.inRealmiCheck, val -> KaunaConfig.INSTANCE.inRealmiCheck = val, null))
                 .option(buildBooleanOption("Tarkista Päivitykset", "Tarkista onko päivityksiä saatavilla",

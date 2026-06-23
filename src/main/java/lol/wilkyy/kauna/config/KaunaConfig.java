@@ -32,6 +32,12 @@ public class KaunaConfig {
 
     public boolean inRealmiCheck = true;
 
+    public boolean statsHud = true;
+    public int statsHudX = 8;
+    public int statsHudY = 52;
+    public boolean showKitStats = false;
+    public float statsHudBackgroundOpacity = 0.5f;
+
     public List<String> friendsList = new ArrayList<>(List.of("hullu"));
 
     public static KaunaConfig INSTANCE = new KaunaConfig();

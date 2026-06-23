@@ -1,6 +1,7 @@
 package lol.wilkyy.kauna.kahakka;
 
 import lol.wilkyy.kauna.Kauna;
+import lol.wilkyy.kauna.kahakka.parkour.parkourModule;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -14,7 +15,7 @@ import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 public class inDuelChecks implements ClientModInitializer {
 
     private static boolean inDuel = false;
-    private static boolean inParkourDuel = false;
+    public static boolean inParkourDuel = false;
 
     private static int duelEndTimer = -1; // -1 = not running
 
@@ -55,6 +56,7 @@ public class inDuelChecks implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.gameMode != null && clientt.gameMode.getPlayerMode() == GameType.SPECTATOR && Kauna.isCurrentlyOnRealmi())) {
+                parkourModule.showParkourTitle();
                 inParkourDuel = true;
                 debugLog("Parkour Duel started");
             }

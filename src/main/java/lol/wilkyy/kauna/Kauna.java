@@ -4,6 +4,7 @@ import lol.wilkyy.kauna.config.ConfigHandler;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.kahakka.AutoGG;
 import lol.wilkyy.kauna.kahakka.AutoReadyUp;
+import lol.wilkyy.kauna.kahakka.StatsDisplay.StatsHud;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -19,7 +20,7 @@ import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 public class Kauna implements ModInitializer {
 
     private static boolean inKahakka = false;
-
+    public static final String MOD_ID = "kauna";
     @Override
     public void onInitialize() {
         GListScanner.init();
@@ -35,6 +36,7 @@ public class Kauna implements ModInitializer {
         kahakkaJoinCheck();
         kahakkaLeaveCheck();
         debugLog("Kannat kaunaa... Mod initialized!");
+
     }
 
     public static boolean isCurrentlyOnRealmi() {

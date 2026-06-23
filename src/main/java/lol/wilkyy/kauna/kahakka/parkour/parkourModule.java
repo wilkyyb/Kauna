@@ -17,6 +17,7 @@ import net.minecraft.ChatFormatting;
 import java.text.DecimalFormat;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
+import static lol.wilkyy.kauna.kahakka.inDuelChecks.inParkourDuel;
 import static lol.wilkyy.kauna.kahakka.parkour.parkourChatListener.*;
 
 public class parkourModule implements ClientModInitializer {
@@ -96,6 +97,20 @@ public class parkourModule implements ClientModInitializer {
                 mc.gui.setSubtitle(Component.literal(""));
             }
         });
+    }
+
+    public static void showParkourTitle() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui == null) return;
+        if (inParkourDuel) return;
+
+        // Set the timings once (Fade-in ticks, Display duration ticks, Fade-out ticks)
+        mc.gui.setTimes(10, 40, 10);
+
+        // Push the title text once. Minecraft handles its lifecycle automatically.
+        mc.gui.setTitle(Component.literal("Parkour")
+                .withStyle(ChatFormatting.BLUE)
+                .withStyle(style -> style.withBold(true)));
     }
 
     private void calculateAndShowSplits(Minecraft client) {

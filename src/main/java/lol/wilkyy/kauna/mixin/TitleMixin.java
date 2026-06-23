@@ -3,6 +3,7 @@ package lol.wilkyy.kauna.mixin;
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.kahakka.AutoReadyUp;
+import lol.wilkyy.kauna.kahakka.StatsDisplay.StatsManager;
 import lol.wilkyy.kauna.kahakka.inDuelChecks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
