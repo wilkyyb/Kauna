@@ -13,6 +13,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.contents.objects.PlayerSprite;
+import net.minecraft.world.item.component.ResolvableProfile;
 
 import java.text.DecimalFormat;
 
@@ -37,7 +39,6 @@ public class parkourModule implements ClientModInitializer {
     int dividerColor = 0x545454;
     int starColor = 0xFDD000;
 
-    // Dynamically retrieve the colors array based on config selection
     private static int[] getCurrentColors() {
         if (KaunaConfig.INSTANCE.wrColorTheme == null) return Colors.RAINBOW_THEME;
         return switch (KaunaConfig.INSTANCE.wrColorTheme) {
@@ -104,10 +105,8 @@ public class parkourModule implements ClientModInitializer {
         if (mc.gui == null) return;
         if (inParkourDuel) return;
 
-        // Set the timings once (Fade-in ticks, Display duration ticks, Fade-out ticks)
         mc.gui.setTimes(10, 40, 10);
 
-        // Push the title text once. Minecraft handles its lifecycle automatically.
         mc.gui.setTitle(Component.literal("Parkour")
                 .withStyle(ChatFormatting.BLUE)
                 .withStyle(style -> style.withBold(true)));
@@ -207,10 +206,12 @@ public class parkourModule implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             Minecraft client = Minecraft.getInstance();
-            if (client.player == null ) return;
+            if (client.player == null) return;
             String playerName = client.player.getGameProfile().name();
 
             if (msg.contains("ehdotti kartan ohitusta!") && Kauna.isCurrentlyOnRealmi() && !msg.contains(playerName)) {
+                String skipperName = msg.substring(msg.indexOf("]") + 1, msg.indexOf(" ehdotti")).trim();
+
                 if (KaunaConfig.INSTANCE.stickySkipNotification) {
                     Component subtitle = Component.empty()
                             .append(Component.literal("⌚")
@@ -219,11 +220,19 @@ public class parkourModule implements ClientModInitializer {
                     client.gui.setTitle(Component.literal(""));
                     client.gui.setSubtitle(subtitle);
                 } else {
-                    Component mainTitle = Component.literal("");
-                    Component subtitle = Component.literal("Vastustaja haluaa ohittaa kartan")
-                            .withStyle(ChatFormatting.RED);
+                    ResolvableProfile profile = ResolvableProfile.createUnresolved(skipperName);
+                    Component headComponent = Component.object(new PlayerSprite(profile, true));
+
+                    Component subtitle = Component.empty()
+                            .append(headComponent)
+                            .append(Component.literal(" "))
+                            .append(Component.literal(skipperName)
+                                    .withStyle(ChatFormatting.RED))
+                            .append(Component.literal(" ehdotti kartan ohitusta!")
+                                    .withStyle(ChatFormatting.RED));
+
                     client.gui.setTimes(2, 30, 20);
-                    client.gui.setTitle(mainTitle);
+                    client.gui.setTitle(Component.literal(""));
                     client.gui.setSubtitle(subtitle);
                 }
                 debugLog("Skip-ilmoitus näytetty.");
