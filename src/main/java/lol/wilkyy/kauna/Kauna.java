@@ -2,9 +2,9 @@ package lol.wilkyy.kauna;
 
 import lol.wilkyy.kauna.config.ConfigHandler;
 import lol.wilkyy.kauna.config.KaunaConfig;
-import lol.wilkyy.kauna.kahakka.AutoGG;
-import lol.wilkyy.kauna.kahakka.AutoReadyUp;
-import lol.wilkyy.kauna.kahakka.StatsDisplay.StatsHud;
+import lol.wilkyy.kauna.features.friendslist.GListScanner;
+import lol.wilkyy.kauna.features.kahakka.autogg.AutoGG;
+import lol.wilkyy.kauna.features.kahakka.autoready.AutoReadyUp;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;

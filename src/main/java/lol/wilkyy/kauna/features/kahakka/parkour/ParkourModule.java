@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.kahakka.parkour;
+package lol.wilkyy.kauna.features.kahakka.parkour;
 
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.Colors;
@@ -19,10 +19,10 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import java.text.DecimalFormat;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
-import static lol.wilkyy.kauna.kahakka.inDuelChecks.inParkourDuel;
-import static lol.wilkyy.kauna.kahakka.parkour.parkourChatListener.*;
+import static lol.wilkyy.kauna.features.kahakka.duel.DuelManager.inParkourDuel;
+import static lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener.*;
 
-public class parkourModule implements ClientModInitializer {
+public class ParkourModule implements ClientModInitializer {
 
     private static boolean rainbowRunning = false;
     private static int rainbowTick = 0;
@@ -56,10 +56,10 @@ public class parkourModule implements ClientModInitializer {
         countdown();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
-            if (pendingDisplay && parkourChatListener.statsUpdatedThisTick) {
+            if (pendingDisplay && ParkourChatListener.statsUpdatedThisTick) {
                 calculateAndShowSplits(mc);
                 pendingDisplay = false;
-                parkourChatListener.statsUpdatedThisTick = false;
+                ParkourChatListener.statsUpdatedThisTick = false;
             }
 
             if (!rainbowRunning) return;
@@ -125,7 +125,7 @@ public class parkourModule implements ClientModInitializer {
             if (client.player != null) {
                 client.player.playSound(SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(0).value(), 1.0f, 1.0f);
             }
-            parkourChatListener.currentTime = 0.0;
+            ParkourChatListener.currentTime = 0.0;
             debugLog("Got WR, animation started");
 
         } else if (pbDiff < 0) { // Personal best
@@ -148,7 +148,7 @@ public class parkourModule implements ClientModInitializer {
             client.gui.setTimes(0, 100, 20);
             client.gui.setTitle(title);
             client.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
-            parkourChatListener.currentTime = 0.0;
+            ParkourChatListener.currentTime = 0.0;
             debugLog("Got PB, splits displayed");
 
         } else { // No record
@@ -168,7 +168,7 @@ public class parkourModule implements ClientModInitializer {
             client.gui.setTimes(0, 100, 20);
             client.gui.setTitle(title);
             client.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
-            parkourChatListener.currentTime = 0.0;
+            ParkourChatListener.currentTime = 0.0;
             debugLog("No WR or PB, showing standard splits");
         }
     }

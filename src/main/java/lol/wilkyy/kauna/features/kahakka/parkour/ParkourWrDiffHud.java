@@ -1,8 +1,7 @@
-package lol.wilkyy.kauna.kahakka.parkour;
+package lol.wilkyy.kauna.features.kahakka.parkour;
 
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
-import lol.wilkyy.kauna.kahakka.inDuelChecks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -26,13 +25,13 @@ public class ParkourWrDiffHud implements ClientModInitializer {
     }
 
     private static void render(GuiGraphicsExtractor graphics, DeltaTracker tickCounter) {
-        if (parkourChatListener.currentTime <= 0) return;
-        if (parkourChatListener.worldRecord <= 0) return;
+        if (ParkourChatListener.currentTime <= 0) return;
+        if (ParkourChatListener.worldRecord <= 0) return;
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        double diff = parkourChatListener.currentTime - parkourChatListener.worldRecord;
+        double diff = ParkourChatListener.currentTime - ParkourChatListener.worldRecord;
         boolean ahead = diff < 0;
         int color = ahead ? 0xFF00FF00 : 0xFFfc5454;
         String sign = ahead ? "" : "+";

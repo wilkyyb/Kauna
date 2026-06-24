@@ -1,11 +1,10 @@
 package lol.wilkyy.kauna.mixin;
 
-import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
-import lol.wilkyy.kauna.kahakka.AutoReadyUp;
-import lol.wilkyy.kauna.kahakka.StatsDisplay.StatsManager;
-import lol.wilkyy.kauna.kahakka.inDuelChecks;
-import lol.wilkyy.kauna.kahakka.parkour.parkourChatListener;
+import lol.wilkyy.kauna.features.kahakka.autoready.AutoReadyUp;
+import lol.wilkyy.kauna.features.kahakka.stats.StatsManager;
+import lol.wilkyy.kauna.features.kahakka.duel.DuelManager;
+import lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
@@ -76,7 +75,7 @@ public class TitleMixin {
 
             if (!number.isEmpty()) {
                 Minecraft client = Minecraft.getInstance();
-                inDuelChecks.duelStarted = false;
+                DuelManager.duelStarted = false;
 
                 if (!number.equals("5") && !number.equals("4")) {
                     ChatFormatting color = switch (number) {
@@ -109,18 +108,18 @@ public class TitleMixin {
                     afterAika = afterAika.split("\\s+")[0].trim();
                 }
 
-                parkourChatListener.currentTime = Double.parseDouble(afterAika);
+                ParkourChatListener.currentTime = Double.parseDouble(afterAika);
                 debugLog("currentTime set as " + afterAika);
             } catch (NumberFormatException | IndexOutOfBoundsException ignored) {}
         }
 
-        if (content.contains("PB") && !inDuelChecks.duelStarted) {
+        if (content.contains("PB") && !DuelManager.duelStarted) {
             Minecraft client = Minecraft.getInstance();
 
             client.gui.setTimes(0, 20, 5);
             client.gui.setTitle(Component.literal(""));
             client.gui.setSubtitle(Component.literal("GLHF!").withStyle(ChatFormatting.GOLD));
-            inDuelChecks.duelStarted = true;
+            DuelManager.duelStarted = true;
         }
     }
 }

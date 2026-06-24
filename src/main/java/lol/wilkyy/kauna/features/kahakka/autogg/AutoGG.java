@@ -1,7 +1,6 @@
-package lol.wilkyy.kauna.kahakka;
+package lol.wilkyy.kauna.features.kahakka.autogg;
 
 import lol.wilkyy.kauna.Kauna;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.Minecraft;
 import lol.wilkyy.kauna.config.KaunaConfig;

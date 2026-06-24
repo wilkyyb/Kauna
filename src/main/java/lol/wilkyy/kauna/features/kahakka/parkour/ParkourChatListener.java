@@ -1,11 +1,11 @@
-package lol.wilkyy.kauna.kahakka.parkour;
+package lol.wilkyy.kauna.features.kahakka.parkour;
 
 import lol.wilkyy.kauna.Kauna;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
-public class parkourChatListener implements ClientModInitializer {
+public class ParkourChatListener implements ClientModInitializer {
 
     public static double time = 0.0;
     public static double worldRecord = 0;

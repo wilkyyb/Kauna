@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna;
+package lol.wilkyy.kauna.features.friendslist;
 
 import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;

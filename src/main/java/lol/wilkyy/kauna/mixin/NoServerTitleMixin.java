@@ -1,7 +1,7 @@
 package lol.wilkyy.kauna.mixin;
 
 import lol.wilkyy.kauna.Kauna;
-import lol.wilkyy.kauna.kahakka.inDuelChecks;
+import lol.wilkyy.kauna.features.kahakka.duel.DuelManager;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
@@ -16,14 +16,14 @@ public class NoServerTitleMixin {
 
 	@Inject(method = "setTitleText", at = @At("HEAD"), cancellable = true)
 	private void swallowTitle(ClientboundSetTitleTextPacket packet, CallbackInfo ci) {
-		if (inDuelChecks.inParkourDuel() && Kauna.inKahakka()) {
+		if (DuelManager.inParkourDuel() && Kauna.inKahakka()) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "setSubtitleText", at = @At("HEAD"), cancellable = true)
 	private void swallowSubtitle(ClientboundSetSubtitleTextPacket packet, CallbackInfo ci) {
-		if (inDuelChecks.inParkourDuel() && Kauna.inKahakka()) {
+		if (DuelManager.inParkourDuel() && Kauna.inKahakka()) {
 			ci.cancel();
 		}
 	}
@@ -31,7 +31,7 @@ public class NoServerTitleMixin {
 
 	@Inject(method = "setTitlesAnimation", at = @At("HEAD"), cancellable = true)
 	private void swallowFade(ClientboundSetTitlesAnimationPacket packet, CallbackInfo ci) {
-		if (inDuelChecks.inParkourDuel() && Kauna.inKahakka()) {
+		if (DuelManager.inParkourDuel() && Kauna.inKahakka()) {
 			ci.cancel();
 		}
 	}

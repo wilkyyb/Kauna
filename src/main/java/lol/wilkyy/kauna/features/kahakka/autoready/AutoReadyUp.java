@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.kahakka;
+package lol.wilkyy.kauna.features.kahakka.autoready;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import lol.wilkyy.kauna.config.KaunaConfig;

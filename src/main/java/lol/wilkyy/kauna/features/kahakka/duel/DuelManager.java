@@ -1,8 +1,9 @@
-package lol.wilkyy.kauna.kahakka;
+package lol.wilkyy.kauna.features.kahakka.duel;
 
 import lol.wilkyy.kauna.Kauna;
-import lol.wilkyy.kauna.kahakka.parkour.parkourChatListener;
-import lol.wilkyy.kauna.kahakka.parkour.parkourModule;
+import lol.wilkyy.kauna.features.kahakka.autoready.AutoReadyUp;
+import lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener;
+import lol.wilkyy.kauna.features.kahakka.parkour.ParkourModule;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.GameType;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
-public class inDuelChecks implements ClientModInitializer {
+public class DuelManager implements ClientModInitializer {
 
     private static boolean inDuel = false;
     public static boolean inParkourDuel = false;
@@ -57,7 +58,7 @@ public class inDuelChecks implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             String msg = message.getString();
             if (msg.contains("Ohita kartta:") && !msg.contains("[") && !(clientt.player != null && clientt.gameMode != null && clientt.gameMode.getPlayerMode() == GameType.SPECTATOR && Kauna.isCurrentlyOnRealmi())) {
-                parkourModule.showParkourTitle();
+                ParkourModule.showParkourTitle();
                 inParkourDuel = true;
                 debugLog("Parkour Duel started");
             }
@@ -71,7 +72,7 @@ public class inDuelChecks implements ClientModInitializer {
                 duelEndTimer = 80; // Triggers the 4-second reset countdown
                 debugLog("Duel end message detected, starting reset timer.");
                 AutoReadyUp.isSearchingForReady = false;
-                parkourChatListener.currentTime = 0.0;
+                ParkourChatListener.currentTime = 0.0;
             }
         });
         // Detect Duel End / Spectator Exit

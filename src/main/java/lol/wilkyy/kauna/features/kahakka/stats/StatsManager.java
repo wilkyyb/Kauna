@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.kahakka.StatsDisplay;
+package lol.wilkyy.kauna.features.kahakka.stats;
 
 import net.minecraft.network.chat.TextColor;
 import java.util.HashMap;

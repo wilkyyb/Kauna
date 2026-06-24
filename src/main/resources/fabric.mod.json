@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "kauna",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "name": "Kauna",
   "description": "Realmi.fi Kahakka Quality Of Life Mod",
   "authors": [
@@ -19,11 +19,11 @@
       "lol.wilkyy.kauna.Kauna"
     ],
     "client": [
-      "lol.wilkyy.kauna.kahakka.parkour.parkourChatListener",
-      "lol.wilkyy.kauna.kahakka.parkour.parkourModule",
-      "lol.wilkyy.kauna.kahakka.inDuelChecks",
-      "lol.wilkyy.kauna.kahakka.StatsDisplay.StatsHud",
-      "lol.wilkyy.kauna.kahakka.parkour.ParkourWrDiffHud"
+      "lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener",
+      "lol.wilkyy.kauna.features.kahakka.parkour.ParkourModule",
+      "lol.wilkyy.kauna.features.kahakka.duel.DuelManager",
+      "lol.wilkyy.kauna.features.kahakka.stats.StatsHud",
+      "lol.wilkyy.kauna.features.kahakka.parkour.ParkourWrDiffHud"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"

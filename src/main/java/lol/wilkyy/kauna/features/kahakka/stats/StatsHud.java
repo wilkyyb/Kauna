@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.kahakka.StatsDisplay;
+package lol.wilkyy.kauna.features.kahakka.stats;
 
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
