@@ -27,10 +27,13 @@ public class GListScanner {
 
                 for (String friend : KaunaConfig.INSTANCE.friendsList) {
                     for (String onlinePlayer : onlinePlayers) {
-                        String cleanName = onlinePlayer.trim().replace(".", "");
+                        String trimmed = onlinePlayer.trim().replace(".", "");
+                        boolean isVanished = trimmed.startsWith("[V]");
+                        String cleanName = trimmed.replaceAll("^\\[V\\]", "");
 
                         if (cleanName.equalsIgnoreCase(friend.trim())) {
-                            foundFriends.add("§8[§a" + proxyName + "§8] "  + "§7" + friend);
+                            String vanishIcon = isVanished ? " §8[§4V§8]§7" : "";
+                            foundFriends.add("§8[§a" + proxyName + "§8] §7" + friend + vanishIcon);
                             break;
                         }
                     }
