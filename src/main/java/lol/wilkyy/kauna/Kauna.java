@@ -33,6 +33,7 @@ public class Kauna implements ModInitializer {
             ConfigHandler.register(dispatcher);
         });
 
+
         kahakkaJoinCheck();
         kahakkaLeaveCheck();
         debugLog("Kannat kaunaa... Mod initialized!");
@@ -74,13 +75,13 @@ public class Kauna implements ModInitializer {
                         .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA01C3C)).withBold(true)));
 
                 if (UpdateChecker.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
-                    client.gui.setTitle(Component.literal("Päivitys saatavilla!").withStyle(ChatFormatting.GOLD).copy().append(""));
+                    client.gui.hud.setTitle(Component.literal("Päivitys saatavilla!").withStyle(ChatFormatting.GOLD).copy().append(""));
                 } else {
-                    client.gui.setTitle(Component.literal(""));
+                    client.gui.hud.setTitle(Component.literal(""));
                 }
 
-                client.gui.setSubtitle(subtitleText);
-                client.gui.setTimes(10, 40, 10);
+                client.gui.hud.setSubtitle(subtitleText);
+                client.gui.hud.setTimes(10, 40, 10);
             }
         });
     }

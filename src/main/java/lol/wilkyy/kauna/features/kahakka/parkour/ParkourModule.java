@@ -88,14 +88,14 @@ public class ParkourModule implements ClientModInitializer {
                     .append(Component.literal(" ⭐")
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
 
-            mc.gui.setTimes(0, 2, 20);
-            mc.gui.setTitle(title);
-            mc.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
+            mc.gui.hud.setTimes(0, 2, 20);
+            mc.gui.hud.setTitle(title);
+            mc.gui.hud.setSubtitle(generateSubtitle(wrColor, pbColor));
 
             if (rainbowTick > 80) {
                 rainbowRunning = false;
-                mc.gui.setTitle(Component.literal(""));
-                mc.gui.setSubtitle(Component.literal(""));
+                mc.gui.hud.setTitle(Component.literal(""));
+                mc.gui.hud.setSubtitle(Component.literal(""));
             }
         });
     }
@@ -105,9 +105,9 @@ public class ParkourModule implements ClientModInitializer {
         if (mc.gui == null) return;
         if (inParkourDuel) return;
 
-        mc.gui.setTimes(10, 40, 10);
+        mc.gui.hud.setTimes(10, 40, 10);
 
-        mc.gui.setTitle(Component.literal("Parkour")
+        mc.gui.hud.setTitle(Component.literal("Parkour")
                 .withStyle(ChatFormatting.BLUE)
                 .withStyle(style -> style.withBold(true)));
     }
@@ -145,9 +145,9 @@ public class ParkourModule implements ClientModInitializer {
                     .append(Component.literal(" ⭐")
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
 
-            client.gui.setTimes(0, 100, 20);
-            client.gui.setTitle(title);
-            client.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
+            client.gui.hud.setTimes(0, 100, 20);
+            client.gui.hud.setTitle(title);
+            client.gui.hud.setSubtitle(generateSubtitle(wrColor, pbColor));
             ParkourChatListener.currentTime = 0.0;
             debugLog("Got PB, splits displayed");
 
@@ -165,9 +165,9 @@ public class ParkourModule implements ClientModInitializer {
                     .append(Component.literal(" ⭐")
                             .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(starColor)).withBold(true)));
 
-            client.gui.setTimes(0, 100, 20);
-            client.gui.setTitle(title);
-            client.gui.setSubtitle(generateSubtitle(wrColor, pbColor));
+            client.gui.hud.setTimes(0, 100, 20);
+            client.gui.hud.setTitle(title);
+            client.gui.hud.setSubtitle(generateSubtitle(wrColor, pbColor));
             ParkourChatListener.currentTime = 0.0;
             debugLog("No WR or PB, showing standard splits");
         }
@@ -219,9 +219,9 @@ public class ParkourModule implements ClientModInitializer {
                     Component subtitle = Component.empty()
                             .append(Component.literal("⌚")
                                     .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xbebebe))));
-                    client.gui.setTimes(0, 280, 20);
-                    client.gui.setTitle(Component.literal(""));
-                    client.gui.setSubtitle(subtitle);
+                    client.gui.hud.setTimes(0, 280, 20);
+                    client.gui.hud.setTitle(Component.literal(""));
+                    client.gui.hud.setSubtitle(subtitle);
                 } else {
                     ResolvableProfile profile = ResolvableProfile.createUnresolved(skipperName);
                     Component headComponent = Component.object(new PlayerSprite(profile, true));
@@ -234,17 +234,17 @@ public class ParkourModule implements ClientModInitializer {
                             .append(Component.literal(" ehdotti kartan ohitusta!")
                                     .withStyle(ChatFormatting.RED));
 
-                    client.gui.setTimes(2, 30, 20);
-                    client.gui.setTitle(Component.literal(""));
-                    client.gui.setSubtitle(subtitle);
+                    client.gui.hud.setTimes(2, 30, 20);
+                    client.gui.hud.setTitle(Component.literal(""));
+                    client.gui.hud.setSubtitle(subtitle);
                 }
                 debugLog("Skip-ilmoitus näytetty.");
             }
 
             if ((msg.contains("hyväksyi kartan ohituksen!") || msg.contains("Peli alkoi!")) && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
-                client.gui.setTimes(0, 0, 0);
-                client.gui.setTitle(Component.literal(""));
-                client.gui.setSubtitle(Component.literal(""));
+                client.gui.hud.setTimes(0, 0, 0);
+                client.gui.hud.setTitle(Component.literal(""));
+                client.gui.hud.setSubtitle(Component.literal(""));
             }
         });
     }
@@ -258,8 +258,8 @@ public class ParkourModule implements ClientModInitializer {
                     Minecraft client = Minecraft.getInstance();
                     Component countdownTitle = Component.literal(number)
                             .setStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.GOLD));
-                    client.gui.setTimes(0, 20, 5);
-                    client.gui.setTitle(countdownTitle);
+                    client.gui.hud.setTimes(0, 20, 5);
+                    client.gui.hud.setTitle(countdownTitle);
                 }
             }
         });

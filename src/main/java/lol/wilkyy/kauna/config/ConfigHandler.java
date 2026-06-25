@@ -219,7 +219,7 @@ public class ConfigHandler {
 
     private static int openGuiScreen() {
         Minecraft.getInstance().execute(() -> {
-            Minecraft.getInstance().setScreen(createConfigScreen(Minecraft.getInstance().screen));
+            Minecraft.getInstance().gui.setScreen(createConfigScreen(Minecraft.getInstance().gui.screen()));
         });
         return 1;
     }

@@ -33,9 +33,9 @@ public class DuelManager implements ClientModInitializer {
                     inParkourDuel = false;
 
                     if (client.gui != null) {
-                        client.gui.setTitle(Component.literal(""));
-                        client.gui.setSubtitle(Component.literal(""));
-                        client.gui.setTimes(0, 0, 0);
+                        client.gui.hud.setTitle(Component.literal(""));
+                        client.gui.hud.setSubtitle(Component.literal(""));
+                        client.gui.hud.setTimes(0, 0, 0);
                     }
 
                     debugLog("Duel state and HUD reset.");
@@ -84,9 +84,9 @@ public class DuelManager implements ClientModInitializer {
                 debugLog("Exited duel spectator mode");
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
                     if (client.gui != null) {
-                        client.gui.setTitle(Component.literal(""));
-                        client.gui.setSubtitle(Component.literal(""));
-                        client.gui.setTimes(0, 0, 0);
+                        client.gui.hud.setTitle(Component.literal(""));
+                        client.gui.hud.setSubtitle(Component.literal(""));
+                        client.gui.hud.setTimes(0, 0, 0);
                     }
                 });
             }
@@ -104,9 +104,9 @@ public class DuelManager implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             inDuel = false;
             inParkourDuel = false;
-            client.gui.setTitle(Component.literal(""));
-            client.gui.setSubtitle(Component.literal(""));
-            client.gui.setTimes(0, 0, 0);
+            client.gui.hud.setTitle(Component.literal(""));
+            client.gui.hud.setSubtitle(Component.literal(""));
+            client.gui.hud.setTimes(0, 0, 0);
             duelEndTimer = -1;
             debugLog("Duel ended due to disconnect");
         });

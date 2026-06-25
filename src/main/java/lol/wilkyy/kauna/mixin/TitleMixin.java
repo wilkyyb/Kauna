@@ -6,7 +6,7 @@ import lol.wilkyy.kauna.features.kahakka.stats.StatsManager;
 import lol.wilkyy.kauna.features.kahakka.duel.DuelManager;
 import lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
@@ -19,7 +19,7 @@ import java.util.List;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public class TitleMixin {
 
     private static final List<String> KITS = List.of(
@@ -88,13 +88,15 @@ public class TitleMixin {
                     Component countdownTitle = Component.literal(number)
                             .withStyle(Style.EMPTY.withBold(true).withColor(color));
 
-                    client.gui.setTimes(0, 30, 5);
-                    client.gui.setTitle(countdownTitle);
-                    client.gui.setSubtitle(Component.literal(""));
+                    client.gui.hud.setTimes(0, 30, 5);
+                    client.gui.hud.setTitle(countdownTitle);
+                    client.gui.hud.setSubtitle(Component.literal(""));
                 }
                 return;
             }
         }
+
+
 
         if (content.contains("Aika:")) {
             try {
@@ -116,9 +118,9 @@ public class TitleMixin {
         if (content.contains("PB") && !DuelManager.duelStarted) {
             Minecraft client = Minecraft.getInstance();
 
-            client.gui.setTimes(0, 20, 5);
-            client.gui.setTitle(Component.literal(""));
-            client.gui.setSubtitle(Component.literal("GLHF!").withStyle(ChatFormatting.GOLD));
+            client.gui.hud.setTimes(0, 20, 5);
+            client.gui.hud.setTitle(Component.literal(""));
+            client.gui.hud.setSubtitle(Component.literal("GLHF!").withStyle(ChatFormatting.GOLD));
             DuelManager.duelStarted = true;
         }
     }
