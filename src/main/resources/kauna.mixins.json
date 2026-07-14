@@ -1,11 +1,13 @@
 {
 	"required": true,
 	"package": "lol.wilkyy.kauna.mixin",
+
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
 		"NoServerTitleMixin",
 		"TitleMixin",
-		"KeyMappingAccessor"
+		"KeyMappingAccessor",
+		"CommandSuggestionsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
