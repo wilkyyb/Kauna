@@ -108,6 +108,7 @@ public class DuelManager implements ClientModInitializer {
             client.gui.hud.setSubtitle(Component.literal(""));
             client.gui.hud.setTimes(0, 0, 0);
             duelEndTimer = -1;
+            ParkourChatListener.currentTime = 0.0;
             debugLog("Duel ended due to disconnect");
         });
     }

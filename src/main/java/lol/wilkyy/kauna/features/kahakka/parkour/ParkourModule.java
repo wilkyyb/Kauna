@@ -241,10 +241,16 @@ public class ParkourModule implements ClientModInitializer {
                 debugLog("Skip-ilmoitus näytetty.");
             }
 
-            if ((msg.contains("hyväksyi kartan ohituksen!") || msg.contains("Peli alkoi!")) && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
+            if ((msg.contains("Peli alkoi!")) && !msg.contains("[") && Kauna.isCurrentlyOnRealmi()) {
                 client.gui.hud.setTimes(0, 0, 0);
                 client.gui.hud.setTitle(Component.literal(""));
                 client.gui.hud.setSubtitle(Component.literal(""));
+            }
+            if ((msg.contains("hyväksyi kartan ohituksen!") && !msg.contains("[") && Kauna.isCurrentlyOnRealmi())) {
+                client.gui.hud.setTimes(0, 0, 0);
+                client.gui.hud.setTitle(Component.literal(""));
+                client.gui.hud.setSubtitle(Component.literal(""));
+                ParkourChatListener.currentTime = 0.0;
             }
         });
     }
