@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.mixin;
+package lol.wilkyy.kauna.mixin.features.kahakka.parkour;
 
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.features.kahakka.autoready.AutoReadyUp;

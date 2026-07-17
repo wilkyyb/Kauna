@@ -1,8 +1,9 @@
-package lol.wilkyy.kauna.mixin;
+package lol.wilkyy.kauna.mixin.features.other;
 
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import lol.wilkyy.kauna.features.chat.EmojiRegistry;
+import lol.wilkyy.kauna.mixin.features.kahakka.parkour.Kauna;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Final;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(CommandSuggestions.class)
-public class CommandSuggestionsMixin {
+public class EmojiSuggestorMixin {
 
     @Shadow
     private CompletableFuture<Suggestions> pendingSuggestions;
@@ -29,7 +30,7 @@ public class CommandSuggestionsMixin {
     @Inject(method = "updateCommandInfo()V", at = @At("RETURN"))
     private void kauna$injectEmojiSuggestions(CallbackInfo ci) {
         if (this.input == null) return;
-        if (!lol.wilkyy.kauna.Kauna.isCurrentlyOnRealmi()) return;
+        if (!Kauna.isCurrentlyOnRealmi()) return;
 
         String fullText    = this.input.getValue();
         int    cursor      = this.input.getCursorPosition();

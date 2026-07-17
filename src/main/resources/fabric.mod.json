@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "lol.wilkyy.kauna.Kauna"
+      "lol.wilkyy.kauna.mixin.features.kahakka.parkour.Kauna"
     ],
     "client": [
       "lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener",

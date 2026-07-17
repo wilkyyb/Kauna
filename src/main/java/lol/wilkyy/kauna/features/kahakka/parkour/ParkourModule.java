@@ -1,6 +1,6 @@
 package lol.wilkyy.kauna.features.kahakka.parkour;
 
-import lol.wilkyy.kauna.Kauna;
+import lol.wilkyy.kauna.mixin.features.kahakka.parkour.Kauna;
 import lol.wilkyy.kauna.config.Colors;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.api.ClientModInitializer;

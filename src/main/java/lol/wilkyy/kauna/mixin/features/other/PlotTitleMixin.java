@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.mixin;
+package lol.wilkyy.kauna.mixin.features.other;
 
 import lol.wilkyy.kauna.config.KaunaConfig;
 import net.minecraft.client.gui.Hud;

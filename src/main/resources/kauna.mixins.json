@@ -4,11 +4,11 @@
 
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"NoServerTitleMixin",
-		"TitleMixin",
-		"KeyMappingAccessor",
-		"CommandSuggestionsMixin",
-		"PlotTitleMixin"
+		"features.kahakka.parkour.NoServerTitleMixin",
+		"features.kahakka.parkour.TitleMixin",
+		"features.kahakka.parkour.KeyMappingAccessor",
+		"features.other.EmojiSuggestorMixin",
+		"features.other.PlotTitleMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
