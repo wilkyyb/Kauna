@@ -6,7 +6,7 @@
 	"mixins": [
 		"features.kahakka.parkour.NoServerTitleMixin",
 		"features.kahakka.parkour.TitleMixin",
-		"features.kahakka.parkour.KeyMappingAccessor",
+		"features.kahakka.KeyMappingAccessor",
 		"features.other.EmojiSuggestorMixin",
 		"features.other.PlotTitleMixin"
 	],

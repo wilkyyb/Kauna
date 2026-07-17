@@ -2,7 +2,7 @@ package lol.wilkyy.kauna.features.kahakka.autoready;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import lol.wilkyy.kauna.config.KaunaConfig;
-import lol.wilkyy.kauna.mixin.features.kahakka.parkour.KeyMappingAccessor; // Import your accessor
+import lol.wilkyy.kauna.mixin.features.kahakka.KeyMappingAccessor; // Import your accessor
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.ChatFormatting;

@@ -1,4 +1,4 @@
-package lol.wilkyy.kauna.mixin.features.kahakka.parkour;
+package lol.wilkyy.kauna.mixin.features.kahakka;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
