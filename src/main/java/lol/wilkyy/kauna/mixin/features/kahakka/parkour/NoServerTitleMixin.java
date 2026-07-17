@@ -1,5 +1,6 @@
 package lol.wilkyy.kauna.mixin.features.kahakka.parkour;
 
+import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.features.kahakka.duel.DuelManager;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;

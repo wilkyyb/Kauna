@@ -3,7 +3,7 @@ package lol.wilkyy.kauna.mixin.features.other;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import lol.wilkyy.kauna.features.chat.EmojiRegistry;
-import lol.wilkyy.kauna.mixin.features.kahakka.parkour.Kauna;
+import lol.wilkyy.kauna.Kauna;
 import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Final;

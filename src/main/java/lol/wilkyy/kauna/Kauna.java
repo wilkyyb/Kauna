@@ -1,6 +1,5 @@
-package lol.wilkyy.kauna.mixin.features.kahakka.parkour;
+package lol.wilkyy.kauna;
 
-import lol.wilkyy.kauna.UpdateChecker;
 import lol.wilkyy.kauna.config.ConfigHandler;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.features.friendslist.GListScanner;

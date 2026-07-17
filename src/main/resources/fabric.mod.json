@@ -13,10 +13,10 @@
   },
   "license": "ARR",
   "icon": "assets/kauna/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
-      "lol.wilkyy.kauna.mixin.features.kahakka.parkour.Kauna"
+      "lol.wilkyy.kauna.Kauna"
     ],
     "client": [
       "lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener",

@@ -1,6 +1,6 @@
 package lol.wilkyy.kauna.features.kahakka.duel;
 
-import lol.wilkyy.kauna.mixin.features.kahakka.parkour.Kauna;
+import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.features.kahakka.autoready.AutoReadyUp;
 import lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener;
 import lol.wilkyy.kauna.features.kahakka.parkour.ParkourModule;
