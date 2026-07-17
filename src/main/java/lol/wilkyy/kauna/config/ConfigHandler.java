@@ -68,6 +68,8 @@ public class ConfigHandler {
                                 () -> KaunaConfig.INSTANCE.autoGG, val -> KaunaConfig.INSTANCE.autoGG = val, null))
                         .option(buildBooleanOption("AutoReady", "Kyykkää automaattisesti erän alkaessa",
                                 () -> KaunaConfig.INSTANCE.autoReady, val -> KaunaConfig.INSTANCE.autoReady = val, null))
+                        .option(buildBooleanOption("Auto Requeue", "Liity automaattisesti jonoon siihen kittiin jota viimeksi pelasit",
+                                () -> KaunaConfig.INSTANCE.autoRequeue, val -> KaunaConfig.INSTANCE.autoRequeue = val, null))
                         .build())
                 .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
                         .name(Component.literal("Stats Display").withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD))
@@ -116,7 +118,7 @@ public class ConfigHandler {
         return ConfigCategory.createBuilder()
                 .name(Component.literal("Muuta"))
                 .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
-                        .name(Component.literal("Muuta").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                        .name(Component.literal("Muuta").withStyle(ChatFormatting.DARK_BLUE, ChatFormatting.BOLD))
                         .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Creative Asetukset")))
 
                         .option(buildBooleanOption("Creative Plot Title", "Vaihda plot title subtitlestä action baariin (ei niin tiellä)",

@@ -39,6 +39,8 @@ public class KaunaConfig {
     public boolean showKitStats = false;
     public float statsHudBackgroundOpacity = 0.5f;
 
+    public boolean autoRequeue = false;
+
     public boolean creativePlotTitle = false;
 
     public List<String> friendsList = new ArrayList<>(List.of("hullu"));
