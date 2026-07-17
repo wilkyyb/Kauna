@@ -10,11 +10,14 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.sounds.SoundEvents;
+
+import java.net.URI;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
@@ -22,6 +25,7 @@ public class Kauna implements ModInitializer {
 
     private static boolean inKahakka = false;
     public static final String MOD_ID = "kauna";
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     @Override
     public void onInitialize() {
         GListScanner.init();
@@ -75,12 +79,32 @@ public class Kauna implements ModInitializer {
                         .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xAA1F40)).withBold(true)))
                         .append(Component.literal("ᴀ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA01C3C)).withBold(true)));
 
-                if (UpdateChecker.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates) {
-                    client.gui.hud.setTitle(Component.literal("Päivitys saatavilla!").withStyle(ChatFormatting.GOLD).copy().append(""));
+                if (UpdateChecker.updateAvailable && KaunaConfig.INSTANCE.CheckForUpdates && client.player != null) {
+                    client.gui.hud.setTitle(Component.literal(""));
+                    scheduler.schedule(() -> {
+                        client.execute(() -> {
+                            if (client.player != null) {
+                                client.player.sendSystemMessage(Component.literal("                                  ").append(ConfigHandler.getPrefix()));
+                                client.player.sendSystemMessage(
+                                        Component.literal("                            ")
+                                                .append(Component.literal("Päivitys Saatavilla")
+                                                .withStyle(style -> style
+                                                        .withColor(ChatFormatting.GOLD)
+                                                        .withClickEvent(new ClickEvent.OpenUrl(URI.create("https://modrinth.com/mod/kauna")))
+                                                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Avaa Modrinth")))
+                                                        .withUnderlined(true))
+                                ));
+                                client.player.sendSystemMessage(
+                                        Component.literal("                                  (klikkaa)").withStyle(ChatFormatting.GRAY));
+                                client.player.sendSystemMessage(Component.literal(""));
+                                client.player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+                            }
+
+                        });
+                    }, 100, TimeUnit.MILLISECONDS);
                 } else {
                     client.gui.hud.setTitle(Component.literal(""));
                 }
-
                 client.gui.hud.setSubtitle(subtitleText);
                 client.gui.hud.setTimes(10, 40, 10);
             }
