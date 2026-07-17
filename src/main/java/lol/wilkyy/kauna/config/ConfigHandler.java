@@ -230,7 +230,16 @@ public class ConfigHandler {
         );
         dispatcher.register(literal("k").redirect(kaunaCommand));
         dispatcher.register(literal("kc").executes(ctx -> openGuiScreen()));
+
+        var autoRequeueCommand = dispatcher.register(
+                literal("autorequeue")
+                        .executes(ctx -> KaunaConfig.toggleAutoRequeue(ctx.getSource())));
+
+        dispatcher.register(
+                literal("arq")
+                        .executes(ctx -> KaunaConfig.toggleAutoRequeue(ctx.getSource())));
     }
+
 
     private static int openGuiScreen() {
         Minecraft.getInstance().execute(() -> {

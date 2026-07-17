@@ -2,7 +2,10 @@ package lol.wilkyy.kauna.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import static lol.wilkyy.kauna.config.ConfigHandler.getPrefix;
 
 public class KaunaConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -40,6 +45,16 @@ public class KaunaConfig {
     public float statsHudBackgroundOpacity = 0.5f;
 
     public boolean autoRequeue = false;
+
+    public static int toggleAutoRequeue(FabricClientCommandSource source) {
+        INSTANCE.autoRequeue = !INSTANCE.autoRequeue;
+        save();
+        source.sendFeedback(getPrefix()
+                .append(Component.literal("Auto Requeue: ").withStyle(ChatFormatting.GRAY))
+                .append(Component.literal(INSTANCE.autoRequeue ? "Päällä" : "Pois Päältä")
+                        .withStyle(INSTANCE.autoRequeue ? ChatFormatting.GREEN : ChatFormatting.RED)));
+        return 1;
+    }
 
     public boolean creativePlotTitle = false;
 
