@@ -8,7 +8,6 @@ import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
@@ -34,7 +33,8 @@ public class ConfigHandler {
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.literal("Kauna Config").withStyle(ChatFormatting.BOLD))
                 .category(buildKahakkaCategory())
-                .category(buildYstavatCategory())
+                .category(buildOtherCategory())
+                .category(buildFriendsCategory())
                 .category(buildSystemCategory())
                 .save(KaunaConfig::save)
                 .build()
@@ -112,7 +112,20 @@ public class ConfigHandler {
                 .build();
     }
 
-    private static ConfigCategory buildYstavatCategory() {
+    private static ConfigCategory buildOtherCategory() {
+        return ConfigCategory.createBuilder()
+                .name(Component.literal("Muuta"))
+                .group(dev.isxander.yacl3.api.OptionGroup.createBuilder()
+                        .name(Component.literal("Muuta").withStyle(ChatFormatting.RED, ChatFormatting.BOLD))
+                        .description(dev.isxander.yacl3.api.OptionDescription.of(Component.literal("Creative Asetukset")))
+
+                        .option(buildBooleanOption("Creative Plot Title", "Vaihda plot title subtitlestä action baariin (ei niin tiellä)",
+                                () -> KaunaConfig.INSTANCE.creativePlotTitle, val -> KaunaConfig.INSTANCE.creativePlotTitle = val, null))
+                        .build())
+                .build();
+    }
+
+    private static ConfigCategory buildFriendsCategory() {
         return ConfigCategory.createBuilder()
                 .name(Component.literal("Kaverit"))
                 .option(ListOption.<String>createBuilder()
