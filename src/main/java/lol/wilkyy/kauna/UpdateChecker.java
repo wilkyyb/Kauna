@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 public class UpdateChecker {
     private static final String VERSION_URL = "https://raw.githubusercontent.com/wilkyyb/Kauna/refs/heads/master/version.txt";
-    private static final String CURRENT_VERSION = "0.8.1";
+    private static final String CURRENT_VERSION = "0.8.2";
     public static boolean updateAvailable = false;
 
     public static void checkVersion() {
