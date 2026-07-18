@@ -1,5 +1,6 @@
 package lol.wilkyy.kauna.features.kahakka.stats;
 
+import lol.wilkyy.kauna.features.chat.PlayerNameResolver;
 import lol.wilkyy.kauna.features.kahakka.parkour.ParkourChatListener;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.Minecraft;
@@ -52,7 +53,7 @@ public class StatsListener {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player == null) return;
 
-            String playerName = mc.player.getName().getString();
+            String playerName = PlayerNameResolver.getPlayerName();
             String stripped = text.replace("⚔", "").trim();
 
             String[] sides = stripped.split(" VS ", 2);

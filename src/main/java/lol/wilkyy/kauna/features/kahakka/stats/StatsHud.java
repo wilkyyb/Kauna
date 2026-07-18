@@ -2,6 +2,7 @@ package lol.wilkyy.kauna.features.kahakka.stats;
 
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
+import lol.wilkyy.kauna.features.chat.PlayerNameResolver;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;

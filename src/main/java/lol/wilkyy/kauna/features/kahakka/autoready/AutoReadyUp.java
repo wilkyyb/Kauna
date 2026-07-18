@@ -2,6 +2,7 @@ package lol.wilkyy.kauna.features.kahakka.autoready;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import lol.wilkyy.kauna.config.KaunaConfig;
+import lol.wilkyy.kauna.features.chat.PlayerNameResolver;
 import lol.wilkyy.kauna.mixin.features.kahakka.KeyMappingAccessor; // Import your accessor
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -23,7 +24,7 @@ public class AutoReadyUp {
             Minecraft client = Minecraft.getInstance();
             if (client.player == null) return;
 
-            String playerName = client.player.getGameProfile().name();
+            String playerName = PlayerNameResolver.getPlayerName();
             String chatText = ChatFormatting.stripFormatting(message.getString());
 
             if (chatText.contains("on valmis!") || KaunaConfig.autoReady) {

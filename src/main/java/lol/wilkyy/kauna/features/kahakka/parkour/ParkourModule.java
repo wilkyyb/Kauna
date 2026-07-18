@@ -3,6 +3,7 @@ package lol.wilkyy.kauna.features.kahakka.parkour;
 import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.Colors;
 import lol.wilkyy.kauna.config.KaunaConfig;
+import lol.wilkyy.kauna.features.chat.PlayerNameResolver;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -210,7 +211,7 @@ public class ParkourModule implements ClientModInitializer {
             String msg = message.getString();
             Minecraft client = Minecraft.getInstance();
             if (client.player == null) return;
-            String playerName = client.player.getGameProfile().name();
+            String playerName = PlayerNameResolver.getPlayerName();
 
             if (msg.contains("ehdotti kartan ohitusta!") && Kauna.isCurrentlyOnRealmi() && !msg.contains(playerName)) {
                 String skipperName = msg.substring(msg.indexOf("]") + 1, msg.indexOf(" ehdotti")).trim();

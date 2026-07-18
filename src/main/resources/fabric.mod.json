@@ -23,7 +23,8 @@
       "lol.wilkyy.kauna.features.kahakka.parkour.ParkourModule",
       "lol.wilkyy.kauna.features.kahakka.duel.DuelManager",
       "lol.wilkyy.kauna.features.kahakka.stats.StatsHud",
-      "lol.wilkyy.kauna.features.kahakka.parkour.ParkourWrDiffHud"
+      "lol.wilkyy.kauna.features.kahakka.parkour.ParkourWrDiffHud",
+      "lol.wilkyy.kauna.features.chat.PlayerNameResolver"
     ],
     "modmenu": [
       "lol.wilkyy.kauna.config.ModMenuIntegration"
