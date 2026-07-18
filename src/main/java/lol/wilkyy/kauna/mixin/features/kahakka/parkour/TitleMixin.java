@@ -111,7 +111,6 @@ public class TitleMixin {
                 }
 
                 ParkourChatListener.currentTime = Double.parseDouble(afterAika);
-                debugLog("currentTime set as " + afterAika);
             } catch (NumberFormatException | IndexOutOfBoundsException ignored) {}
         }
 
