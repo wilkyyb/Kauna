@@ -37,7 +37,11 @@ public class AutoRequeue {
             client.execute(() -> {
                 if (client.player != null) {
                     String command = "duelqueue " + kit;
-                    client.player.connection.sendCommand(command);
+
+                    if(KaunaConfig.INSTANCE.autoRequeue) {
+                        client.player.connection.sendCommand(command);
+                    }
+
                     debugLog("AutoRequeue sent: /{}", command);
                 }
             });
