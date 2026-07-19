@@ -96,8 +96,6 @@ public class TitleMixin {
             }
         }
 
-
-
         if (content.contains("Aika:")) {
             try {
                 String afterAika = content.substring(content.indexOf("Aika:") + 5).trim();
@@ -112,6 +110,18 @@ public class TitleMixin {
 
                 ParkourChatListener.currentTime = Double.parseDouble(afterAika);
             } catch (NumberFormatException | IndexOutOfBoundsException ignored) {}
+        }
+
+        if (content.contains("Peli päättyi")) {
+            DuelManager.inDuel = false;
+            DuelManager.inParkourDuel = false;
+            DuelManager.duelEndTimer = -1;
+            DuelManager.duelStarted = false;
+            ParkourChatListener.time = 0.0;
+            ParkourChatListener.worldRecord = 0;
+            ParkourChatListener.personalBest = 0;
+            ParkourChatListener.statsUpdatedThisTick = false;
+            ParkourChatListener.currentTime = 0.0;
         }
 
         if (content.contains("PB") && !DuelManager.duelStarted) {

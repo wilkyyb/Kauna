@@ -17,10 +17,10 @@ import static lol.wilkyy.kauna.config.KaunaConfig.debugLog;
 
 public class DuelManager implements ClientModInitializer {
 
-    private static boolean inDuel = false;
+    public static boolean inDuel = false;
     public static boolean inParkourDuel = false;
 
-    private static int duelEndTimer = -1; // -1 = not running
+    public static int duelEndTimer = -1; // -1 = not running
 
     public static boolean duelStarted = false;
 
@@ -83,6 +83,13 @@ public class DuelManager implements ClientModInitializer {
             if (msg.contains("Poistuit kaksintaiston katselemisesta!")) {
                 inDuel = false;
                 inParkourDuel = false;
+                duelEndTimer = -1;
+                duelStarted = false;
+                ParkourChatListener.time = 0.0;
+                ParkourChatListener.worldRecord = 0;
+                ParkourChatListener.personalBest = 0;
+                ParkourChatListener.statsUpdatedThisTick = false;
+                ParkourChatListener.currentTime = 0.0;
                 debugLog("Exited duel spectator mode");
                 ClientTickEvents.END_CLIENT_TICK.register(client -> {
                     if (client.gui != null) {
@@ -106,6 +113,12 @@ public class DuelManager implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             inDuel = false;
             inParkourDuel = false;
+            duelStarted = false;
+            ParkourChatListener.time = 0.0;
+            ParkourChatListener.worldRecord = 0;
+            ParkourChatListener.personalBest = 0;
+            ParkourChatListener.statsUpdatedThisTick = false;
+            ParkourChatListener.currentTime = 0.0;
             client.gui.hud.setTitle(Component.literal(""));
             client.gui.hud.setSubtitle(Component.literal(""));
             client.gui.hud.setTimes(0, 0, 0);
