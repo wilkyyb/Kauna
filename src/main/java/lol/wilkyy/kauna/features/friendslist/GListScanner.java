@@ -1,9 +1,11 @@
 package lol.wilkyy.kauna.features.friendslist;
 
+import lol.wilkyy.kauna.config.Colors;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,8 @@ import java.util.regex.Pattern;
 
 public class GListScanner {
     private static final Pattern PROXY_PATTERN = Pattern.compile("\\[(\\w+)\\] \\(\\d+\\) » (.+)");
-    private static final List<String> foundFriends = new ArrayList<>();
+    private static final List<MutableComponent> foundFriends = new ArrayList<>();
+
 
     public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
@@ -32,8 +35,15 @@ public class GListScanner {
                         String cleanName = trimmed.replaceAll("^\\[V\\]", "");
 
                         if (cleanName.equalsIgnoreCase(friend.trim())) {
-                            String vanishIcon = isVanished ? " §8[§4V§8]§7" : "";
-                            foundFriends.add("§8[§a" + proxyName + "§8] §7" + friend + vanishIcon);
+                            MutableComponent entry = Component.literal("§8[")
+                                    .append(Colors.getProxyName(proxyName))
+                                    .append(Component.literal("§8] §7" + friend));
+
+                            if (isVanished) {
+                                entry.append(Component.literal(" §8[§4V§8]§7"));
+                            }
+
+                            foundFriends.add(entry);
                             break;
                         }
                     }
@@ -44,8 +54,8 @@ public class GListScanner {
                 Minecraft client = Minecraft.getInstance();
                 if (client.player != null) {
                     client.player.sendSystemMessage(Component.literal("§2» §6Kavereita paikalla:"));
-                    for (String line : foundFriends) {
-                        client.player.sendSystemMessage(Component.literal(" §7- " + line));
+                    for (MutableComponent line : foundFriends) {
+                        client.player.sendSystemMessage(Component.literal(" §7- ").append(line));
                     }
                     client.player.sendSystemMessage(Component.literal(""));
                 }
