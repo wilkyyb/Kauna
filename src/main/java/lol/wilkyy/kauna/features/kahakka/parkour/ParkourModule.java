@@ -46,6 +46,10 @@ public class ParkourModule implements ClientModInitializer {
             case "Gay" -> Colors.GAY_THEME;
             case "Lesbian" -> Colors.LESBIAN_THEME;
             case "Trans" -> Colors.TRANS_THEME;
+            case "Pastel" -> Colors.PASTEL_THEME;
+            case "Love" -> Colors.LOVE_THEME;
+            case "Aurora" -> Colors.AURORA_THEME;
+            case "Yeller" -> Colors.YELLER_THEME;
             default -> Colors.RAINBOW_THEME;
         };
     }
@@ -95,8 +99,6 @@ public class ParkourModule implements ClientModInitializer {
 
             if (rainbowTick > 80) {
                 rainbowRunning = false;
-                mc.gui.hud.setTitle(Component.literal(""));
-                mc.gui.hud.setSubtitle(Component.literal(""));
             }
         });
     }

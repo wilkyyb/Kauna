@@ -56,7 +56,7 @@ public class ConfigHandler {
         Minecraft mc = Minecraft.getInstance();
         int maxX = mc.getWindow().getGuiScaledWidth();
         int maxY = mc.getWindow().getGuiScaledHeight();
-        List<String> themeOptions = List.of("Rainbow", "Gay", "Lesbian", "Trans");
+        List<String> themeOptions = List.of("Rainbow", "Pastel", "Love", "Aurora", "Yeller", "Gay", "Lesbian", "Trans");
 
         return ConfigCategory.createBuilder()
                 .name(Component.literal("Kahakka"))
