@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GListScanner {
-    private static final Pattern PROXY_PATTERN = Pattern.compile("\\[(\\w+)\\] \\(\\d+\\) » (.+)");
+    private static final Pattern PROXY_PATTERN = Pattern.compile("\\[([\\w-]+)\\] \\(\\d+\\) » (.+)");
     private static final List<MutableComponent> foundFriends = new ArrayList<>();
 
 
