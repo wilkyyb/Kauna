@@ -98,6 +98,19 @@ public class Colors {
                     .append(c("a", 0xf2a639)).append(c("t", 0xf5b033)).append(c("i", 0xf9ba2c))
                     .append(c("v", 0xfcc423)).append(c("e", 0xffce13));
 
+            case "build"  -> Component.empty()
+                    .append(c("B", 0xFCD05C)).append(c("u", 0xFDC54D))
+                    .append(c("i", 0xFEBB3D)).append(c("l", 0xFFB028))
+                    .append(c("d", 0xFFA500));
+
+            case "event" -> Component.empty()
+                    .append(c("e", 0xBB00FC)).append(c("v", 0xC814EF)).append(c("e", 0xD51BE2))
+                    .append(c("n", 0xE31BD5)).append(c("t", 0xF115C8));
+
+            case "event2" -> Component.empty()
+                    .append(c("e", 0xBB00FC)).append(c("v", 0xC814EF)).append(c("e", 0xD51BE2))
+                    .append(c("n", 0xE31BD5)).append(c("t", 0xF115C8)).append(c("2", 0xFF00BA));
+
             default -> Component.literal(value).withStyle(ChatFormatting.GOLD);
         };
     }
