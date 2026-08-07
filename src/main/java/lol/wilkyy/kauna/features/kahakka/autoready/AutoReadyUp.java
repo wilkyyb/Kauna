@@ -1,6 +1,7 @@
 package lol.wilkyy.kauna.features.kahakka.autoready;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import lol.wilkyy.kauna.Kauna;
 import lol.wilkyy.kauna.config.KaunaConfig;
 import lol.wilkyy.kauna.features.chat.PlayerNameResolver;
 import lol.wilkyy.kauna.mixin.features.kahakka.KeyMappingAccessor; // Import your accessor
@@ -22,6 +23,8 @@ public class AutoReadyUp {
     public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             Minecraft client = Minecraft.getInstance();
+            if (!KaunaConfig.autoReady) return;
+            if (!Kauna.inKahakka()) return;
             if (client.player == null) return;
 
             String playerName = PlayerNameResolver.getPlayerName();
@@ -39,6 +42,8 @@ public class AutoReadyUp {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player == null) return;
+            if (!KaunaConfig.autoReady) return;
+            if (!Kauna.inKahakka()) return;
 
             KeyMapping sneakKey = client.options.keyShift;
 
@@ -60,6 +65,8 @@ public class AutoReadyUp {
 
     public static void tryTriggerCrouch() {
         long currentTime = System.currentTimeMillis();
+        if (!KaunaConfig.autoReady) return;
+        if (!Kauna.inKahakka()) return;
 
         if (isSearchingForReady) {
             return;
